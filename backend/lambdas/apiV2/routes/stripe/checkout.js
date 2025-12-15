@@ -12,16 +12,16 @@ export async function checkout(requestBody, user_id) {
     const { stripe, env } = await getStripeObject();
     if (!stripe || !env) throw new Error("stripe cannot be instantiated");
 
-    const { productName, success_url, cancel_url, referral_id } = requestBody;
-    if (!productName) throw new Error("product name is missing");
+    const { product_name, success_url, cancel_url, referrer_user_id } = requestBody;
+    if (!product_name) throw new Error("product name is missing");
 
-    const product = getProductByName(productName, env);
-    const priceId = product?.priceId;
-    if (!priceId) throw new Error("priceId is missing");
+    const product = getProductByName(product_name, env);
+    const price_id = product?.priceId;
+    if (!price_id) throw new Error("priceId is missing");
 
     let promotion_code;
     if (ACTIVE_COUPON_NAME) {
-      const coupon = getCoupon(ACTIVE_COUPON_NAME, productName, env);
+      const coupon = getCoupon(ACTIVE_COUPON_NAME, product_name, env);
 
       if (coupon) {
         const stripeCoupon = await getCouponByIdFromStripe(coupon.couponId);
@@ -35,10 +35,10 @@ export async function checkout(requestBody, user_id) {
 
     const portalSession = await stripe.checkout.sessions.create({
       billing_address_collection: "auto",
-      line_items: [{ price: priceId, quantity: 1 }],
+      line_items: [{ price: price_id, quantity: 1 }],
       customer_email: email,
       mode: "payment",
-      metadata: { product_name: productName, price_id: priceId, referral_id },
+      metadata: { product_name, price_id, referrer_user_id },
       ...(promotion_code && { discounts: [{ promotion_code }] }),
       success_url,
       cancel_url,
@@ -46,7 +46,6 @@ export async function checkout(requestBody, user_id) {
 
     return successResponse("checkout was successful", { url: portalSession.url });
   } catch (err) {
-    console.log("erorr", err);
     return errorResponse(`checkout failed for ${user_id}: ${err?.message}`);
   }
 }

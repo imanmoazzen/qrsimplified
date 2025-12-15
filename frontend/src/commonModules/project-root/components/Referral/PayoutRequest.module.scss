@@ -1,0 +1,17 @@
+@import "../../../../../../styles/_mixin.scss";
+
+.main-container {
+  @include referralMainContainer();
+  @include flexCenter(column, 0.5rem);
+  align-items: flex-end;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+}
+
+.error {
+  @include errorMessage();
+  background-color: transparent;
+  border: none;
+}

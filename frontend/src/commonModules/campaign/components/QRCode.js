@@ -7,9 +7,8 @@ import InputBox from "../../../commonComponents/InputBox/InputBox.js";
 import { isValidHttpsUrl } from "../../../commonUtil/stringUtils.js";
 import { COMMON_MESSAGES } from "../../../frontEndConstants.js";
 import { auth, campaignModule, server } from "../../../index.js";
-import config from "../../server/config.js";
 import { CAMPAIGN_PAGES, campaignPageChanged } from "../store/uiReducer.js";
-import { generateQRCodeAsSVG } from "../utils.js";
+import { generateQRCodeAsSVG, getTrackingLink } from "../utils.js";
 import styles from "./QRCode.module.scss";
 
 const STATES = {
@@ -25,7 +24,7 @@ const QRCode = ({ onSuccess }) => {
   const dispatch = useDispatch();
   const userId = useSelector(auth.userIdSelector);
   const branding = useSelector(campaignModule.getBranding);
-  const [link, setLink] = useState("");
+  const [destination, setDestination] = useState("");
   const [name, setName] = useState("");
   const [state, setState] = useState(STATES.INIT);
 
@@ -39,15 +38,14 @@ const QRCode = ({ onSuccess }) => {
       setState(STATES.CREATING_NEW_CAMPAIGN);
 
       const campaign_id = uuid();
-      const trackingLink = `${config.apiV2URL}/campaign/${userId}/${campaign_id}`;
-      const destination = `${link}?campaign=${campaign_id}`;
+      const tracking_link = getTrackingLink(userId, campaign_id);
 
       const [svgCode] = await Promise.all([
-        generateQRCodeAsSVG(trackingLink, color, background),
+        generateQRCodeAsSVG(tracking_link, color, background),
         server.requestFromApiv2(`/campaign`, {
           method: "POST",
           mode: "cors",
-          data: { campaign_id, destination, name },
+          data: { campaign_id, tracking_link, destination, name },
         }),
       ]);
 
@@ -59,7 +57,7 @@ const QRCode = ({ onSuccess }) => {
   };
 
   const testLink = () => {
-    if (isCampaignValid()) window.open(`${link}?campaign=${name}`, "_blank", "noopener,noreferrer");
+    if (isCampaignValid()) window.open(`${destination}?campaign=${name}`, "_blank", "noopener,noreferrer");
   };
 
   const isCampaignValid = () => {
@@ -68,12 +66,12 @@ const QRCode = ({ onSuccess }) => {
       return false;
     }
 
-    if (!link?.trim()) {
+    if (!destination?.trim()) {
       setState(STATES.URL_EMPTY);
       return false;
     }
 
-    if (!isValidHttpsUrl(link)) {
+    if (!isValidHttpsUrl(destination)) {
       setState(STATES.URL_INVALID);
       return false;
     }
@@ -94,8 +92,8 @@ const QRCode = ({ onSuccess }) => {
       />
       <InputBox
         label="Landing Page:"
-        value={link}
-        setValue={setLink}
+        value={destination}
+        setValue={setDestination}
         onFocus={() => setState(STATES.INIT)}
         isRippling={state === STATES.URL_EMPTY || state === STATES.URL_INVALID}
         isDisabled={state === STATES.CREATING_NEW_CAMPAIGN}

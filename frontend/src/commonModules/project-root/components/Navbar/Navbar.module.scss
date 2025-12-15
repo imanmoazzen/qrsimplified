@@ -8,3 +8,27 @@
   padding: 0px;
   background-color: var(--navbar-background-color);
 }
+
+.refer-button {
+  background-color: transparent;
+  border-color: transparent;
+  color: white;
+  padding: 0.5rem 0.75rem;
+
+  @include mobile {
+    padding: 0.5rem;
+  }
+
+  &:hover {
+    background-color: var(--google-meet-light-gray) !important;
+  }
+
+  &[class*="busy"] {
+    opacity: 0.5;
+    color: white !important;
+
+    span[class*="material"] {
+      color: white;
+    }
+  }
+}

@@ -12,6 +12,13 @@
 
 .new-campaign-container {
   margin-left: auto;
+  margin-top: 1rem;
+  margin-right: 1rem;
+
+  @include mobile {
+    margin-left: initial;
+    margin-right: 0rem;
+  }
 }
 
 .info {

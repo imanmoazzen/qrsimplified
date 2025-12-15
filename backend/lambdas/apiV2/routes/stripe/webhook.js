@@ -2,11 +2,10 @@ import { CAMPAIGN_STATUS } from "../../../../../castofly-common/campaigns.js";
 import { HTTP_STATUS_CODES } from "../../../../../castofly-common/commonConstants.js";
 import { getProductByName } from "../../../../../castofly-common/purchases/products.js";
 import { sortByCreationTime } from "../../../../../castofly-common/sort.js";
-import { query, updateItemAdd, updateItemSet } from "../../../common-aws-utils-v3/dynamoUtils.js";
+import { putItem, query, updateItemAdd, updateItemSet } from "../../../common-aws-utils-v3/dynamoUtils.js";
 import { TABLE_NAMES } from "../../config.js";
 import { dynamo } from "../../index.js";
 import { getUserByEmail } from "../user.js";
-import { checkReferralProgram } from "./checkReferralProgram.js";
 import { getStripeObject } from "./utils.js";
 
 export const HANDLED_EVENTS = {
@@ -53,7 +52,7 @@ export async function webhook(exactRequestBody, signature) {
 
     const product_name = object?.metadata?.product_name;
     const price_id = object?.metadata?.price_id;
-    const referral_id = object?.metadata?.referral_id;
+    const referrer_user_id = object?.metadata?.referrer_user_id;
     const coupon_id = object?.discounts?.[0]?.promotion_code;
 
     switch (eventType) {
@@ -75,7 +74,14 @@ export async function webhook(exactRequestBody, signature) {
           updateItemSet(dynamo, TABLE_NAMES.PURCHASES, { user_id, purchase_id }, payerFields),
           updateItemAdd(dynamo, TABLE_NAMES.USER_DATA, { user_id }, { qr_credits }),
           updateTrialOrExpiredCampaign(user_id, qr_credits),
-          checkReferralProgram(user_id, email, referral_id),
+          referrer_user_id
+            ? putItem(dynamo, TABLE_NAMES.REFERRAL_RECORDS, {
+                referrer_user_id,
+                purchase_id,
+                referee_user_id: user_id,
+                referee_display_name: user?.display_name,
+              })
+            : Promise.resolve(),
         ]);
 
         break;

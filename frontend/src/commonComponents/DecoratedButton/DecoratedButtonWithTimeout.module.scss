@@ -1,11 +1,5 @@
 .ok {
-  background-color: var(--success-color);
-  cursor: default;
   border-color: transparent;
-  color: white;
-}
-
-.ok:hover {
-  background-color: var(--success-color) !important;
-  color: white !important;
+  pointer-events: none;
+  color: var(--primary-color) !important;
 }

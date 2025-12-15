@@ -10,7 +10,9 @@ import { brandingChanged } from "../commonModules/campaign/store/uiReducer.js";
 import Cart from "../commonModules/project-root/components/Cart/Cart.js";
 import FAQPage from "../commonModules/project-root/components/Cart/FAQPage.js";
 import Navbar from "../commonModules/project-root/components/Navbar/Navbar.js";
+import Referral from "../commonModules/project-root/components/Referral/Referral.js";
 import StripeReturnPage from "../commonModules/project-root/components/Stripe/StripeReturnPage.js";
+import Track from "../commonModules/project-root/components/Track/Track.js";
 import { removeInitialLoadingIndicator } from "../commonUtil/initialLoadingIndicator.js";
 import { AUTHENTICATION_PAGES } from "../frontEndConstants.js";
 import { auth } from "../index.js";
@@ -28,6 +30,15 @@ const AppRouter = () => {
 
   useEffect(() => {
     if (pathname.includes("welcome")) navigate("/folder/root?onboarding=true");
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const referrer_user_id = params.get("ref");
+
+    if (referrer_user_id && referrer_user_id !== user?.user_id) {
+      localStorage.setItem("referrer_user_id", referrer_user_id);
+    }
   }, []);
 
   useEffect(() => {
@@ -58,6 +69,7 @@ const AppRouter = () => {
 
   return (
     <Routes>
+      <Route path="track" element={<Track />} />
       <Route
         path="/"
         element={
@@ -74,6 +86,7 @@ const AppRouter = () => {
         <Route path="success" element={<StripeReturnPage />} />
         <Route path="cancel" element={<StripeReturnPage isUpgrade={false} />} />
         <Route path="feedback" element={<Feedback />} />
+        <Route path="referral" element={<Referral />} />
       </Route>
       <Route path="*" element={<span>Invalid URL!</span>} />
       {[

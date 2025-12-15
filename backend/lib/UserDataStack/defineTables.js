@@ -13,9 +13,6 @@ export function defineTables(parent, cdkConfig) {
     [BACKEND_CONFIG.GSI.COGNITO_ATTRIBUTES_EMAIL_GSI]: "email-index",
     [BACKEND_CONFIG.GSI.USER_DATA_EMAIL_GSI]: "email-index",
     [BACKEND_CONFIG.GSI.SLACK_USER_ID_GSI]: "slack_user_id-index",
-    [BACKEND_CONFIG.GSI.REFERRAL_ID_GSI]: "referral_id-index",
-    [BACKEND_CONFIG.GSI.REFERRAL_COUPON_GSI]: "referral_coupon-index",
-    [BACKEND_CONFIG.GSI.REFERRAL_EMAIL_GSI]: "referral_email-index",
   };
 
   tables.anonymous_users = new UserDataTable(parent, "anonymous_users", {
@@ -61,32 +58,11 @@ export function defineTables(parent, cdkConfig) {
     },
   });
 
-  tables.referral_sources = new UserDataTable(parent, "referral_sources", {
-    cdkConfig,
-    primaryKeys: {
-      user_id: AttributeType.STRING,
-      referral_id: AttributeType.STRING,
-    },
-    gsiIndices: {
-      [gsiNames[BACKEND_CONFIG.GSI.REFERRAL_ID_GSI]]: {
-        referral_id: AttributeType.STRING,
-      },
-      [gsiNames[BACKEND_CONFIG.GSI.REFERRAL_COUPON_GSI]]: {
-        coupon_id: AttributeType.STRING,
-      },
-    },
-  });
-
   tables.referral_records = new UserDataTable(parent, "referral_records", {
     cdkConfig,
     primaryKeys: {
-      referral_id: AttributeType.STRING,
-      referee_email: AttributeType.STRING,
-    },
-    gsiIndices: {
-      [gsiNames[BACKEND_CONFIG.GSI.REFERRAL_EMAIL_GSI]]: {
-        referee_email: AttributeType.STRING,
-      },
+      referrer_user_id: AttributeType.STRING,
+      purchase_id: AttributeType.STRING,
     },
   });
 

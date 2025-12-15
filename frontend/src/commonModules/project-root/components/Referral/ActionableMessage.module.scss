@@ -1,0 +1,38 @@
+@import "../../../../../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(row, 0.5rem);
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.sub-container {
+  @include flexCenter(column, 0.25rem);
+  align-items: flex-start;
+
+  .title-container {
+    @include flexCenter(row, 0.25rem);
+  }
+
+  h3 {
+    margin: 0;
+  }
+
+  .message {
+    font-size: small;
+    opacity: 0.8;
+    margin-left: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include belowDesktop {
+      max-width: 300px;
+    }
+  }
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  min-width: 142px;
+}

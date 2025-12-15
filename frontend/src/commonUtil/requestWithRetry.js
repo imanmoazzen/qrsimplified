@@ -9,7 +9,7 @@ export default async function requestWithRetry(params, initialDelay = 500, maxTr
     try {
       return await axios(params);
     } catch (err) {
-      console.log(err);
+      console.log(err?.response);
       if ([401, 403].includes(err?.response?.status)) throw Error("Request failed: Bad auth", { cause: err });
       // sleep for twice as long with each additional try:
       // e.g. 500ms, 1000ms, 2000ms, 4000ms...

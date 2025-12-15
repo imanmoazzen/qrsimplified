@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import DecoratedButton, { BUTTON_THEMES } from "../../../commonComponents/DecoratedButton/DecoratedButton.js";
+import DecoratedButtonWithTimeout from "../../../commonComponents/DecoratedButton/DecoratedButtonWithTimeout.js";
 import Header from "../../../commonComponents/Header/Header.js";
 import InputBox from "../../../commonComponents/InputBox/InputBox.js";
 import { COMMON_MESSAGES } from "../../../frontEndConstants.js";
@@ -29,12 +30,9 @@ const EditPage = () => {
   const [message, setMessage] = useState("");
   const [requestToArchive, setRequestToArchive] = useState(false);
 
-  const qrCodeImg = useFadeInImage({
-    src: campaign.s3URL,
-    alt: "QR code url",
-  });
+  const { destination, tracking_link, s3URL } = campaign ?? {};
 
-  const destination = campaign.destination;
+  const qrCodeImg = useFadeInImage({ src: s3URL, alt: "QR code url" });
 
   useEffect(() => {
     setName(campaign?.name ?? "");
@@ -113,13 +111,24 @@ const EditPage = () => {
       </div>
 
       <div className={styles["link-container"]}>
-        <label className={styles["title"]}>Link:</label>
+        <label className={styles["title"]}>Tracking Link:</label>
+        <span className={styles["link"]}>{tracking_link}</span>
+        <DecoratedButtonWithTimeout
+          onClick={async () => await navigator.clipboard.writeText(tracking_link)}
+          theme={BUTTON_THEMES.TRANSPARENT}
+          extraClasses={styles["cta-button"]}
+        />
+      </div>
+
+      <div className={styles["link-container"]}>
+        <label className={styles["title"]}>Landing Page:</label>
         <span className={styles["link"]}>{destination}</span>
         <DecoratedButton
+          buttonText="Open"
           icon="open_in_new"
           onClick={() => window.open(destination, "_blank", "noopener,noreferrer")}
           theme={BUTTON_THEMES.TRANSPARENT}
-          extraClasses={styles["open-button"]}
+          extraClasses={styles["cta-button"]}
         />
       </div>
 

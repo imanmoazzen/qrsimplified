@@ -5,13 +5,14 @@ import styles from "./DecoratedButtonWithTimeout.module.scss";
 
 const DecoratedButtonWithTimeout = ({
   onClick,
-  defaultText = "Copy Link",
+  defaultText = "Copy",
   defaultIcon = "content_copy",
   afterClickText = "Copied!",
   afterClickIcon = "check",
   timeoutInMs = 5000,
   isRippling,
   extraClasses,
+  theme,
 }) => {
   const [isCopied, setIsCopied] = useState(false);
 
@@ -28,6 +29,7 @@ const DecoratedButtonWithTimeout = ({
       onClick={handleClick}
       extraClasses={`${extraClasses} ${isCopied ? styles["ok"] : ""}`}
       isRippling={isRippling}
+      theme={theme}
     />
   );
 };

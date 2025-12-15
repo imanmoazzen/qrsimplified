@@ -31,6 +31,8 @@ export const APP_PAGES = {
   DASHBOARD: "/",
   UPGRADE: "/upgrade",
   FEEDBACK: "/feedback",
+  SIGNUP: "/signup",
+  REFERRAL: "/referral",
 };
 
 export const JSON_CONTENT_TYPE = "application/json";

@@ -1,7 +1,4 @@
 export const EMAIL_TYPES = {
-  ORG_INVITE: "org_invtie",
-  CUSTOMER_EMAIL: "customer_email",
-  CUSTOMER_MESSAGE_SUBMISSION: "customer_message_submission",
   EMAIL_VERIFICATION: "email_verification",
   USER_FEEDBACK: "user_feedback",
 };
@@ -40,3 +37,5 @@ export const ID_PREFIXES = {
 export const AUTH_SUBDOMAINS = {
   APP: "APP",
 };
+
+export const REFERRAL_PERCENTAGE = 25;

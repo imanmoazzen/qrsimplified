@@ -31,7 +31,7 @@ const Cart = () => {
   const purchase = async () => {
     try {
       if (isAnonymous) {
-        navigate("/signup");
+        navigate(APP_PAGES.SIGNUP);
         return;
       }
 
@@ -41,10 +41,10 @@ const Cart = () => {
         method: "POST",
         mode: "cors",
         data: {
-          productName: selectedProductName,
+          product_name: selectedProductName,
           success_url: window.location.origin + "/success",
           cancel_url: window.location.origin + APP_PAGES.CART,
-          referral_id: null,
+          referrer_user_id: localStorage.getItem("referrer_user_id"),
         },
       });
 

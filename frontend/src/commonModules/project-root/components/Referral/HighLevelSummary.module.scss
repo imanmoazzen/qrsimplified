@@ -1,0 +1,19 @@
+@import "../../../../../../styles/_mixin.scss";
+
+.main-container {
+  @include referralMainContainer();
+}
+
+.table {
+  @include referralSubContainer();
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+}

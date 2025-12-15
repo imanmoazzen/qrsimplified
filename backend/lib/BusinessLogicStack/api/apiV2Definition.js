@@ -22,9 +22,6 @@ export const API_V2_DEFINITION = {
     },
     referral: {
       info: { GET: AUTH },
-      create: { POST: AUTH },
-      view: { PUT: AUTH },
-      signup: { POST: AUTH },
     },
   },
   stripe: {
@@ -63,6 +60,9 @@ export const API_V2_DEFINITION = {
       "{campaign_id}": {
         GET: NOAUTH,
       },
+    },
+    "referral": {
+      POST: AUTH,
     },
   },
 };

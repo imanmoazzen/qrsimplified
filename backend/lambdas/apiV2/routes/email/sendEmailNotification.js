@@ -11,7 +11,7 @@ const region = process.env.AWS_REGION;
 const sesClient = new SESClient({ region });
 
 export async function sendEmailNotification(requestBody) {
-  const { type, recipients, message } = requestBody;
+  const { type, recipients, message, subject } = requestBody;
 
   try {
     if (!recipients) throw new Error("Email addresses are missing!");
@@ -33,7 +33,7 @@ export async function sendEmailNotification(requestBody) {
               Body: {
                 Text: { Data: message },
               },
-              Subject: { Data: `User feedback` },
+              Subject: { Data: subject ?? `User feedback` },
             },
             Source: senderEmail,
             SourceArn: verifiedEmailArn,

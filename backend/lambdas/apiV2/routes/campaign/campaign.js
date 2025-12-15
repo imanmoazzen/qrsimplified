@@ -20,13 +20,15 @@ import { getCampaignAnalytics } from "./utils.js";
 export const getCampaigns = async (userId) => {
   try {
     const allCampaigns = await query(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, { user_id: userId });
-    const noArchivedCampaigns = allCampaigns.filter((item) => item.status !== CAMPAIGN_STATUS.ARCHIVED);
-
-    const visitsForEachCampaign = await Promise.all(
-      noArchivedCampaigns.map((item) => query(dynamo, TABLE_NAMES.CAMPAIGN_VISITS, { campaign_id: item.campaign_id }))
+    const validCampaigns = allCampaigns.filter(
+      (item) => item.status !== CAMPAIGN_STATUS.ARCHIVED && item.status !== CAMPAIGN_STATUS.REFERRAL
     );
 
-    const campaigns = noArchivedCampaigns.map((item, index) => ({
+    const visitsForEachCampaign = await Promise.all(
+      validCampaigns.map((item) => query(dynamo, TABLE_NAMES.CAMPAIGN_VISITS, { campaign_id: item.campaign_id }))
+    );
+
+    const campaigns = validCampaigns.map((item, index) => ({
       ...item,
       visits: visitsForEachCampaign[index].length,
       analytics: getCampaignAnalytics(visitsForEachCampaign[index]),
@@ -40,8 +42,8 @@ export const getCampaigns = async (userId) => {
 
 export const addCampaign = async (requestBody, userId) => {
   try {
-    const { campaign_id, name, destination } = requestBody;
-    if (!campaign_id || !name || !destination) throw new Error("required params are missing");
+    const { campaign_id, name, tracking_link, destination } = requestBody;
+    if (!campaign_id || !name || !tracking_link || !destination) throw new Error("required params are missing");
 
     const [user, allCampaigns] = await Promise.all([
       getUser(userId),
@@ -49,14 +51,17 @@ export const addCampaign = async (requestBody, userId) => {
     ]);
 
     const qr_credits = user?.qr_credits ?? 0;
-    const noArchivedCampaigns = allCampaigns.filter((item) => item.status !== CAMPAIGN_STATUS.ARCHIVED);
+    const validCampaigns = allCampaigns.filter(
+      (item) => item.status !== CAMPAIGN_STATUS.ARCHIVED && item.status !== CAMPAIGN_STATUS.REFERRAL
+    );
 
-    const status = qr_credits > noArchivedCampaigns.length ? CAMPAIGN_STATUS.LIVE : CAMPAIGN_STATUS.TRIAL;
+    const status = qr_credits > validCampaigns.length ? CAMPAIGN_STATUS.LIVE : CAMPAIGN_STATUS.TRIAL;
 
     const item = {
       user_id: userId,
       campaign_id,
       name,
+      tracking_link,
       destination,
       creation_time: Date.now(),
       status,
@@ -65,6 +70,30 @@ export const addCampaign = async (requestBody, userId) => {
     await putItem(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, item);
 
     return successResponse("item was added", { item });
+  } catch (err) {
+    return errorResponse(`cannot add item: ${err?.message}`);
+  }
+};
+
+export const addReferralCampaign = async (requestBody, userId) => {
+  try {
+    const { tracking_link, s3URL } = requestBody;
+    if (!tracking_link || !s3URL) throw new Error("required params are missing");
+
+    const campaign = {
+      user_id: userId,
+      campaign_id: userId,
+      name: "Referral QR Code",
+      tracking_link,
+      destination: `${process.env.APP_BASE_URL}/signup/?ref=${userId}`,
+      creation_time: Date.now(),
+      status: CAMPAIGN_STATUS.REFERRAL,
+      s3URL,
+    };
+
+    await putItem(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, campaign);
+
+    return successResponse("item was added", { campaign });
   } catch (err) {
     return errorResponse(`cannot add item: ${err?.message}`);
   }

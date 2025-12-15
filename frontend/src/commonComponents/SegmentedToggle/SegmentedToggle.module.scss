@@ -1,0 +1,36 @@
+@import "../../styles/_styles.scss";
+
+.main-container {
+  position: relative;
+  @include flexCenter(row);
+  width: fit-content;
+  padding-block: 0.5rem;
+  width: 100%;
+  border-radius: var(--border-radius-big);
+  overflow: hidden;
+  border: 1px solid black;
+
+  span {
+    width: 50%;
+    white-space: nowrap;
+    text-align: center;
+    z-index: 1;
+    cursor: pointer;
+    transition: color 0.3s ease, left 0.3s ease;
+  }
+
+  span.active {
+    color: white;
+  }
+
+  span.slider {
+    position: absolute;
+    height: 100%;
+    background-color: var(--primary-color);
+    left: 50%;
+
+    &.left {
+      left: 0;
+    }
+  }
+}

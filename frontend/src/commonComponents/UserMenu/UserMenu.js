@@ -16,19 +16,9 @@ const UserMenu = ({ authModule }) => {
 
   const { user_id, display_name, picture, user_uploaded_picture } = user;
 
-  const pricingClicked = () => {
+  const handleClick = (page) => {
     setPopupVisible(false);
-    navigate(APP_PAGES.CART);
-  };
-
-  const helpClicked = () => {
-    setPopupVisible(false);
-    navigate(APP_PAGES.FAQ);
-  };
-
-  const feedbackClicked = () => {
-    setPopupVisible(false);
-    navigate(APP_PAGES.FEEDBACK);
+    navigate(page);
   };
 
   return (
@@ -54,21 +44,28 @@ const UserMenu = ({ authModule }) => {
               <DecoratedButton
                 icon={"shopping_cart"}
                 buttonText={"Cart"}
-                onClick={pricingClicked}
+                onClick={() => handleClick(APP_PAGES.CART)}
                 theme={BUTTON_THEMES.POPUP}
                 extraContainerClasses={styles["button-container"]}
               />
               <DecoratedButton
                 icon={"help"}
                 buttonText={"Help"}
-                onClick={helpClicked}
+                onClick={() => handleClick(APP_PAGES.FAQ)}
                 theme={BUTTON_THEMES.POPUP}
                 extraContainerClasses={styles["button-container"]}
               />
               <DecoratedButton
                 icon={"forum"}
                 buttonText={"Feedback"}
-                onClick={feedbackClicked}
+                onClick={() => handleClick(APP_PAGES.FEEDBACK)}
+                theme={BUTTON_THEMES.POPUP}
+                extraContainerClasses={styles["button-container"]}
+              />
+              <DecoratedButton
+                icon={"redeem"}
+                buttonText={"Referral"}
+                onClick={() => handleClick(APP_PAGES.REFERRAL)}
                 theme={BUTTON_THEMES.POPUP}
                 extraContainerClasses={styles["button-container"]}
               />
@@ -100,14 +97,14 @@ const UserMenu = ({ authModule }) => {
               <DecoratedButton
                 icon={"help"}
                 buttonText={"Help"}
-                onClick={helpClicked}
+                onClick={() => handleClick(APP_PAGES.FAQ)}
                 theme={BUTTON_THEMES.POPUP}
                 extraContainerClasses={styles["button-container"]}
               />
               <DecoratedButton
                 icon={"shopping_cart"}
                 buttonText={"Cart"}
-                onClick={pricingClicked}
+                onClick={() => handleClick(APP_PAGES.CART)}
                 theme={BUTTON_THEMES.POPUP}
                 extraContainerClasses={styles["button-container"]}
               />

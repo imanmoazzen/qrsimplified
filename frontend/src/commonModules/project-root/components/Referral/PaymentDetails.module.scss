@@ -1,0 +1,47 @@
+@import "../../../../../../styles/_mixin.scss";
+
+.main-container {
+  @include referralMainContainer();
+}
+
+.details-container {
+  @include referralSubContainer();
+  @include flexCenter(column);
+  align-items: flex-start;
+
+  span {
+    @include flexCenter();
+    justify-content: flex-start;
+    width: 112px;
+    height: 48px;
+    border: 1px solid #ccc;
+    font-size: small;
+    padding: 8px;
+    overflow: hidden;
+  }
+
+  span:first-child {
+    flex-grow: 1.5;
+  }
+
+  span:last-child {
+    flex-grow: 1;
+  }
+}
+
+.payment-card-container,
+.title-container {
+  @include flexCenter();
+  width: 100%;
+}
+
+.title-container span {
+  align-items: flex-start;
+  font-weight: bold;
+}
+
+.hideable {
+  @include belowBigDesktop {
+    display: none !important;
+  }
+}

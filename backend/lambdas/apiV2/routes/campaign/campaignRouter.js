@@ -1,4 +1,4 @@
-import { addCampaign, deleteCampaign, getCampaigns, updateCampaign, visit } from "./campaign.js";
+import { addCampaign, addReferralCampaign, deleteCampaign, getCampaigns, updateCampaign, visit } from "./campaign.js";
 
 export default async function campaignRouter(routeKey, requestBody, pathParameters, userId, event) {
   switch (routeKey) {
@@ -7,6 +7,9 @@ export default async function campaignRouter(routeKey, requestBody, pathParamete
     }
     case "POST /campaign": {
       return await addCampaign(requestBody, userId);
+    }
+    case "POST /campaign/referral": {
+      return await addReferralCampaign(requestBody, userId);
     }
     case "PUT /campaign": {
       return await updateCampaign(requestBody, userId);
