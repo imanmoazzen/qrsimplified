@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+
+const devConfig = require("../../frontend/config/appSettings.development-template.json");
+const stagingConfig = require("../../frontend/config/appSettings.staging.json");
+const prodConfig = require("../../frontend/config/appSettings.production.json");
+
+const checkConfigs = () => {
+  const devKeys = Object.keys(devConfig).filter((key) => key.startsWith("api."));
+  const stagingKeys = Object.keys(stagingConfig).filter((key) => key.startsWith("api."));
+  const productionKeys = Object.keys(prodConfig).filter((key) => key.startsWith("api."));
+
+  const failures = [];
+
+  devKeys.forEach((key) => {
+    const value = devConfig[key];
+    if (value.endsWith("/")) {
+      failures.push(`[appSettings.development.json] -> ${key}'s value cannot end with a forward slash`);
+    }
+  });
+
+  stagingKeys.forEach((key) => {
+    const value = stagingConfig[key];
+    if (value.endsWith("/")) {
+      failures.push(`[appSettings.staging.json] -> ${key}'s value cannot end with a forward slash`);
+    }
+  });
+
+  productionKeys.forEach((key) => {
+    const value = prodConfig[key];
+    if (value.endsWith("/")) {
+      failures.push(`[appSettings.production.json] -> ${key}'s value cannot end with a forward slash`);
+    }
+  });
+
+  if (failures.length > 0) {
+    console.error(`Some problems were found in your config files:`);
+    console.log("======================================================");
+    failures.forEach((failure) => {
+      console.error(failure);
+    });
+    console.log("======================================================");
+    console.log("Please fix these and you can continue with your commit.");
+    process.exit(1);
+  }
+  process.exit(0);
+};
+
+checkConfigs();

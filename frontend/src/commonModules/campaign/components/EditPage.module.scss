@@ -1,0 +1,99 @@
+@import "../../../styles/_mixin.scss";
+@import "../styles/_campaignStyles.scss";
+
+.main-container {
+  @include parent-container();
+  width: 512px;
+}
+
+.name-container {
+  @include flexCenter(column, 1.5rem);
+  width: 100%;
+
+  .input-box {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+
+    input {
+      padding: 0.4rem;
+    }
+
+    label {
+      width: 60px;
+      padding-left: 0;
+    }
+  }
+}
+
+.title {
+  @include labelStyle();
+  width: 60px;
+}
+
+.link-container {
+  @include flexCenter(row);
+  width: 100%;
+
+  .title-container {
+    @include flexCenter(row, 0.25rem);
+    width: 100%;
+  }
+
+  .link {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: small;
+    background-color: var(--light-background);
+    border-radius: var(--border-radius);
+    padding: 0.4rem;
+    border: 1px solid gray;
+  }
+
+  .open-button {
+    padding: 0;
+    padding-left: 0.5rem;
+  }
+}
+
+.qrcode-container {
+  @include flexCenter(row);
+  width: 100%;
+  justify-content: space-between;
+
+  @include mobile {
+    flex-direction: column;
+  }
+
+  img {
+    width: 256px;
+    aspect-ratio: 1;
+  }
+}
+
+.buttons {
+  @include buttonPanel(0);
+}
+
+.archive-container {
+  @include flexCenter(row, 4px);
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 2rem;
+
+  > span {
+    @include labelStyle();
+  }
+}
+
+.info {
+  @include labelStyle(1);
+  color: var(--primary-color);
+}
+
+.confirm-container {
+  @include flexCenter(column, 1rem);
+}

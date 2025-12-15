@@ -1,0 +1,53 @@
+name: Lint, Test and Deploy Staging
+
+# This workflow can only be run manually (workflow_dispatch)
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: lint-test-deploy-staging
+  cancel-in-progress: false # here, we don't want to cancel in-progress workflows or we risk terminating a deployment while it's midway through
+
+jobs:
+  lint-and-test:
+    name: Lint and Test
+    uses: ./.github/workflows/lint-and-test.yml
+  deploy:
+    needs: lint-and-test
+    if: needs.lint-and-test.result == 'success'
+    name: Deploy To Staging Environment
+    uses: ./.github/workflows/deploy-staging.yml
+    secrets: inherit
+  notify-deployment-success:
+    if: success()
+    name: Notify Success In Slack
+    needs: [lint-and-test, deploy]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      env-name: staging
+      message: "[Staging Deployment] Successful"
+      job-status: "success"
+      emoji: ":party-parrot:"
+    secrets: inherit
+  notify-deployment-failed:
+    if: failure()
+    name: Notify Failure In Slack
+    needs: [lint-and-test, deploy]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      env-name: staging
+      message: "[Staging Deployment] Failed"
+      job-status: "failure"
+      emoji: ":cry:"
+    secrets: inherit
+  notify-deployment-cancelled:
+    if: cancelled()
+    name: Notify Cancelled In Slack
+    needs: [lint-and-test, deploy]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      env-name: staging
+      message: "[Staging Deployment] Cancelled"
+      job-status: "cancelled"
+      emoji: ":neutral_face:"
+    secrets: inherit

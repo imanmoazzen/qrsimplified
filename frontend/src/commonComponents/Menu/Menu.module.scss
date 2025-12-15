@@ -1,0 +1,83 @@
+@import "../../styles/_mixin.scss";
+
+.above-mobile-container {
+  @include flexCenter(row);
+  justify-content: space-between;
+  width: 100%;
+
+  &.column {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.mobile-container {
+  position: relative;
+  display: none;
+  z-index: 2;
+  height: var(--navbar-height);
+
+  @include mobile {
+    display: block;
+    @include flexCenter();
+    width: 100%;
+
+    &.left {
+      justify-content: flex-start;
+    }
+
+    &.right {
+      justify-content: flex-end;
+    }
+
+    &.center {
+      justify-content: center;
+    }
+  }
+
+  .mobile-button {
+    @include rfont(punch);
+    cursor: pointer;
+    user-select: none;
+    z-index: inherit;
+  }
+
+  .mobile-options {
+    @include flexCenter(column);
+    position: absolute;
+    bottom: 0;
+    transform: translate(0, 100%);
+    width: 100%;
+    z-index: inherit;
+
+    &.left {
+      left: 0;
+    }
+
+    &.right {
+      right: 0;
+    }
+  }
+}
+
+.overlay {
+  position: fixed;
+  opacity: 0;
+  transition: 200ms ease-in-out;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--navbar-background-color);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}

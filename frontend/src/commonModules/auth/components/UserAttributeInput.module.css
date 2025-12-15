@@ -1,0 +1,13 @@
+.user-info {
+  display: flex;
+}
+
+.user-info__label {
+  width: 120px;
+}
+
+.user-info__input {
+  margin-left: 10px;
+  font: inherit;
+  flex-grow: 2;
+}

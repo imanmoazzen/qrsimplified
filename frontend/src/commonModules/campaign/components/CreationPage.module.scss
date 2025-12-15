@@ -1,0 +1,24 @@
+@import "../../../styles/_mixin.scss";
+@import "../styles/_campaignStyles.scss";
+
+.main-container {
+  @include parent-container();
+}
+
+.qr-code-image {
+  width: 256px;
+}
+
+.buttons {
+  @include buttonPanel();
+  width: 100%;
+}
+
+.image-container {
+  @include flexCenter();
+  position: relative;
+
+  .moving-bar {
+    @include movingBar();
+  }
+}

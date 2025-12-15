@@ -1,0 +1,107 @@
+@import "../../../../styles/_styles.scss";
+
+.main-container {
+  position: relative;
+  width: 100%;
+  padding-top: 0px;
+  width: 300px;
+  max-width: 100%;
+  color: var(--charcoal-color);
+  cursor: pointer;
+
+  &.disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+.coupon-container {
+  @include flexCenter(column, 4px);
+  margin-bottom: 0.5rem;
+
+  section {
+    @include flexCenter(row, 4px);
+
+    span {
+      font-size: large;
+    }
+  }
+}
+
+.card-container {
+  @include flexCenter(column, 3rem);
+  padding: var(--default-distance);
+  border-radius: var(--border-radius);
+  box-shadow: 0px 0px 4px gray;
+}
+
+.saving {
+  margin-top: 0.5rem;
+  display: block;
+  text-align: center;
+  @include rfont();
+}
+
+.selected {
+  .coupon-container,
+  .saving {
+    color: var(--primary-color);
+  }
+
+  .card-container {
+    color: var(--navbar-background-color);
+    outline: 2px solid var(--primary-color);
+  }
+}
+
+.name-container {
+  @include flexCenter(column);
+  @include rfont(title);
+  font-weight: bold;
+
+  div {
+    @include flexCenter(row, 0.5rem);
+
+    span[class*="material"] {
+      @include rfont(title);
+    }
+  }
+
+  .price,
+  .price-discounted {
+    display: block;
+
+    font-weight: normal;
+    @include rfont(subtitle);
+    height: 1.4rem;
+  }
+
+  .price.off {
+    text-decoration-color: gray;
+    color: gray;
+    @include rfont();
+    text-decoration: line-through;
+  }
+}
+
+.details {
+  @include flexCenter(column, 0.75rem);
+  align-items: flex-start;
+
+  @include belowDesktop {
+    width: fit-content;
+    margin: auto;
+  }
+
+  span[class*="material"] {
+    color: inherit;
+  }
+}
+
+.selected .plan-details span[class*="material"] {
+  color: var(--primary-color);
+}
+
+.hidden {
+  visibility: hidden;
+}

@@ -1,0 +1,193 @@
+@import "../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter();
+  position: relative;
+  color: transparent;
+}
+
+.button {
+  position: relative;
+  @include flexCenter(row, 4px);
+  padding: 0.6rem 1rem;
+  background: white;
+  border: 1px solid black;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  cursor: pointer;
+  text-wrap: wrap;
+  user-select: none;
+  --rippling-color: #635bff66;
+
+  @include small-screen {
+    font-size: small;
+  }
+
+  span,
+  label {
+    pointer-events: none;
+  }
+}
+
+.button span[class*="material-symbols-outlined"] {
+  @include rfont(subtitle);
+}
+
+.button[aria-disabled="true"] {
+  cursor: default;
+  pointer-events: none;
+}
+
+.button[aria-disabled="false"]:hover {
+  background: var(--primary-color);
+  color: white;
+  border-color: transparent;
+}
+
+.ripple {
+  @include ripple();
+}
+
+.google-icon-hidden span[class*="material"] {
+  @include mobile {
+    display: none;
+  }
+}
+
+.text-hidden label {
+  @include mobile {
+    display: none;
+  }
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+.button.colored {
+  color: white;
+  border-color: var(--primary-color);
+  background-color: var(--primary-color);
+
+  &:hover {
+    box-shadow: 0 0 3px var(--primary-color);
+  }
+}
+
+.button.transparent {
+  color: black;
+  border-color: transparent;
+  background-color: transparent;
+
+  &:hover {
+    color: var(--primary-color);
+    border-color: transparent;
+    background-color: transparent;
+  }
+}
+
+.button.ai {
+  color: white;
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  border: none;
+
+  &:hover {
+    background: var(--primary-color);
+  }
+
+  &.busy {
+    color: white;
+
+    .progress {
+      color: white;
+    }
+  }
+}
+
+.button.popup {
+  border-color: transparent;
+  border-radius: 0;
+  user-select: none;
+  justify-content: flex-start;
+  gap: 8px;
+
+  &:hover {
+    background-color: var(--light-background);
+    color: var(--primary-color);
+  }
+}
+
+.button.busy {
+  border-color: transparent;
+  pointer-events: none;
+  background-color: transparent;
+  color: black;
+
+  .progress {
+    animation: spin 1.5s linear infinite;
+    transform-origin: center center;
+    color: var(--primary-color);
+  }
+
+  .ripple {
+    display: none;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.button.transparent-light-background {
+  border: none;
+  background-color: transparent;
+  color: var(--primary-color);
+  padding: 4px 8px;
+
+  @include mobile {
+    padding: 4px;
+  }
+
+  &:hover {
+    background-color: transparent;
+    color: var(--primary-color);
+    background-color: rgba(99, 91, 255, 0.2);
+  }
+}
+
+.help {
+  @include rfont(subtitle);
+  position: absolute;
+  left: calc(100% + 0.25rem);
+  color: black;
+  opacity: 0.5;
+  cursor: pointer;
+  z-index: 1;
+
+  &.on-left {
+    left: initial;
+    right: calc(100% + 0.25rem);
+  }
+
+  &:hover {
+    opacity: 1;
+    color: var(--primary-color);
+  }
+
+  @include mobile {
+    left: calc(100% + 4px);
+  }
+}
+
+.active-help {
+  opacity: 1 !important;
+  z-index: 1001;
+}

@@ -1,0 +1,25 @@
+.modal-button {
+  border: none;
+  width: calc(var(--button-width) * 2);
+  height: calc(var(--button-width) / 2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid #06d6a0 !important;
+  border-radius: var(--border-radius);
+  color: black;
+  padding: 5px;
+}
+
+.modal-button:hover {
+  background-color: #06d6a0;
+  color: white;
+}
+
+.spacer {
+  display: flex;
+  justify-content: center;
+  margin: 10px 20px;
+}

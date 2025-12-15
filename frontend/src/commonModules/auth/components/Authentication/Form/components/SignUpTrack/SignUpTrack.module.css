@@ -1,0 +1,109 @@
+.sign-up-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 48px;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+
+.sign-up-track__step,
+.sign-up-track__text,
+.sign-up-track__progress {
+  display: inline-block;
+}
+
+.sign-up-track__step {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sign-up-track__step {
+    transition-property: background-color, border-color;
+    transition-timing-function: ease-in-out;
+    transition-duration: 150ms;
+  }
+}
+
+.sign-up-track__step--complete {
+  background-color: var(--landing-page-blue-color);
+}
+
+.sign-up-track__step--sign-up {
+  border-color: var(--landing-page-blue-color);
+}
+
+.sign-up-track__step--confirm-sign-up {
+  border-color: var(--landing-page-blue-color);
+}
+
+.sign-up-track__step-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: var(--landing-page-blue-color);
+  font-size: 18px;
+  font-weight: bold;
+  transform: translate(-50%, -50%);
+}
+
+.sign-up-track__step--complete .sign-up-track__step-icon {
+  color: #555555;
+}
+
+.sign-up-track__step--sign-up:not(.sign-up-track__step--complete) .sign-up-track__step-icon,
+.sign-up-track__step--confirm-sign-up:not(.sign-up-track__step--complete) .sign-up-track__step-icon {
+  font-size: 18px;
+}
+
+.sign-up-track__text {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.sign-up-track__progress {
+  position: relative;
+  width: 60%;
+  height: 2px;
+  background-color: var(--border-color);
+}
+
+.sign-up-track__progress::before {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background-color: var(--landing-page-blue-color);
+  content: "";
+  transform: translateY(-50%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sign-up-track__progress::before {
+    transition: width 150ms ease-in-out;
+    animation: progress-start 150ms ease-in-out;
+  }
+}
+
+.sign-up-track__progress--confirm-sign-up::before {
+  width: 100%;
+}
+
+@keyframes progress-start {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 50%;
+  }
+}

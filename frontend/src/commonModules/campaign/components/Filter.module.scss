@@ -1,0 +1,34 @@
+@import "../../../styles/_styles.scss";
+
+.main-container {
+  @include flexCenter(column, 0.25rem);
+}
+
+.header {
+  @include flexCenter(row, 4px);
+  @include labelStyle();
+
+  span {
+    font-size: 14px;
+  }
+}
+
+.buttons-container {
+  @include flexCenter(row, 0.25rem);
+  border: 1px solid gray;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+}
+
+.button {
+  padding: 0.25rem 0.5rem;
+  opacity: 0.5;
+  font-size: small;
+  border-radius: 0;
+  flex-grow: 1 !important;
+
+  &.active,
+  &:hover {
+    opacity: 1;
+  }
+}

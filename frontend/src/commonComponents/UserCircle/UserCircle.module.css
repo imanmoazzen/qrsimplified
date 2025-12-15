@@ -1,0 +1,10 @@
+.user-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  color: white;
+  z-index: 2;
+}

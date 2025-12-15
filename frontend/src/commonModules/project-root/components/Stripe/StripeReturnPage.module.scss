@@ -1,0 +1,21 @@
+@import "../../../../styles/_styles.scss";
+
+.main-container {
+  position: relative;
+  @include flexCenter(column, 1.5rem);
+  padding: 2rem;
+  height: var(--core-height);
+
+  .illustration {
+    width: 196px;
+  }
+}
+
+.robot-container {
+  position: absolute;
+  aspect-ratio: 1;
+  height: calc(0.25 * var(--core-height));
+  right: 1rem;
+  bottom: 0;
+  overflow: hidden;
+}

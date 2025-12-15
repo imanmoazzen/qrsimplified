@@ -1,0 +1,24 @@
+@import "../../../styles/_styles.scss";
+
+.main-container {
+  @include flexCenter(column, 4rem);
+  padding: 2rem;
+  width: 100%;
+
+  @include mobile {
+    padding: 1rem;
+  }
+}
+
+.new-campaign-container {
+  margin-left: auto;
+}
+
+.info {
+  @include labelStyle(1);
+  color: var(--primary-color);
+}
+
+.hidden {
+  visibility: hidden;
+}

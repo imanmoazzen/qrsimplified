@@ -1,0 +1,62 @@
+@import "../../../../styles/_styles.scss";
+
+.main-container {
+  @include flexCenter(column, 0rem);
+  width: 100%;
+
+  section {
+    @include flexCenter(column, 1rem);
+    padding: 1rem;
+  }
+
+  .parent-expandable {
+    div[class*="title-container"] {
+      justify-content: flex-start;
+      gap: 0.5rem !important;
+    }
+
+    div[class*="content-container"] {
+      padding-top: 1rem;
+      background-color: white;
+    }
+  }
+
+  .parent-expandable,
+  .expandable {
+    background-color: transparent;
+    box-shadow: none !important;
+    margin-bottom: 1rem;
+
+    div[class*="title-container"] {
+      padding: 0rem;
+      padding-bottom: 0.25rem;
+      gap: 1rem;
+
+      h3 {
+        font-size: medium;
+        font-weight: normal;
+      }
+    }
+  }
+
+  .expandable {
+    div[class*="title-container"] {
+      opacity: 1;
+      justify-content: flex-end;
+
+      &[class*="closed"] {
+        opacity: 0.75;
+      }
+
+      h3 {
+        font-size: medium;
+      }
+    }
+
+    div[class*="content-container"] {
+      background-color: var(--light-background);
+      padding-top: 0rem;
+      border-radius: var(--border-radius);
+    }
+  }
+}

@@ -1,0 +1,23 @@
+export const TABLE_NAMES = {
+  USER_DATA: process.env.USER_DATA_TABLE_NAME,
+  PURCHASES: process.env.PURCHASES_TABLE_NAME,
+  ANONYMOUS_USERS: process.env.ANONYMOUS_USERS_TABLE_NAME,
+  COGNITO_ATTRIBUTES: process.env.COGNITO_ATTRIBUTES_TABLE_NAME,
+  REFERRAL_SOURCES: process.env.REFERRAL_SOURCES_TABLE_NAME,
+  REFERRAL_RECORDS: process.env.REFERRAL_RECORDS_TABLE_NAME,
+  LEADS: process.env.LEADS_TABLE_NAME,
+  CAMPAIGN_SOURCES: process.env.CAMPAIGN_SOURCES_TABLE_NAME,
+  CAMPAIGN_VISITS: process.env.CAMPAIGN_VISITS_TABLE_NAME,
+};
+
+export const TABLE_PRIMARY_KEYS = {
+  USER_DATA: ["user_id"],
+  PURCHASES: ["user_id", "purchase_id"],
+  ANONYMOUS_USERS: ["anonymous_user_id"],
+};
+
+export const USER_POOL_ID = process.env.USER_POOL_ID;
+
+export const BUCKET_NAME = process.env.MAIN_DATA_BUCKET_NAME;
+
+export const PROJECT_REDIRECT_BASE_URL = process.env.APP_BASE_URL + "/project/";

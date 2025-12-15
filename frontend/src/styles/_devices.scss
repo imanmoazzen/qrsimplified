@@ -1,0 +1,55 @@
+@import "./_variables.scss";
+
+@mixin bigDesktop {
+  @media (min-width: $breakpoint-big-desktop) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: $breakpoint-desktop) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: $breakpoint-mobile) {
+    @content;
+  }
+}
+
+@mixin mobile-landscape {
+  @media (min-width: $minimum-mobile-side) and (max-width: $breakpoint-mobile) and (orientation: landscape) {
+    @content;
+  }
+}
+
+@mixin small-screen {
+  @media (max-width: $breakpoint-small-screen) {
+    @content;
+  }
+}
+
+@mixin belowBigDesktop {
+  @media (max-width: ($breakpoint-big-desktop - 1)) {
+    @content;
+  }
+}
+
+@mixin belowDesktop {
+  @media (max-width: ($breakpoint-desktop - 1)) {
+    @content;
+  }
+}
+
+@mixin aboveMobile {
+  @media (min-width: ($breakpoint-mobile + 1)) {
+    @content;
+  }
+}
+
+@mixin belowDesktopHeight {
+  @media (max-height: ($breakpoint-desktop-height - 1)) {
+    @content;
+  }
+}

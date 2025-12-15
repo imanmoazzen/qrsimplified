@@ -1,0 +1,60 @@
+@import "../../styles/_mixin.scss";
+
+.modal {
+  position: fixed;
+  min-width: 512px;
+  max-width: 95%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: 200ms ease-in-out;
+  border-radius: var(--border-radius);
+  background-color: white;
+  z-index: 10001;
+  overflow: hidden;
+
+  @include mobile {
+    min-width: initial;
+    max-width: initial;
+    width: 100%;
+    border-radius: 0;
+    @include flexCenter(column);
+  }
+}
+
+.modal.active {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.header {
+  @include flexCenter(column, 0.5rem);
+  align-items: flex-end;
+  width: 100%;
+
+  .close-button {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    color: rgb(33, 33, 33);
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin: 1rem 1rem 1rem auto;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  .title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+}
+
+.button-group {
+  @include buttonPanel();
+}

@@ -1,0 +1,219 @@
+name: Lint And Test
+
+# This workflow will run whenever there is a pull request opened that targets main (pull_request).
+# It is also called from the workflow that responds to pushes to main (workflow_call).
+on:
+  workflow_call:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: [main]
+
+env:
+  LINT_AND_TEST: true
+
+concurrency:
+  group: lint-and-test-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  frontend:
+    name: Lint & Test Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout The Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # needed for push
+
+      - name: Get Changed Frontend Files
+        id: get-changed-frontend-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            frontend/**
+            castofly-common/**
+          files_ignore: |
+            frontend/.eslintrc.json
+            frontend/.gitignore
+            frontend/babel.config.json
+            frontend/jest.config.js
+            frontend/jest.setup.js
+
+      - if: steps.get-changed-frontend-files.outputs.any_changed == 'true'
+        name: Display Changed Files
+        run: |
+          for file in ${{ steps.get-changed-frontend-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+
+      - if: steps.get-changed-frontend-files.outputs.any_changed == 'true'
+        name: Setup NodeJS Environment
+        uses: actions/setup-node@v4
+        with:
+          cache: "npm"
+
+      - if: steps.get-changed-frontend-files.outputs.any_changed == 'true'
+        name: Cache Castofly Common Node Modules
+        id: cache-npm-cc
+        uses: actions/cache@v4
+        env:
+          cache-name: cc-node-modules-${{ github.ref_name }}
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-$${{ hashFiles('./castofly-common/package-lock.json')}}
+
+      - if: steps.get-changed-frontend-files.outputs.any_changed == 'true'
+        name: Install Castofly Common NPM Package Dependencies
+        working-directory: castofly-common
+        run: npm install
+
+      - if: steps.get-changed-frontend-files.outputs.any_changed == 'true'
+        name: Cache Frontend Node Modules
+        id: cache-npm-fe
+        uses: actions/cache@v4
+        env:
+          cache-name: fe-node-modules-${{ github.ref_name }}
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-$${{ hashFiles('./frontend/package-lock.json')}}
+
+      - if: steps.get-changed-frontend-files.outputs.any_changed == 'true'
+        name: Install Frontend NPM Package Dependencies
+        run: npm install
+
+      - if: steps.get-changed-frontend-files.outputs.any_changed == 'true'
+        name: Lint
+        run: npm run lint
+
+      - if: steps.get-changed-frontend-files.outputs.any_changed == 'true'
+        name: Test
+        run: npm run test
+
+      - if: steps.get-changed-frontend-files.outputs.any_changed != 'true'
+        name: No Frontend Changes
+        run: |
+          echo 'No changes in the frontend'
+  common:
+    name: Lint & Test Common Code
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: castofly-common
+    steps:
+      - name: Checkout The Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get Changed Castofly Common Files
+        id: get-changed-common-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            castofly-common/**
+          files_ignore: |
+            castofly-common/.eslintrc.json
+            castofly-common/ava.config.js
+
+      - if: steps.get-changed-common-files.outputs.any_changed == 'true'
+        name: Display Changed Files
+        run: |
+          for file in ${{ steps.get-changed-common-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+
+      - if: steps.get-changed-common-files.outputs.any_changed == 'true'
+        name: Setup NodeJS Environment
+        uses: actions/setup-node@v4
+        with:
+          cache: "npm"
+
+      - if: steps.get-changed-common-files.outputs.any_changed == 'true'
+        name: Cache Node Modules
+        id: cache-npm-cc
+        uses: actions/cache@v4
+        env:
+          cache-name: cc-node-modules-${{ github.ref_name }}
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-$${{ hashFiles('./castofly-common/package-lock.json')}}
+
+      - if: steps.get-changed-common-files.outputs.any_changed == 'true'
+        name: Install NPM Package Dependencies
+        run: npm install
+
+      - if: steps.get-changed-common-files.outputs.any_changed == 'true'
+        name: Lint
+        run: npm run lint
+
+      - if: steps.get-changed-common-files.outputs.any_changed == 'true'
+        name: Test
+        run: npm run test
+
+  backend:
+    name: Lint & Test Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout The Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get Changed Backend Files
+        id: get-changed-backend-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            backend/**
+            castofly-common/**
+          files_ignore: |
+            backend/.eslintrc.json
+            backend/.gitignore
+            backend/.env.example
+
+      - if: steps.get-changed-backend-files.outputs.any_changed == 'true'
+        name: Display Changed Files
+        run: |
+          for file in ${{ steps.get-changed-backend-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+
+      - if: steps.get-changed-backend-files.outputs.any_changed == 'true'
+        name: Setup NodeJS Environment
+        uses: actions/setup-node@v4
+        with:
+          cache: "npm"
+
+      - if: steps.get-changed-backend-files.outputs.any_changed == 'true'
+        name: Cache Node Modules
+        id: cache-npm-be
+        uses: actions/cache@v4
+        env:
+          cache-name: be-node-modules-${{ github.ref_name }}
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-$${{ hashFiles('./backend/**/package-lock.json')}}
+
+      - if: steps.get-changed-backend-files.outputs.any_changed == 'true'
+        name: Install NPM Dependencies And Sub-Dependencies
+        run: |
+          npm install
+          npm run install-all
+
+      - if: steps.get-changed-backend-files.outputs.any_changed == 'true'
+        name: Lint
+        run: npm run lint
+
+      - if: steps.get-changed-backend-files.outputs.any_changed == 'true'
+        name: Test
+        run: npm run test
+
+      - if: steps.get-changed-backend-files.outputs.any_changed != 'true'
+        name: No Backend Changes
+        run: |
+          echo 'No changes in the backend'

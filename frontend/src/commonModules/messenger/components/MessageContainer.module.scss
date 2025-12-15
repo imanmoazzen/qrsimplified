@@ -1,0 +1,17 @@
+@import "../../../styles/_mixin.scss";
+
+.message-container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  bottom: 16px;
+  left: 16px;
+  z-index: 10001;
+
+  @include mobile {
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    padding: 8px;
+  }
+}

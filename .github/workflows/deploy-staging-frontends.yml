@@ -1,0 +1,99 @@
+name: Deploy Staging Frontends
+
+# This workflow can be called manually or from another workflow
+on:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  id-token: write # This is required for the AWS auth
+  contents: read
+
+concurrency:
+  group: deploy-staging-frontends
+  cancel-in-progress: false # here, we don't want to cancel in-progress workflows or we risk terminating a deployment while it's midway through
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    environment: staging
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout The Repository
+        uses: actions/checkout@v4
+        with:
+          ref: main # This is needed to ensure we get any changes commited via the backend deployment
+
+      - name: Setup NodeJS Environment
+        uses: actions/setup-node@v4
+        with:
+          cache: "npm"
+
+      - name: Cache castofly-common modules
+        id: cache-npm-cc
+        uses: actions/cache@v4
+        env:
+          cache-name: staging-cc-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-$${{ hashFiles('./castofly-common/package-lock.json')}}
+
+      - name: Install Castofly Common Package Dependencies
+        working-directory: castofly-common
+        run: npm install
+
+      - name: Cache Frontend Node modules
+        id: cache-npm-fe
+        uses: actions/cache@v4
+        env:
+          cache-name: staging-fe-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-$${{ hashFiles('./frontend/package-lock.json')}}
+
+      - name: Install Frontend Package Dependencies
+        run: npm install
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_CDK_REGION }}
+
+      - name: Deploy Main App
+        run: npm run deploy-app-staging-ci
+  notify-deployment-success:
+    if: github.event_name == 'workflow_dispatch' && success()
+    name: Notify Success In Slack
+    needs: deploy-frontend
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      env-name: staging
+      message: "[Staging Frontend(s) Deployment] Successful"
+      job-status: "success"
+      emoji: ":party-parrot:"
+    secrets: inherit
+  notify-deployment-failed:
+    if: github.event_name == 'workflow_dispatch' && failure()
+    name: Notify Failure In Slack
+    needs: deploy-frontend
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      env-name: staging
+      message: "[Staging Frontend(s) Deployment] Failed"
+      job-status: "failure"
+      emoji: ":cry:"
+    secrets: inherit
+  notify-deployment-cancelled:
+    if: github.event_name == 'workflow_dispatch' && cancelled()
+    name: Notify Cancelled In Slack
+    needs: deploy-frontend
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      env-name: staging
+      message: "[Staging Frontend(s) Deployment] Cancelled"
+      job-status: "cancelled"
+      emoji: ":neutral_face:"
+    secrets: inherit

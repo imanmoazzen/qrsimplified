@@ -1,0 +1,17 @@
+@import "../../styles/_styles.scss";
+
+.crop-container {
+  @include flexCenter();
+  width: 96px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background-color: var(--navbar-background-color);
+  border-radius: 50%;
+
+  img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
+}

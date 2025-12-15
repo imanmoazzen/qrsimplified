@@ -1,0 +1,90 @@
+@import "../../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(column, 2rem);
+  width: 100%;
+}
+
+.logo-container {
+  position: relative;
+  @include flexCenter(column-reverse);
+
+  .qr-code-image {
+    width: 256px;
+  }
+
+  .upload-button-container {
+    position: absolute;
+
+    button[class*="busy"] {
+      pointer-events: none;
+      background-color: white;
+    }
+  }
+
+  img:last-child {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    transition: width 0.3s ease;
+    height: auto;
+  }
+}
+
+.moving-bar {
+  @include movingBar();
+}
+
+.background-color-container {
+  @include flexCenter(column, 0.75rem);
+  width: 100%;
+}
+
+.info {
+  @include labelStyle(1);
+  color: var(--primary-color);
+}
+
+.resize-container {
+  @include flexCenter(column, 1rem);
+  width: 100%;
+}
+
+.resize-slider {
+  @include flexCenter(row, 1rem);
+  justify-content: space-between;
+  width: 100%;
+
+  section {
+    @include flexCenter(row, 8px);
+  }
+
+  .slider {
+    color: var(--primary-color);
+    accent-color: var(--primary-color);
+    cursor: pointer;
+  }
+}
+
+.scan-to-check-message {
+  @include flexCenter(row, 0.5rem);
+  visibility: hidden;
+
+  &.visible {
+    opacity: 0.75 !important;
+    visibility: visible;
+    @include fadeUpAnimation();
+  }
+
+  span:first-child {
+    font-size: 36px;
+  }
+
+  span:last-child {
+    @include rfont(small);
+  }
+}
+
+.buttons {
+  @include buttonPanel();
+}

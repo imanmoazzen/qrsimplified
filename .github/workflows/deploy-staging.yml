@@ -1,0 +1,16 @@
+name: Deploy Staging Backend Then Frontends
+
+# This is a callable workflow and is not meant to be called directly.
+# It should be called from another workflow.
+on:
+  workflow_call:
+
+jobs:
+  deploy-backend:
+    uses: ./.github/workflows/deploy-staging-backend.yml
+    secrets: inherit
+  deploy-frontends:
+    if: needs.deploy-backend.result == 'success'
+    uses: ./.github/workflows/deploy-staging-frontends.yml
+    secrets: inherit
+    needs: deploy-backend

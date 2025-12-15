@@ -1,0 +1,45 @@
+.identity-provider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  span {
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  a {
+    display: inline-flex;
+    position: relative;
+    align-items: center;
+    width: auto;
+    padding: 12px 32px 12px 72px;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    font-size: 16px;
+    line-height: 1.42857143;
+    text-align: left;
+    text-decoration: none;
+    touch-action: manipulation;
+    user-select: none;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .google-logo {
+    display: inline-flex;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 42px;
+    height: calc(100% - 4px);
+    padding: 8px;
+    background-color: #ffffff;
+    border-radius: var(--border-radius);
+  }
+}

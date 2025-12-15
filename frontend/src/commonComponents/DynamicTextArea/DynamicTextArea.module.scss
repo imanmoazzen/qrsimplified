@@ -1,0 +1,37 @@
+@import "../../styles/_mixin.scss";
+
+.main-container {
+  position: relative;
+  @include flexCenter(column, 4px);
+  user-select: none;
+  align-items: flex-start;
+  width: 100%;
+
+  .text-area-label {
+    @include labelStyle();
+    @include leftPadding();
+  }
+
+  &.focused .text-area-label {
+    opacity: 1;
+    font-weight: bold;
+  }
+}
+
+.main-container textarea {
+  @include inputEntry();
+  resize: none;
+  overflow-y: auto;
+}
+
+.character-limit {
+  @include labelStyle();
+  position: absolute;
+  bottom: 0;
+  transform: translate(0, 100%);
+  padding-top: 4px;
+}
+
+.character-limit[data-is-max-reached="true"] {
+  color: var(--reddish-color);
+}

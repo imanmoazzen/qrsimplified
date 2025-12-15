@@ -1,0 +1,24 @@
+{
+  "name": "common-utilities",
+  "version": "1.0.0",
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "devDependencies": {
+    "@babel/core": "^7.21.0"
+  },
+  "dependencies": {
+    "@dolbyio/dolbyio-rest-apis-client": "^4.0.2",
+    "async-mutex": "^0.4.0",
+    "axios": "^1.7.7",
+    "deepmerge": "^4.3.1",
+    "mime-types": "^2.1.35",
+    "node-fetch": "^3.3.2",
+    "uuid": "^9.0.0",
+    "ytdl-core": "^4.11.5"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

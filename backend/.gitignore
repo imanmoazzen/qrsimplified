@@ -1,0 +1,15 @@
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+cdk-output.development.json
+cdk-output.development.ssm.json
+cdk-output.staging.json
+cdk-output.staging.ssm.json
+cdk-output.production.json
+cdk-output.production.ssm.json
+
+.env.*
+!.env.example
+.env

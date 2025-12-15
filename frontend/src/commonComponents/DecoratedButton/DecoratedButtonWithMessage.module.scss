@@ -1,0 +1,50 @@
+@import "../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(column, 0.5rem);
+  min-height: 64px;
+}
+
+.button-container {
+  @include flexCenter(row, 0.75rem);
+}
+
+.button {
+  padding: 0.5rem 1rem;
+}
+
+.message-container {
+  font-size: small;
+  color: var(--robot-black-color);
+  text-align: center;
+
+  &.sucess {
+    color: var(--primary-color);
+    animation: wiggle 0.3s 2;
+  }
+
+  &.error {
+    color: var(--reddish-color);
+  }
+}
+
+.loading-container {
+  position: relative;
+  height: 36px;
+  aspect-ratio: 1;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(0deg);
+  }
+  16% {
+    transform: rotate(-2.5deg);
+  }
+  83% {
+    transform: rotate(2.5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}

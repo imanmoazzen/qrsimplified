@@ -1,0 +1,145 @@
+@import "../../../styles/_mixin.scss";
+
+.main-container {
+  position: absolute;
+  @include flexCenter(column);
+  @include fadeUpAnimation();
+  align-items: flex-start;
+  background-color: white;
+  color: black;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--primary-color);
+  box-shadow: 0 0 4px var(--primary-color);
+  min-width: 400px;
+  padding: 1rem;
+  padding-top: 0.5rem;
+  z-index: 1001;
+
+  @include mobile {
+    width: 100vw;
+    min-width: initial;
+    border-radius: 0;
+  }
+
+  h2 {
+    margin: auto;
+    margin-top: 3rem;
+    @include rfont(subtitle);
+  }
+
+  p {
+    @include rfont(small);
+    text-align: left;
+    white-space: pre-line;
+  }
+}
+
+.buttons {
+  @include buttonPanel(0.5rem);
+}
+
+.backdrop {
+  position: fixed;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #00000075;
+  z-index: 1000;
+}
+
+.below-right {
+  @include aboveMobile {
+    top: calc(100% + 0.5rem);
+    right: initial;
+    bottom: initial;
+    left: 0;
+  }
+}
+
+.below-left {
+  @include aboveMobile {
+    top: calc(100% + 0.5rem);
+    right: 0;
+    bottom: initial;
+    left: initial;
+  }
+}
+
+.top-right {
+  @include aboveMobile {
+    top: initial;
+    right: initial;
+    bottom: calc(100% + 0.5rem);
+    left: 0;
+  }
+}
+
+.top-left {
+  @include aboveMobile {
+    top: initial;
+    right: 0;
+    bottom: calc(100% + 0.5rem);
+    left: initial;
+  }
+}
+
+.align-right {
+  @include aboveMobile {
+    top: 0;
+    right: initial;
+    bottom: initial;
+    left: calc(100% + 0.5rem);
+  }
+}
+
+.align-left {
+  @include aboveMobile {
+    top: initial;
+    right: calc(100% + 0.5rem);
+    bottom: 0%;
+    left: initial;
+  }
+}
+
+.align-top {
+  @include aboveMobile {
+    top: initial;
+    right: initial;
+    bottom: 0%;
+    left: calc(100% + 0.5rem);
+  }
+}
+
+.top-container {
+  position: absolute;
+  @include flexCenter(row, 1rem);
+  justify-content: space-between;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 2px 4px;
+  background-color: var(--bright-white);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.sound-container {
+  @include flexCenter(row);
+
+  .mute-button {
+    padding: 5px;
+
+    span[class*="material"] {
+      font-size: 22px;
+    }
+  }
+}
+
+.close {
+  margin-left: auto;
+  cursor: pointer;
+  font-size: 24px !important;
+}

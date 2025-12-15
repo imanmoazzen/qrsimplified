@@ -1,0 +1,41 @@
+@import "../../../../../styles/_mixin.scss";
+
+.form {
+  @include flexCenter(column);
+  @include shadowLightAnimationOnHover(1rem, var(--landing-page-blue-color), 0.25s);
+  position: relative;
+  width: 100%;
+  padding: 3rem;
+  background-color: var(--navbar-background-color);
+  font-family: inherit;
+  border-radius: var(--border-radius-big);
+  color: white;
+  border: 1px solid white;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: white;
+  background-color: transparent;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  margin: 0;
+  transform: translate(0, -120%);
+  padding: 0 1rem;
+  font-weight: normal;
+
+  @include mobile {
+    transform: initial;
+  }
+}
+
+.inputs-container {
+  @include flexCenter(column);
+  align-items: flex-start;
+  width: 100%;
+}
+
+.error {
+  @include errorMessage();
+}

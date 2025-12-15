@@ -1,0 +1,22 @@
+@import "../../styles/_styles.scss";
+
+.main-container {
+  position: relative;
+  @include flexCenter(row, 1rem);
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+
+  button {
+    padding: 0.5rem;
+  }
+
+  .verified {
+    pointer-events: none;
+
+    button {
+      color: var(--primary-color);
+      padding-inline: 0;
+    }
+  }
+}

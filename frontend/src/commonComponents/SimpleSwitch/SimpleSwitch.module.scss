@@ -1,0 +1,68 @@
+.main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  font-size: small;
+  gap: 0.5rem;
+  --switch-width: 34px;
+  --switch-height: 20px;
+  --knob-ratio-to-rail: 0.75;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.rail-and-knob-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.rail {
+  width: var(--switch-width);
+  height: var(--switch-height);
+  border-radius: calc(var(--knob-ratio-to-rail) * var(--switch-height));
+  background-color: var(--navbar-secondary-background-color);
+}
+
+.main-container.right .rail {
+  background-color: var(--primary-color);
+}
+
+.knob {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--knob-ratio-to-rail) * var(--switch-height));
+  height: calc(var(--knob-ratio-to-rail) * var(--switch-height));
+  border-radius: 50%;
+  background-color: white;
+  top: calc((1 - var(--knob-ratio-to-rail)) * var(--switch-height) / 2);
+  left: calc((1 - var(--knob-ratio-to-rail)) * var(--switch-height) / 2);
+  transition: left 250ms ease-in-out;
+}
+
+.main-container.right .knob {
+  left: calc(var(--switch-width) - (1 + var(--knob-ratio-to-rail)) * var(--switch-height) / 2);
+}
+
+.icon {
+  position: absolute;
+  font-size: calc(0.75 * var(--knob-ratio-to-rail) * var(--switch-height));
+}
+
+.left-label,
+.right-label {
+  opacity: 0.5;
+}
+
+.main-container:not(.right) .left-label {
+  opacity: 1;
+}
+
+.main-container.right .right-label {
+  opacity: 1;
+}

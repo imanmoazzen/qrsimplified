@@ -1,0 +1,29 @@
+@import "../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(column, var(--default-distance));
+  width: 100%;
+  padding: var(--default-distance);
+
+  @include mobile {
+    padding: var(--default-distance) calc(var(--default-distance) / 4);
+  }
+}
+
+.title-container {
+  @include flexCenter(column, 0.5rem);
+  width: 100%;
+
+  h2 {
+    margin-bottom: 0;
+  }
+
+  label {
+    @include labelStyle();
+  }
+}
+
+.center-container {
+  @include flexCenter();
+  width: 100%;
+}

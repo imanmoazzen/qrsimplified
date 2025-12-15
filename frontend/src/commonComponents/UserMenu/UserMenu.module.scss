@@ -1,0 +1,86 @@
+@import "../../styles/_mixin.scss";
+
+.main-container {
+  position: relative;
+  @include flexCenter();
+  padding-right: 1rem;
+  z-index: 4;
+
+  @include mobile {
+    padding-right: 0.5rem;
+  }
+}
+
+.top-container {
+  @include flexCenter(row, 4px);
+  background-color: transparent;
+  cursor: pointer;
+  border: 0;
+  z-index: inherit;
+
+  @include mobile {
+    gap: 0px;
+  }
+}
+
+.popup-menu {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  transform: translate(0, 100%);
+  min-width: 150px;
+}
+
+.user-circle {
+  width: 32px;
+  margin-right: 4px;
+
+  @include mobile {
+    margin-right: 0px;
+  }
+
+  @include small-screen {
+    display: none;
+  }
+}
+
+.user-button {
+  @include dimmedLook;
+  flex-direction: row-reverse;
+  user-select: none;
+  justify-content: flex-start;
+  background-color: transparent;
+  border-color: transparent;
+  padding-left: 0;
+  padding-right: 0;
+  gap: 4px;
+
+  &:hover {
+    background-color: transparent !important;
+  }
+
+  span {
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  @include mobile {
+    span {
+      font-size: 36px !important;
+    }
+
+    label {
+      display: none;
+    }
+  }
+}
+
+.button-container {
+  justify-content: left;
+
+  button {
+    width: 100%;
+  }
+}

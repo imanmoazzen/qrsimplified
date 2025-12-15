@@ -1,0 +1,22 @@
+@import "../../../styles/_styles.scss";
+
+.main-container {
+  @include flexCenter(column, 2rem);
+  width: 100%;
+}
+
+.info {
+  @include labelStyle(1);
+  color: var(--primary-color);
+}
+
+.buttons {
+  @include buttonPanel();
+  justify-content: space-between;
+  width: 100%;
+
+  section {
+    @include buttonPanel(0);
+    width: fit-content;
+  }
+}

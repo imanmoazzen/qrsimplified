@@ -1,0 +1,28 @@
+@import "../styles/_campaignStyles.scss";
+
+.main-container {
+  @include flexCenter(column, 4rem);
+  padding: 2rem;
+  width: 100%;
+
+  @include mobile {
+    padding: 1rem;
+  }
+
+  p {
+    width: 500px;
+    max-width: 100%;
+    line-height: 1.5rem;
+    color: var(--robot-black-color);
+  }
+}
+
+.close-container {
+  margin-left: auto;
+}
+
+.qr-code {
+  font-size: 96px;
+  color: var(--primary-color);
+  margin-bottom: -3rem;
+}

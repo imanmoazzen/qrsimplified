@@ -1,0 +1,39 @@
+@import "../../../../styles/_styles.scss";
+
+.main-container {
+  @include flexCenter(row, 0.5rem);
+  height: 36px;
+  padding: 0;
+  width: fit-content;
+  padding-left: 1rem;
+  cursor: pointer;
+
+  @include mobile {
+    padding-left: 0.5rem;
+  }
+}
+
+.image {
+  height: inherit;
+  aspect-ratio: 1;
+  display: block;
+}
+
+.text {
+  color: darkgray !important;
+  @include rfont(small);
+  letter-spacing: 0.15rem;
+  @include dimmedLook();
+  pointer-events: none;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.main-container:hover {
+  .image,
+  .text {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,25 @@
+@import "../../styles/_mixin.scss";
+
+.button-container {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 3;
+
+  @include mobile {
+    position: relative;
+    top: initial;
+    right: initial;
+    z-index: initial;
+    margin: 1rem 0rem 1rem auto;
+  }
+}
+
+.button {
+  padding: 0rem;
+
+  span[class*="material"] {
+    width: initial;
+    @include rfont(xlarge);
+  }
+}

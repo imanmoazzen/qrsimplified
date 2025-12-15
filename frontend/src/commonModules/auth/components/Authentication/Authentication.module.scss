@@ -1,0 +1,50 @@
+@import "../../../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(row);
+  min-height: 100vh;
+  width: 100%;
+  justify-content: space-evenly;
+  position: relative;
+  overflow: hidden;
+
+  @include mobile {
+    flex-direction: column;
+    min-height: 50vh;
+  }
+}
+
+.banner-container {
+  @include flexCenter(column);
+  flex-grow: 1;
+  min-height: inherit;
+  background-color: var(--navbar-secondary-background-color);
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.login-container {
+  @include flexCenter(column, 1rem);
+  min-height: inherit;
+  animation: expandWidth 1s ease forwards;
+  overflow: hidden;
+
+  img {
+    width: 200px;
+  }
+
+  @include mobile {
+    animation: initial;
+  }
+}
+
+@keyframes expandWidth {
+  from {
+    width: 0;
+  }
+  to {
+    width: 50vw;
+  }
+}

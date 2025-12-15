@@ -1,0 +1,207 @@
+@mixin fadeUpAnimation($y: 32px, $time: 0.3s, $delay: 0s) {
+  animation: fadeUp $time ease-out forwards;
+  animation-delay: $delay;
+  opacity: 0;
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY($y);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@mixin comeForwardAnimation($depth: 600px) {
+  animation: comeForward 1s 1 linear;
+
+  @keyframes comeForward {
+    0% {
+      transform: perspective($depth) rotateY(30deg) translateZ(calc(-1 * $depth / 2)) translateY(-50px);
+      opacity: 0.5;
+    }
+    100% {
+      transform: perspective($depth) rotateY(0deg) translateZ(0px) translateX(0px);
+      opacity: 1;
+    }
+  }
+}
+
+@mixin shadowLightAnimationOnHover($shadowDepth: 4px, $shadowColor: gray, $duration: 0.4) {
+  &:hover {
+    transition: box-shadow $duration ease-in-out;
+    box-shadow: 0 0 $shadowDepth $shadowColor;
+  }
+}
+
+@mixin wiggleAnimationOnHover() {
+  &:hover {
+    animation: wiggle 0.4s ease-in-out 1;
+  }
+
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(5deg);
+    }
+    50% {
+      transform: rotate(-5deg);
+    }
+    75% {
+      transform: rotate(3deg);
+    }
+  }
+}
+
+@mixin ripple($rippling-color: #635bff66, $depth: 6px) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  animation: rippleBoxPulse 1.25s ease-in-out infinite;
+  pointer-events: none;
+
+  @keyframes rippleBoxPulse {
+    0% {
+      box-shadow: none;
+    }
+    50% {
+      box-shadow: 0 0 0 #{$depth} #{$rippling-color};
+    }
+    100% {
+      box-shadow: none;
+    }
+  }
+}
+
+@mixin shake($duration: 2s) {
+  animation: shake $duration infinite;
+
+  @keyframes shake {
+    0% {
+      transform: rotate(0deg);
+    }
+    10% {
+      transform: rotate(15deg);
+    }
+    20% {
+      transform: rotate(-15deg);
+    }
+    30% {
+      transform: rotate(15deg);
+    }
+    40% {
+      transform: rotate(-15deg);
+    }
+    50% {
+      transform: rotate(10deg);
+    }
+    60% {
+      transform: rotate(-10deg);
+    }
+    70% {
+      transform: rotate(5deg);
+    }
+    80% {
+      transform: rotate(-5deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+@mixin move-sideways($distance: 10px, $duration: 1s) {
+  animation: move-sideways $duration linear infinite alternate;
+
+  @keyframes move-sideways {
+    0% {
+      transform: translateX(-$distance);
+    }
+    100% {
+      transform: translateX($distance);
+    }
+  }
+}
+
+@mixin movingBar($width: 1rem, $color: var(--primary-color), $duration: 2s, $delay: 0) {
+  position: absolute;
+  height: 100%;
+  width: $width;
+  background-color: $color;
+  z-index: 2;
+  border-radius: 4px;
+  animation: slideBackAndForth $duration ease-in-out forwards;
+  animation-delay: $delay;
+  left: 0;
+  opacity: 0;
+
+  @keyframes slideBackAndForth {
+    0% {
+      left: 0;
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    50% {
+      left: calc(100% - #{$width});
+      opacity: 0.9;
+    }
+    90% {
+      opacity: 0.8;
+    }
+    100% {
+      left: 0;
+      opacity: 0;
+    }
+  }
+}
+
+@mixin typing($num: 38, $width: 38ch, $duration: 4s, $delay: 0s) {
+  display: inline-block;
+  font-family: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+
+  width: 0;
+  border-right: 2px solid transparent;
+
+  animation: typing $duration steps($num, end) $delay forwards, showCursor 0s linear $delay forwards,
+    blink 0.7s step-end $delay infinite, hideCursor 0.1s linear ($duration + $delay) forwards;
+
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: $width;
+    }
+  }
+
+  @keyframes showCursor {
+    to {
+      border-color: #fff;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+
+  @keyframes hideCursor {
+    to {
+      border-color: transparent;
+    }
+  }
+}

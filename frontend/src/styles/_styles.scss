@@ -1,0 +1,214 @@
+@import "_devices.scss";
+@import "_fontsizes.scss";
+@import "_referralStyles.scss";
+
+@mixin flexCenter($direction: row, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+  gap: $gap;
+}
+
+@mixin errorMessage {
+  color: var(--error-color);
+  padding: 0.25rem 0.5rem;
+  background-color: #ffe6e6;
+  border: 1px solid #ffcccc;
+  border-radius: var(--border-radius-small);
+  @include rfont(small);
+  text-align: center;
+
+  @include mobile {
+    padding: 2px 4px;
+    text-align: center;
+  }
+}
+
+@mixin successMessage {
+  @include errorMessage();
+  color: black;
+  background-color: #e6f4ec;
+  border: 1px solid var(--success-color);
+}
+
+@mixin actionButton($background: transparent, $color: white, $shadowColor: var(--landing-page-blue-color)) {
+  margin: 1rem auto 1rem auto;
+  padding: 0.5rem 1rem;
+  background-color: $background;
+  color: $color;
+  border: 1px solid transparent;
+  box-shadow: 0 0 3px $shadowColor;
+  @include rfont(normal);
+
+  &[aria-disabled="false"]:hover {
+    box-shadow: 0 0 6px $shadowColor;
+    border-color: $shadowColor;
+    color: $color;
+  }
+}
+
+@mixin instructions {
+  margin: 0 0 2rem;
+  padding: 0.5rem 1rem;
+  color: lightgray;
+  background-color: #222222;
+  line-height: 1.4;
+  width: 100%;
+  border-radius: 4px;
+}
+
+@mixin linkStyledButton($color: var(--landing-page-blue-color)) {
+  border: none;
+  font-weight: bold;
+  color: $color;
+  background-color: transparent;
+  padding: 0;
+
+  &:hover {
+    background-color: transparent !important;
+    color: $color !important;
+    text-decoration: underline;
+  }
+}
+
+@mixin scrollContainer {
+  position: relative;
+  flex-grow: 1;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+}
+
+@mixin scrollContent {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+}
+
+@mixin dashboardContent($padding: 3rem 3rem) {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: $padding;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+
+@mixin titleAndLabelContainer() {
+  @include flexCenter(column);
+  width: 100%;
+  margin-bottom: 2rem;
+  position: relative;
+
+  h2 {
+    @include rfont(head);
+    margin: 0;
+    margin-bottom: 0.75rem;
+  }
+
+  span[class*="header-text-subtitle"] {
+    @include rfont(small);
+    width: 100%;
+    text-align: center;
+  }
+
+  @include mobile {
+    text-align: center;
+  }
+}
+
+@mixin buttonPanel($verticalPadding: 2rem, $isButtonWidthFixed: true) {
+  @include flexCenter(row, 1rem);
+  width: 100%;
+  padding: $verticalPadding 0;
+
+  @include mobile {
+    flex-direction: column;
+    justify-content: center;
+
+    @if $isButtonWidthFixed == true {
+      button {
+        width: 300px;
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+@mixin labelStyle($opacity: 0.75, $nowrap: true) {
+  @include rfont(small);
+  white-space: initial;
+  text-align: center;
+  opacity: $opacity;
+
+  @include desktop {
+    white-space: if($nowrap, nowrap, initial);
+    text-align: left;
+  }
+}
+
+@mixin sharePopupMainContainer {
+  @include flexCenter(column);
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+}
+
+@mixin toolContainer($gap: 2.5rem, $padding: 2.5rem) {
+  @include flexCenter(column);
+  width: 100%;
+  gap: $gap;
+  padding: 0 $padding $padding $padding;
+
+  @include belowBigDesktop {
+    padding: 0 1rem 1rem 1rem;
+  }
+}
+
+@mixin inputEntry() {
+  border: 1px solid gray;
+  outline: none;
+  border-radius: var(--border-radius);
+  padding: 0.6rem;
+  width: 100%;
+
+  &:focus {
+    border-color: var(--primary-color);
+  }
+
+  &:disabled {
+    opacity: 0.8;
+  }
+
+  &::placeholder {
+    color: gray;
+  }
+}
+
+@mixin leftPadding() {
+  padding-left: 0.6rem;
+}
+
+@mixin dimmedLook {
+  background-color: transparent;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.75;
+  color: white;
+
+  &:hover {
+    background-color: transparent !important;
+    color: white !important;
+    opacity: 1;
+  }
+
+  @include mobile {
+    opacity: 0.75;
+  }
+}

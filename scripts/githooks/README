@@ -1,0 +1,8 @@
+# Git Commit Hooks
+
+Please copy the contents of this folder to the .git/hooks folder in the root of this repository so that you can benefit from the magic of Git hooks.
+Because Git hooks are local only (meaning they cannot be commited), this is a manual step that you, as a developer need to take in order to
+setup you development environment properly.
+
+At the moment, we have only a single `pre-commit` hook that will double check your config files before you are able to complete a commit. This
+will keep you from accidentally committing a URL in the config that ends in a trailing `/`, which we have agreed is a convention that we follow.

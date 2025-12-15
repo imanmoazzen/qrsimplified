@@ -1,0 +1,33 @@
+@import "../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(column, 2rem);
+  width: 100%;
+}
+
+.options {
+  @include flexCenter(column);
+  align-items: flex-start;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  width: 100%;
+}
+
+.item {
+  @include flexCenter(row, 0.75rem);
+  justify-content: flex-start;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  width: 100%;
+  cursor: pointer;
+}
+
+.item.active {
+  background-color: var(--light-background);
+  color: var(--primary-color);
+
+  span[class*="material"] {
+    color: var(--primary-color);
+  }
+}

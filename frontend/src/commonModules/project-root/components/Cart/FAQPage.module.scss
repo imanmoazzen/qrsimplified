@@ -1,0 +1,25 @@
+@import "../../../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(column, 4rem);
+  padding: 2rem;
+  width: 100%;
+
+  @include mobile {
+    padding: 1rem;
+  }
+
+  .faq {
+    @include fadeUpAnimation();
+    max-width: 100%;
+    width: 1024px;
+  }
+
+  div[class*="parent-expandable"] > div[class*="title"] h3 {
+    font-weight: bold !important;
+  }
+}
+
+.close-container {
+  margin-left: auto;
+}

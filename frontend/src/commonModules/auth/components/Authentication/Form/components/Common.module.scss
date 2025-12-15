@@ -1,0 +1,30 @@
+@import "../../../../../../styles/_mixin.scss";
+
+.instructions {
+  @include instructions();
+}
+
+.button {
+  @include actionButton();
+}
+
+.link-styled-button {
+  @include linkStyledButton();
+}
+
+.account {
+  @include flexCenter(column, 0.25rem);
+  margin: 0 auto;
+}
+
+.input-box {
+  margin-bottom: 1rem;
+
+  input {
+    font-size: medium;
+  }
+
+  input:focus {
+    border: 1px solid var(--landing-page-blue-color);
+  }
+}

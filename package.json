@@ -1,0 +1,26 @@
+{
+  "engines": {
+    "npm": "10.x",
+    "node": "22.x"
+  },
+  "name": "qr-simplified-monorepo-root",
+  "scripts": {
+    "prettier": "npx prettier --write .",
+    "test": "mocha ./server/**/specs/**/*.spec.js --reporter spec ",
+    "deploy-all-staging": "cd backend && npm run deploy-staging-nc && cd ../frontend && npm run deploy-all-staging-nc"
+  },
+  "devDependencies": {
+    "@babel/node": "^7.20.7",
+    "eslint": "^8.32.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.0",
+    "prettier": "^2.8.8"
+  },
+  "importSort": {
+    ".js": {
+      "style": "module"
+    }
+  }
+}

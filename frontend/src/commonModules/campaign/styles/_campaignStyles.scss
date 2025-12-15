@@ -1,0 +1,13 @@
+@import "../../../styles/_mixin.scss";
+
+@mixin parent-container() {
+  @include flexCenter(column, 2rem);
+  @include fadeUpAnimation();
+  width: 550px;
+  max-width: 100%;
+  padding-block: 2rem;
+
+  @include mobile {
+    padding-block: 1rem;
+  }
+}

@@ -1,0 +1,38 @@
+@import "../../../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(column, 4rem);
+  padding: 2rem;
+  width: 100%;
+
+  @include mobile {
+    padding: 1rem;
+  }
+}
+
+.close-container {
+  margin-left: auto;
+}
+
+.header {
+  margin-bottom: 0;
+}
+
+.cta-container {
+  @include flexCenter(column, 1.5rem);
+}
+
+.buttons {
+  position: relative;
+  @include buttonPanel(0);
+  width: fit-content;
+}
+
+.faqs {
+  max-width: calc(900px + 6rem);
+}
+
+.message {
+  @include rfont(small);
+  color: var(--primary-color);
+}

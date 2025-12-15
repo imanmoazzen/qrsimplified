@@ -1,0 +1,84 @@
+@import "../../styles/_mixin.scss";
+
+.main-container {
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  width: 100%;
+
+  &.decorated {
+    border: 1px solid var(--primary-color);
+  }
+
+  &.closed {
+    border-radius: var(--border-radius);
+    border-color: transparent;
+    background-color: transparent;
+    @include shadowLightAnimationOnHover();
+  }
+}
+
+.title-container {
+  @include flexCenter(row, 1rem);
+  justify-content: space-between;
+  width: 100%;
+  border-radius: inherit;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  user-select: none;
+  cursor: pointer;
+
+  &.decorated {
+    color: white;
+    background-color: var(--primary-color);
+  }
+
+  padding: 1rem 1rem 1rem 1.5rem;
+  @include mobile {
+    padding: 0.75rem;
+  }
+
+  &.closed {
+    border-color: transparent;
+    background-color: transparent;
+    color: black;
+  }
+
+  .arrow {
+    @include flexCenter();
+    width: 1rem;
+    font-size: 2rem;
+  }
+
+  h3 {
+    margin: 0;
+  }
+
+  label {
+    @include labelStyle;
+  }
+}
+
+.title-container.plus-minus {
+  justify-content: flex-end;
+  flex-direction: row-reverse;
+
+  .arrow {
+    font-size: 1rem;
+  }
+}
+
+.content-container {
+  height: 0;
+  opacity: 0;
+  background-color: var(--light-background);
+
+  &.open {
+    height: fit-content;
+    opacity: 1;
+  }
+
+  &.closed {
+    height: 0;
+    opacity: 0;
+  }
+}

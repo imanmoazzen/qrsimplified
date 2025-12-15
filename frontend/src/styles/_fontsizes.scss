@@ -1,0 +1,13 @@
+@mixin rfont($type: normal) {
+  font-size: map-get($font-sizes, $type);
+}
+
+$font-sizes: (
+  punch: 2.75rem,
+  xlarge: 2.2rem,
+  title: 1.65rem,
+  subtitle: 1.175rem,
+  normal: 1rem,
+  small: 0.875rem,
+  tiny: 0.75rem,
+);

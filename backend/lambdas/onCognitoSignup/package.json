@@ -1,0 +1,19 @@
+{
+  "name": "on-cognito-signup",
+  "version": "1.0.0",
+  "description": "",
+  "source": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "npm install && del-cli ./build/index.js && esbuild index.js --bundle --platform=node --outdir=build --external:\"@aws-sdk/*\" && cd ./build && bestzip function.zip . -x function.zip -q -r --filesync && cd ..",
+    "deploy-dev": "npm run build && aws lambda update-function-code --function-name scriptover_onCognitoSignup --zip-file fileb://build/function.zip --no-cli-pager --profile scriptover-dev"
+  },
+  "author": "asmith-99",
+  "license": "ISC",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "p-limit": "^6.2.0"
+  }
+}

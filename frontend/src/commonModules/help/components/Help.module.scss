@@ -1,0 +1,20 @@
+@import "../../../styles/_styles.scss";
+
+.main-container {
+  position: relative;
+  @include flexCenter(column, 3rem);
+  padding: 4rem 2rem;
+  align-items: initial;
+
+  @include mobile {
+    padding: 3rem 1rem;
+  }
+
+  max-width: 1300px;
+  margin: auto;
+}
+
+.guide-cards-container {
+  @include flexCenter(row, var(--default-distance));
+  flex-wrap: wrap;
+}

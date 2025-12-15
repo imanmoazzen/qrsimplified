@@ -1,0 +1,24 @@
+@import "../../../../styles/_mixin.scss";
+
+.main-container {
+  width: 100%;
+  position: relative;
+  @include flexCenter(row, 3rem);
+  align-items: flex-end;
+
+  @include fadeUpAnimation();
+
+  @include belowDesktop {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+}
+
+.frequency-switch {
+  font-size: medium;
+}
+
+.hidden {
+  visibility: hidden;
+}

@@ -1,0 +1,46 @@
+@import "../../../styles/_styles.scss";
+
+.main-container {
+  position: relative;
+  @include flexCenter(column);
+  max-width: 300px;
+  padding: 1.5rem;
+  font-size: small;
+  border-radius: var(--border-radius);
+  border: 1px solid gray;
+  overflow: hidden;
+
+  &:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 2px var(--primary-color);
+  }
+
+  img {
+    width: 75%;
+    height: auto;
+  }
+
+  p {
+    margin-bottom: 2rem;
+  }
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.video-button-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  button {
+    border-radius: 0 0 var(--border-radius) 0;
+    padding: 4px;
+  }
+
+  span[class*="material"] {
+    font-size: 2rem;
+  }
+}

@@ -1,0 +1,16 @@
+name: Deploy Production Backend Then Frontends
+
+# This is a callable workflow and is not meant to be executed directly.
+# It should be called from another workflow.
+on:
+  workflow_call:
+
+jobs:
+  deploy-backend:
+    uses: ./.github/workflows/deploy-production-backend.yml
+    secrets: inherit
+  deploy-frontends:
+    if: needs.deploy-backend.result == 'success'
+    uses: ./.github/workflows/deploy-production-frontends.yml
+    secrets: inherit
+    needs: deploy-backend

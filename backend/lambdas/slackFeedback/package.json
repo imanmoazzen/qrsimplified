@@ -1,0 +1,13 @@
+{
+  "name": "slack-feedback",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "npm install && del-cli ./build/index.js && esbuild index.js --bundle --platform=node --outdir=build --external:\"@aws-sdk/*\" && cd ./build && bestzip function.zip . -x function.zip -q -r --filesync && cd ..",
+    "deploy-dev": "npm run build && aws lambda update-function-code --function-name castofly_slackFeedback --zip-file fileb://build/function.zip --no-cli-pager --profile development"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,70 @@
+.main-container {
+  display: flex;
+  color: rgb(64, 64, 64);
+  font-size: small;
+  margin-bottom: 30px;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  --animation-time: 1s;
+  --animation-iteration: 1;
+  --wipe-box-color: #4335e622;
+  --label-box-color: black;
+}
+
+.main-container span:first-child {
+  animation: scale-animation var(--animation-time) 1;
+  font-size: large;
+}
+
+.main-container span:first-child.rotating {
+  animation: rotate-animation 2s infinite;
+}
+
+@keyframes scale-animation {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.5);
+  }
+}
+
+@keyframes rotate-animation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.main-container label {
+  position: relative;
+  overflow: hidden;
+  color: var(--label-box-color);
+}
+
+.main-container span.wipe-box {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background-color: var(--wipe-box-color);
+  width: 0.5rem;
+  height: 100%;
+  border-radius: 2px;
+  animation: move-animation var(--animation-time) linear var(--animation-iteration) !important;
+}
+
+@keyframes move-animation {
+  from {
+    left: 0%;
+    opacity: 1;
+  }
+  to {
+    left: 100%;
+    opacity: 0.5;
+  }
+}

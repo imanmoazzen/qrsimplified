@@ -1,0 +1,9 @@
+@import "../../styles/_styles.scss";
+
+.main-container {
+  @include titleAndLabelContainer();
+
+  h2 {
+    @include flexCenter(row, 0.5rem);
+  }
+}

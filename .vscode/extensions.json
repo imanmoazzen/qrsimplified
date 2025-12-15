@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "hediet.vscode-drawio",
+    "esbenp.prettier-vscode",
+    "amatiasq.sort-imports",
+    "deque-systems.vscode-axe-linter",
+    "clinyong.vscode-css-modules"
+  ]
+}

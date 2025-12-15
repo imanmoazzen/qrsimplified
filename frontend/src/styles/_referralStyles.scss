@@ -1,0 +1,22 @@
+@mixin referralMainContainer {
+  @include flexCenter(column);
+  align-items: flex-start;
+  max-width: 1000px;
+  width: 100%;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  @include belowBigDesktop {
+    max-width: initial;
+  }
+}
+
+@mixin referralSubContainer {
+  width: 100%;
+  border-radius: var(--border-radius);
+  border: 1px solid black;
+  overflow: hidden;
+}

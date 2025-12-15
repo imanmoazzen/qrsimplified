@@ -1,0 +1,61 @@
+@import "../../../../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(column);
+  color: white;
+  padding-inline: 1rem;
+
+  .moving-bar {
+    @include movingBar(1rem, #00fff2, 2s, 0.5s);
+  }
+
+  p {
+    @include rfont(title);
+    @include typing(32, 32ch, 4s, 3s);
+    line-height: 1.6;
+    color: lightgray;
+    width: 0;
+    text-align: center;
+
+    @include mobile {
+      opacity: 0;
+      animation: initial;
+      width: 100%;
+      white-space: initial;
+      font-size: small;
+      @include fadeUpAnimation(2rem, 0.5s, 2.5s);
+    }
+  }
+}
+
+.logo-container {
+  position: relative;
+  @include flexCenter();
+  width: 100%;
+
+  img {
+    width: 35vw;
+
+    @include mobile {
+      width: 90%;
+    }
+  }
+}
+
+.usecases {
+  @include flexCenter(column, 1rem);
+  @include fadeUpAnimation(2rem, 0.5s, 7s);
+  width: 350px;
+  margin-top: 4rem;
+  opacity: 0;
+  color: #666666;
+
+  @include mobile {
+    display: none;
+  }
+
+  img {
+    width: 100%;
+    opacity: 1;
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "qrsimplified-api-v2",
+  "version": "1.0.0",
+  "description": "",
+  "source": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "npm install && del-cli ./build/index.js && esbuild index.js --bundle --platform=node --outdir=build --external:\"@aws-sdk/*\" --loader:.png=file && cd ./build && bestzip function.zip . -x function.zip -q -r --filesync && cd ..",
+    "deploy-dev": "npm run build && aws lambda update-function-code --function-name qrsimplified_APIv2 --zip-file fileb://build/function.zip --no-cli-pager --profile qr-dev"
+  },
+  "author": "asmith-99",
+  "license": "ISC",
+  "dependencies": {
+    "docx": "^9.0.2",
+    "form-data": "^4.0.1",
+    "image-size": "^1.1.1",
+    "jspdf": "^2.5.2",
+    "p-limit": "^6.2.0",
+    "querystring": "^0.2.1",
+    "sanitize-html": "^2.13.0",
+    "stripe": "^18.4.0",
+    "twilio": "^5.8.0"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

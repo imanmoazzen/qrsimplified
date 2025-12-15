@@ -1,0 +1,28 @@
+@import "../../../styles/_styles.scss";
+
+.main-container {
+  @include flexCenter(row, 0.5rem);
+  width: 100%;
+  margin-top: 1rem;
+
+  label {
+    @include rfont(small);
+  }
+}
+
+.rail {
+  position: relative;
+  height: 0.75rem;
+  background: #ddd;
+  flex-grow: 1;
+  border-radius: var(--border-radius);
+}
+
+.active {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: var(--border-radius);
+}

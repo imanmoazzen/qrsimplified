@@ -1,0 +1,30 @@
+@import "../../styles/_animations.scss";
+
+.main-container {
+  position: relative;
+  border-radius: var(--border-radius-small);
+  height: 100%;
+}
+
+.dropdown {
+  padding: 2px;
+  border-radius: inherit;
+  text-align: center;
+  background-color: white;
+  color: black;
+  outline: none;
+  padding: 0.25rem;
+  text-align: left;
+  font-size: small;
+  height: 100%;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.ripple {
+  @include ripple();
+}

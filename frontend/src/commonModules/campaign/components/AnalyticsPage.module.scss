@@ -1,0 +1,49 @@
+@import "../../../styles/_mixin.scss";
+@import "../styles/_campaignStyles.scss";
+
+.main-container {
+  @include parent-container();
+}
+
+.filters {
+  @include flexCenter(row, 4rem);
+
+  @include mobile {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+.analytics {
+  @include flexCenter(column, 0.5rem);
+  width: 100%;
+  margin-top: 2rem;
+
+  .row {
+    @include flexCenter();
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid black;
+    padding: 0.25rem;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .title {
+    font-weight: bold;
+  }
+}
+
+.empty-container {
+  @include flexCenter(column);
+
+  img {
+    width: 256px;
+  }
+}
+
+.region {
+  @include flexCenter(row, 0.5rem);
+}

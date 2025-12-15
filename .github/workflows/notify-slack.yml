@@ -1,0 +1,32 @@
+name: Notify Slack
+
+# This is a callable workflow and is not meant to be executed directly.
+# It should be called from another workflow.
+on:
+  workflow_call:
+    inputs:
+      env-name:
+        required: true
+        type: string
+      message:
+        required: true
+        type: string
+      job-status:
+        required: true
+        type: string
+      emoji:
+        required: true
+        type: string
+
+jobs:
+  notify-slack:
+    environment: ${{ inputs.env-name }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: ${{ inputs.message }}
+          SLACK_COLOR: ${{ inputs.job-status }}
+          SLACK_ICON_EMOJI: ${{ inputs.emoji }}
+          SLACK_USERNAME: "Castofly Bot"

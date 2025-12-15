@@ -1,0 +1,19 @@
+{
+  "name": "on-cognito-pre-signup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "npm install && del-cli ./build/index.js && esbuild index.js --bundle --platform=node --outdir=build --external:\"@aws-sdk/*\" && cd ./build && bestzip function.zip . -x function.zip -q -r --filesync && cd ..",
+    "deploy-dev": "npm run build && aws lambda update-function-code --function-name castofly_onCognitoPreSignup --zip-file fileb://build/function.zip --no-cli-pager --profile development"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1242.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

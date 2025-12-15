@@ -1,0 +1,88 @@
+@import "../../styles/_devices.scss";
+
+.main-container {
+  display: grid;
+  grid-template-areas:
+    "navigation"
+    "core-panel";
+  grid-template-rows: var(--navbar-height) var(--core-height);
+  grid-template-columns: 1fr;
+  gap: 0px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.element {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.navigation {
+  grid-area: navigation;
+  background-color: var(--navbar-background-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  @include belowDesktop {
+    display: none;
+  }
+}
+
+.core-panel {
+  grid-area: core-panel;
+  display: flex;
+  height: var(--core-height);
+  background-color: var(--navbar-background-color);
+
+  @include mobile {
+    flex-direction: column;
+    height: initial;
+  }
+}
+
+.toolbox {
+  width: var(--toolbox-width-fixed-pixel);
+  background-color: var(--navbar-background-color);
+
+  @include mobile {
+    background-color: var(--navbar-secondary-background-color);
+    width: 100%;
+    height: calc(2 * var(--navbar-height));
+  }
+}
+
+.scrollable-content {
+  position: relative;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  background-color: var(--light-background);
+  border-top-left-radius: 32px;
+
+  @include mobile {
+    border-top-left-radius: 0;
+  }
+}
+
+.main-container.busy {
+  display: flex;
+
+  .navigation,
+  .toolbox {
+    display: none;
+  }
+
+  .core-panel {
+    height: 100%;
+    width: 100%;
+  }
+
+  .scrollable-content {
+    border-top-left-radius: 0;
+  }
+}
