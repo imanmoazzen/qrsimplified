@@ -1,3 +1,5 @@
+// QRCodeStyling can be used for styling down the road https://qr-code-styling.com/
+
 import QRCode from "qrcode";
 import { v4 as uuid } from "uuid";
 

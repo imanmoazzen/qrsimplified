@@ -187,8 +187,8 @@ const EditPage = () => {
           <DecoratedButton
             onClick={() => setRequestToArchive(true)}
             isBusy={state === STATES.ARCHIVING}
-            buttonText={state === STATES.ARCHIVING ? "Archiving..." : "Archive"}
-            icon="archive"
+            buttonText={state === STATES.ARCHIVING ? "Deleting..." : "Delete"}
+            icon="delete"
             extraContainerClasses={styles["archive-button-container"]}
           />
         </div>
@@ -196,7 +196,7 @@ const EditPage = () => {
 
       {requestToArchive && (
         <div className={styles["confirm-container"]}>
-          <span>Are you sure you want to archive this QR code?</span>
+          <span>Are you sure you want to delete this QR code?</span>
           <div className={styles["buttons"]}>
             <DecoratedButton buttonText="Cancel" icon="close" onClick={() => setRequestToArchive(false)} />
             <DecoratedButton

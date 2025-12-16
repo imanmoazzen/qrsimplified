@@ -2,7 +2,7 @@ import { CAMPAIGN_STATUS, TRIAL_CAMPAIGN_VISIT_LIMIT } from "castofly-common/cam
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import DecoratedButton, { BUTTON_THEMES } from "../../../commonComponents/DecoratedButton/DecoratedButton.js";
+import DecoratedButton from "../../../commonComponents/DecoratedButton/DecoratedButton.js";
 import Header from "../../../commonComponents/Header/Header.js";
 import { APP_PAGES } from "../../../frontEndConstants.js";
 import { auth } from "../../../index.js";
