@@ -76,7 +76,7 @@ const environmentConfig = {
     lambdaMemoryMax: 3008, // TODO: change back to 10240
     dynamoUserDataTableBillingMode: BillingMode.PAY_PER_REQUEST,
     pointInTimeRecoveryEnabled: true,
-    cognitoSESEnabled: true,
+    cognitoSESEnabled: false, // test
     cognitoSESSourceARN: "arn:aws:ses:us-east-1:950672314670:identity/qrsimplified.com",
     cognitoUserPoolId: undefined,
     cognitoImportDomainName: "https://login.qrsimplified.com",
