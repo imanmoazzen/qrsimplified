@@ -81,5 +81,5 @@ export function updateUserPoolConfig(scope, cdkConfig, onSignupLambda, onPreSign
     }),
   });
 
-  // updateResource.node.addDependency(userPool); // I am importing user pool anyway
+  updateResource.node.addDependency(userPool);
 }
