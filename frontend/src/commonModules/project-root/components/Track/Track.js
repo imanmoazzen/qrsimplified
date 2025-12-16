@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { getIds } from "../../../campaign/utils.js";
 import config from "../../../server/config.js";
 
-const Track = () => {
+const Redirect = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
@@ -21,4 +21,4 @@ const Track = () => {
   return null;
 };
 
-export default Track;
+export default Redirect;

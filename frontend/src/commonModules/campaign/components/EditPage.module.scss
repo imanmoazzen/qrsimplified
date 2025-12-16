@@ -6,53 +6,31 @@
   width: 512px;
 }
 
-.name-container {
-  @include flexCenter(column, 1.5rem);
-  width: 100%;
-
-  .input-box {
-    flex-direction: row !important;
-    align-items: center;
-    gap: 0.5rem;
-    width: 100%;
-
-    input {
-      padding: 0.4rem;
-    }
-
-    label {
-      padding-left: 0;
-    }
-  }
-}
-
 .link-container {
-  @include flexCenter(row, 0.5rem);
+  position: relative;
+  @include flexCenter(row);
   width: 100%;
-}
-
-.title {
-  @include labelStyle();
-  width: 120px;
-  text-align: left;
-  white-space: nowrap !important;
-}
-
-.link {
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: small;
-  background-color: var(--light-background);
-  border-radius: var(--border-radius);
-  padding: 0.4rem;
-  border: 1px solid gray;
+  align-items: first baseline;
 }
 
 .cta-button {
+  position: absolute;
+  right: 0;
   padding: 0;
-  padding-left: 0.5rem;
+  padding-bottom: 0.75rem;
+  font-size: small;
+}
+
+.input-box {
+  input {
+    padding: 0.5rem;
+  }
+
+  &.no-editable input {
+    background-color: var(--light-background);
+    pointer-events: none;
+    color: var(--google-meet-light-gray);
+  }
 }
 
 .qrcode-container {

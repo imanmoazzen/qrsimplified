@@ -16,6 +16,8 @@ const AnalyticsPage = () => {
   const timeFilter = useSelector(campaignModule.getTimeFilter);
   const regionFilter = useSelector(campaignModule.getRegionFilter);
 
+  console.log(campaign);
+
   const analytics = campaign?.analytics ?? {};
   const countries = analytics?.countries ?? [];
   const cities = analytics?.cities ?? [];
@@ -84,7 +86,7 @@ export default AnalyticsPage;
 const Region = ({ countryCode, text }) => {
   return (
     <div className={styles["region"]}>
-      <ReactCountryFlag countryCode={countryCode} svg />
+      {countryCode.length === 2 && <ReactCountryFlag countryCode={countryCode} svg />}
       <span>{text}</span>
     </div>
   );

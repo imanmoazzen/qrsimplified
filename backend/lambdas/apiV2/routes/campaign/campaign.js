@@ -147,7 +147,7 @@ export const visit = async (user_id, campaign_id, event) => {
         return {
           statusCode: 302,
           headers: {
-            Location: `${process.env.APP_BASE_URL}/upgrade?status:${CAMPAIGN_STATUS.EXPIRED}`,
+            Location: `${process.env.APP_BASE_URL}/upgrade?status=${CAMPAIGN_STATUS.EXPIRED}`,
           },
           body: "",
         };
@@ -166,7 +166,7 @@ export const visit = async (user_id, campaign_id, event) => {
           return {
             statusCode: 302,
             headers: {
-              Location: `${process.env.APP_BASE_URL}/upgrade?status:${CAMPAIGN_STATUS.EXPIRED}`,
+              Location: `${process.env.APP_BASE_URL}/upgrade?status=${CAMPAIGN_STATUS.EXPIRED}`,
             },
             body: "",
           };
@@ -175,7 +175,13 @@ export const visit = async (user_id, campaign_id, event) => {
       }
 
       case CAMPAIGN_STATUS.ARCHIVED:
-        return forbiddenResponse("This QR code has been archived and is no longer valid.");
+        return {
+          statusCode: 302,
+          headers: {
+            Location: `${process.env.APP_BASE_URL}/upgrade?status=${CAMPAIGN_STATUS.ARCHIVED}`,
+          },
+          body: "",
+        };
     }
 
     const geo = await getGeoLocation(event);

@@ -12,7 +12,7 @@ import FAQPage from "../commonModules/project-root/components/Cart/FAQPage.js";
 import Navbar from "../commonModules/project-root/components/Navbar/Navbar.js";
 import Referral from "../commonModules/project-root/components/Referral/Referral.js";
 import StripeReturnPage from "../commonModules/project-root/components/Stripe/StripeReturnPage.js";
-import Track from "../commonModules/project-root/components/Track/Track.js";
+import Redirect from "../commonModules/project-root/components/Track/Track.js";
 import { removeInitialLoadingIndicator } from "../commonUtil/initialLoadingIndicator.js";
 import { AUTHENTICATION_PAGES } from "../frontEndConstants.js";
 import { auth } from "../index.js";
@@ -69,7 +69,8 @@ const AppRouter = () => {
 
   return (
     <Routes>
-      <Route path="track" element={<Track />} />
+      <Route path="qr" element={<Redirect />} />
+      <Route path="upgrade" element={<UpgradePage />} />
       <Route
         path="/"
         element={
@@ -80,7 +81,6 @@ const AppRouter = () => {
         }
       >
         <Route index element={<Campaign />} />
-        <Route path="upgrade" element={<UpgradePage />} />
         <Route path="cart" element={<Cart />} />
         <Route path="faq" element={<FAQPage />} />
         <Route path="success" element={<StripeReturnPage />} />

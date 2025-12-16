@@ -31,7 +31,19 @@ export async function downloadImage(url, fileName = "image.png") {
   URL.revokeObjectURL(blobUrl);
 }
 
-export const getCountryName = (country) => new Intl.DisplayNames(["en"], { type: "region" }).of(country);
+export const getCountryName = (country) => {
+  try {
+    if (!country || typeof country !== "string") return "Unknown";
+
+    const code = country.trim().toUpperCase();
+    if (code.length !== 2) return "Unknown";
+
+    const name = new Intl.DisplayNames(["en"], { type: "region" }).of(code);
+    return name || "Unknown";
+  } catch {
+    return "Unknown";
+  }
+};
 
 export const generateQRCodeAsSVG = async (text, color, background) => {
   const svg = await QRCode.toString(text, {
@@ -141,8 +153,8 @@ export const generateReferralQRCode = async (userId) => {
 };
 
 export const getTrackingLink = (userId, campaignId) => {
-  if (!campaignId) return `${appSettings.get("app_base_url")}/track?id=${userId}`;
-  return `${appSettings.get("app_base_url")}/track?id=${userId}:${campaignId}`;
+  if (!campaignId) return `${appSettings.get("app_base_url")}/qr?id=${userId}`;
+  return `${appSettings.get("app_base_url")}/qr?id=${userId}:${campaignId}`;
 };
 
 export const getIds = (trackingId) => {

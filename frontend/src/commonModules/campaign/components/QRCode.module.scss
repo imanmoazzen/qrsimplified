@@ -20,3 +20,18 @@
     width: fit-content;
   }
 }
+
+.link-container {
+  position: relative;
+  @include flexCenter(row);
+  width: 100%;
+  align-items: first baseline;
+}
+
+.test-button {
+  position: absolute;
+  right: 0;
+  padding: 0;
+  padding-bottom: 0.5rem;
+  font-size: small;
+}

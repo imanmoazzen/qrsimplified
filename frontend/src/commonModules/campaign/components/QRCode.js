@@ -11,7 +11,7 @@ import { CAMPAIGN_PAGES, campaignPageChanged } from "../store/uiReducer.js";
 import { generateQRCodeAsSVG, getTrackingLink } from "../utils.js";
 import styles from "./QRCode.module.scss";
 
-const STATES = {
+export const QR_STATES = {
   INIT: "Init",
   NAME_EMPTY: "QR code name cannot be empty",
   URL_EMPTY: "Landing page cannot be empty",
@@ -24,18 +24,20 @@ const QRCode = ({ onSuccess }) => {
   const dispatch = useDispatch();
   const userId = useSelector(auth.userIdSelector);
   const branding = useSelector(campaignModule.getBranding);
-  const [destination, setDestination] = useState("");
   const [name, setName] = useState("");
-  const [state, setState] = useState(STATES.INIT);
+  const [destination, setDestination] = useState("");
+  const [state, setState] = useState(QR_STATES.INIT);
 
   const { color, background } = branding;
-  const isMessageVisible = [STATES.URL_EMPTY, STATES.URL_INVALID, STATES.NAME_EMPTY, STATES.ERROR].includes(state);
+  const isMessageVisible = [QR_STATES.URL_EMPTY, QR_STATES.URL_INVALID, QR_STATES.NAME_EMPTY, QR_STATES.ERROR].includes(
+    state
+  );
 
   const createCampaign = async () => {
     try {
       if (!isCampaignValid()) return;
 
-      setState(STATES.CREATING_NEW_CAMPAIGN);
+      setState(QR_STATES.CREATING_NEW_CAMPAIGN);
 
       const campaign_id = uuid();
       const tracking_link = getTrackingLink(userId, campaign_id);
@@ -50,9 +52,9 @@ const QRCode = ({ onSuccess }) => {
       ]);
 
       onSuccess?.(svgCode, campaign_id);
-      setState(STATES.INIT);
+      setState(QR_STATES.INIT);
     } catch (error) {
-      setState(STATES.ERROR);
+      setState(QR_STATES.ERROR);
     }
   };
 
@@ -62,17 +64,17 @@ const QRCode = ({ onSuccess }) => {
 
   const isCampaignValid = () => {
     if (!name?.trim()) {
-      setState(STATES.NAME_EMPTY);
+      setState(QR_STATES.NAME_EMPTY);
       return false;
     }
 
     if (!destination?.trim()) {
-      setState(STATES.URL_EMPTY);
+      setState(QR_STATES.URL_EMPTY);
       return false;
     }
 
     if (!isValidHttpsUrl(destination)) {
-      setState(STATES.URL_INVALID);
+      setState(QR_STATES.URL_INVALID);
       return false;
     }
 
@@ -85,21 +87,33 @@ const QRCode = ({ onSuccess }) => {
         label="QR Code Name:"
         value={name}
         setValue={setName}
-        onFocus={() => setState(STATES.INIT)}
-        isRippling={state === STATES.NAME_EMPTY || !name}
-        isDisabled={state === STATES.CREATING_NEW_CAMPAIGN}
+        onFocus={() => setState(QR_STATES.INIT)}
+        isRippling={state === QR_STATES.NAME_EMPTY || !name}
+        isDisabled={state === QR_STATES.CREATING_NEW_CAMPAIGN}
         placeholder="Enter a short name, e.g. Vegas Tradeshow Poster 2026"
       />
-      <InputBox
-        label="Landing Page:"
-        value={destination}
-        setValue={setDestination}
-        onFocus={() => setState(STATES.INIT)}
-        isRippling={state === STATES.URL_EMPTY || state === STATES.URL_INVALID}
-        isDisabled={state === STATES.CREATING_NEW_CAMPAIGN}
-        placeholder="Link opened after scanning the QR Code"
-      />
+
+      <div className={styles["link-container"]}>
+        <InputBox
+          label="Landing Page:"
+          value={destination}
+          setValue={setDestination}
+          onFocus={() => setState(QR_STATES.INIT)}
+          isRippling={state === QR_STATES.URL_EMPTY || state === QR_STATES.URL_INVALID}
+          isDisabled={state === QR_STATES.CREATING_NEW_CAMPAIGN}
+          placeholder="Link opened after scanning the QR Code"
+        />
+        <DecoratedButton
+          buttonText="Test"
+          icon="open_in_new"
+          onClick={testLink}
+          theme={BUTTON_THEMES.TRANSPARENT}
+          extraClasses={styles["test-button"]}
+        />
+      </div>
+
       {isMessageVisible && <span className={styles["info"]}>{state}</span>}
+
       <div className={styles["buttons"]}>
         <DecoratedButton
           buttonText="Cancel"
@@ -107,12 +121,11 @@ const QRCode = ({ onSuccess }) => {
           onClick={() => dispatch(campaignPageChanged(CAMPAIGN_PAGES.MAIN))}
         />
         <section>
-          <DecoratedButton buttonText="Test Link" icon="open_in_new" onClick={testLink} />
           <DecoratedButton
-            buttonText={state === STATES.CREATING_NEW_CAMPAIGN ? "Creating..." : "Create QR Code"}
+            buttonText={state === QR_STATES.CREATING_NEW_CAMPAIGN ? "Creating..." : "Create QR Code"}
             icon="qr_code_2"
             onClick={createCampaign}
-            isBusy={state === STATES.CREATING_NEW_CAMPAIGN}
+            isBusy={state === QR_STATES.CREATING_NEW_CAMPAIGN}
             theme={BUTTON_THEMES.COLORED}
           />
         </section>

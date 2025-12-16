@@ -6,4 +6,4 @@ export const CAMPAIGN_STATUS = {
   REFERRAL: "REFERRAL",
 };
 
-export const TRIAL_CAMPAIGN_VISIT_LIMIT = 3;
+export const TRIAL_CAMPAIGN_VISIT_LIMIT = 10;
