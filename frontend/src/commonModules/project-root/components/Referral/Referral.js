@@ -4,7 +4,6 @@ import {
   REFERRAL_PERCENTAGE,
   USER_FEEDBACK_LISTENERS,
 } from "castofly-common/commonConstants.js";
-import { getProductByName } from "castofly-common/purchases/products.js";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
