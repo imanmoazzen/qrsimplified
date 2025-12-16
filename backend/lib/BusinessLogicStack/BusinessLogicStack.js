@@ -105,7 +105,7 @@ class BusinessLogicStack extends BaseStack {
       auth.userPoolId
     );
 
-    // updateUserPoolConfig(this, cdkConfig, onSignupLambda, onPreSignupLambda, auth.userPoolId); test
+    // updateUserPoolConfig(this, cdkConfig, onSignupLambda, onPreSignupLambda, auth.userPoolId);
 
     const otherApis = new OtherApiNestedStack(this, "OtherApis", {
       cdkConfig,
