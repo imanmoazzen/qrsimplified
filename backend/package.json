@@ -22,7 +22,7 @@
     "deploy-production-cicd": "cdk deploy --app \"npx node ./bin/deployCiCd.js\" --ci --context deployment-env=production --profile qr-prod",
     "deploy-production-ci": "cdk deploy --all --ci --context deployment-env=production --require-approval never && node ./bin/postDeploy.js production qr-prod",
     "deploy-production": "cdk deploy --all --ci --context deployment-env=production --require-approval never --profile qr-prod && node ./bin/postDeploy.js production qr-prod",
-    "destroy-prodution": "cdk destroy --all --ci --context deployment-env=production --profile qr-prod",
+    "destroy-production": "cdk destroy --all --ci --context deployment-env=production --profile qr-prod",
     "install-all": "npm install && npm-recursive-install && cd ../castofly-common && npm install",
     "lint": "eslint --ext .js .",
     "test": "echo \"No tests configured\" && exit 0"
