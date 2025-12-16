@@ -1,6 +1,5 @@
 import { UserPool } from "aws-cdk-lib/aws-cognito";
 import { ServicePrincipal } from "aws-cdk-lib/aws-iam";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { AwsCustomResource, AwsCustomResourcePolicy, PhysicalResourceId } from "aws-cdk-lib/custom-resources";
 
@@ -77,33 +76,10 @@ export function updateUserPoolConfig(scope, cdkConfig, onSignupLambda, onPreSign
     resourceType: "Custom::UpdateUserPool",
     onCreate: customResourceParams,
     onUpdate: customResourceParams,
-    policy: AwsCustomResourcePolicy.fromStatements([
-      new PolicyStatement({
-        effect: Effect.ALLOW,
-        actions: ["cognito-idp:UpdateUserPool", "cognito-idp:DescribeUserPool"],
-        resources: [userPool.userPoolArn],
-      }),
-      new PolicyStatement({
-        effect: Effect.ALLOW,
-        actions: ["iam:CreateServiceLinkedRole"],
-        resources: ["*"],
-        conditions: {
-          StringEquals: { "iam:AWSServiceName": "email.cognito-idp.amazonaws.com" },
-        },
-      }),
-    ]),
-  });
-
-  /*
-  const updateResource = new AwsCustomResource(scope, "UpdateUserPool", {
-    resourceType: "Custom::UpdateUserPool",
-    onCreate: customResourceParams,
-    onUpdate: customResourceParams,
     policy: AwsCustomResourcePolicy.fromSdkCalls({
       resources: AwsCustomResourcePolicy.ANY_RESOURCE,
     }),
   });
-  */
 
-  updateResource.node.addDependency(userPool);
+  // updateResource.node.addDependency(userPool); // I am importing user pool anyway
 }
