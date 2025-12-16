@@ -7,7 +7,7 @@ import StandardLambda from "../../standardWrappers/StandardLambda.js";
 import StandardRestApi from "../../standardWrappers/StandardRestApi.js";
 
 class OtherApiNestedStack extends BaseNestedStack {
-  constructor(scope, id, { cdkConfig, slackbotTopicArn, standardEnv, executionRoleName, authorizerLambda }) {
+  constructor(scope, id, { cdkConfig, slackbotTopicArn, standardEnv, executionRoleName }) {
     super(scope, id, { cdkConfig });
 
     const executionRole = Role.fromRoleName(this, "executionRole", executionRoleName);

@@ -1,4 +1,3 @@
-import appSettings from "../../frontend/src/appSettings.js";
 import { PRODUCT_NAMES } from "./products.js";
 import { STRIPE_ENV_IN_SECRET_MANAGER } from "./stripe.js";
 

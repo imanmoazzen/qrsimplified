@@ -10,7 +10,7 @@ export default async function apiRouter(event) {
   // e.g. '/dev/permissions/list' -> ["", "dev", "permissions", "list"]
 
   const userId = getUserIdFromAuthHeader(event);
-  const { requestContext, body, pathParameters, queryStringParameters = {} } = event;
+  const { requestContext, body, pathParameters } = event;
 
   const routes = requestContext.path.split("/");
   const resource = routes[2];

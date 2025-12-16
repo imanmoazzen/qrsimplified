@@ -52,4 +52,3 @@ export const remove = async (requestBody, userId) => {
     return errorResponse(`failed to remove the file in s3: ${err?.message}`);
   }
 };
-
