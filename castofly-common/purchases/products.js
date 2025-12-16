@@ -20,7 +20,7 @@ export const PRODUCTS = [
     amount: 29,
     priceIds: {
       [STRIPE_ENV_IN_SECRET_MANAGER.DEV]: "price_1Sdd9mE3d2sGycgE8YJoaSqz",
-      [STRIPE_ENV_IN_SECRET_MANAGER.PROD]: "random number",
+      [STRIPE_ENV_IN_SECRET_MANAGER.PROD]: "price_1SdxcwA1TPo8c24y48KUImjH",
     },
   },
   {
@@ -30,7 +30,7 @@ export const PRODUCTS = [
     amount: 129,
     priceIds: {
       [STRIPE_ENV_IN_SECRET_MANAGER.DEV]: "price_1SddCTE3d2sGycgEE2WFG4Ys",
-      [STRIPE_ENV_IN_SECRET_MANAGER.PROD]: "random number",
+      [STRIPE_ENV_IN_SECRET_MANAGER.PROD]: "price_1SdxdGA1TPo8c24yLgigjOjP",
     },
   },
   {
@@ -40,7 +40,7 @@ export const PRODUCTS = [
     amount: 499,
     priceIds: {
       [STRIPE_ENV_IN_SECRET_MANAGER.DEV]: "price_1SddDzE3d2sGycgEX6Arok68",
-      [STRIPE_ENV_IN_SECRET_MANAGER.PROD]: "random number",
+      [STRIPE_ENV_IN_SECRET_MANAGER.PROD]: "price_1SdxddA1TPo8c24y9JxeZy8S",
     },
   },
 ];
