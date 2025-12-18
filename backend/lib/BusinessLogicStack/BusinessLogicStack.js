@@ -108,7 +108,7 @@ class BusinessLogicStack extends BaseStack {
     // this non sense was created because Castofly user pool was already present want we wanted to change behaviour
     // for fresh pool you can add functionality at the time of start
     // NOTE: If I wanna deploy it as is, first I need to comment out this so the pool gets created then I need to bring it back and deploy it again
-    // updateUserPoolConfig(this, cdkConfig, onSignupLambda, onPreSignupLambda, auth.userPoolId);
+    updateUserPoolConfig(this, cdkConfig, onSignupLambda, onPreSignupLambda, auth.userPoolId);
 
     const otherApis = new OtherApiNestedStack(this, "OtherApis", {
       cdkConfig,
