@@ -65,7 +65,7 @@ const environmentConfig = {
     passwordRequiredForWebsite: false,
   },
   [ENVS.production]: {
-    account: "950672314670",
+    account: "340825716382",
     bucketRemovalPolicy: RemovalPolicy.RETAIN,
     tableRemovalPolicy: RemovalPolicy.RETAIN,
     userPoolRemovalPolicy: RemovalPolicy.RETAIN,
@@ -77,7 +77,7 @@ const environmentConfig = {
     dynamoUserDataTableBillingMode: BillingMode.PAY_PER_REQUEST,
     pointInTimeRecoveryEnabled: true,
     cognitoSESEnabled: true,
-    cognitoSESSourceARN: "arn:aws:ses:us-east-1:950672314670:identity/qrsimplified.com",
+    cognitoSESSourceARN: "arn:aws:ses:us-east-1:340825716382:identity/qrsimplified.com",
     cognitoUserPoolId: undefined,
     cognitoImportDomainName: "https://login.qrsimplified.com",
     cognitoImportBaseUri: "https://login.qrsimplified.com",
@@ -85,12 +85,12 @@ const environmentConfig = {
     cognitoGoogleAuthFlow: true,
     cognitoGoogleClientId: "297688401082-hejg6orpv9m6utqprj6uqjnsbkfnouk5.apps.googleusercontent.com",
     secretsManagerGoogleSecretId: "prod-google-auth-secret", // arn might be better
-    hostedZoneId: "Z03711781ISD9VJM5D0QS",
+    hostedZoneId: "Z058452311MABAQ8NWI72",
     hostedZoneName: "qrsimplified.com",
     hostedZoneAppRecordName: "qrsimplified.com",
-    hostedZoneCertificateArn: "arn:aws:acm:us-east-1:950672314670:certificate/1681477b-70c1-4ffe-9f02-5aa17c7369a1",
-    existingDistributionId: "EKTG5QJ32IE8A", // I don't need this for production
-    existingDistributionDomainName: "d1zahd6939fvq6.cloudfront.net", // I don't need this for production
+    hostedZoneCertificateArn: "arn:aws:acm:us-east-1:340825716382:certificate/7c0fd307-ea45-4489-9239-941660c28a80",
+    existingDistributionId: "E1OB2SY65S1MJ2", // I don't need this for production
+    existingDistributionDomainName: "d1koo92i6l34el.cloudfront.net", // I don't need this for production
     cdkShouldMakeARecords: false,
     cognitoPostSignoutURLs: { [AUTH_SUBDOMAINS.APP]: "https://qrsimplified.com/login" },
     cognitoCallbackURLs: { [AUTH_SUBDOMAINS.APP]: "https://qrsimplified.com" },
@@ -98,9 +98,9 @@ const environmentConfig = {
     cognitoHostedDomainName: "login.qrsimplified.com",
     appBaseUrl: "https://qrsimplified.com",
     notificationEmail: "info@qrsimplified.com",
-    secretEncryptionKeyArn: "arn:aws:kms:us-east-1:950672314670:key/972de72b-d427-4ac1-a802-8b1dccce5d1a",
-    stripeApiSecretArn: "arn:aws:secretsmanager:us-east-1:950672314670:secret:stripe-qr-simplied-prod-tdtPAF",
-    slackFeedbackSecretArn: "arn:aws:secretsmanager:us-east-1:950672314670:secret:slackCustomerFeedbackApiUrl-G5Zt8k",
+    secretEncryptionKeyArn: "arn:aws:kms:us-east-1:340825716382:key/7578aa0e-0d3c-4559-a752-10e2b8efe16c",
+    stripeApiSecretArn: "arn:aws:secretsmanager:us-east-1:340825716382:secret:stripe-qr-simplied-prod-Fm2FMt",
+    slackFeedbackSecretArn: "arn:aws:secretsmanager:us-east-1:340825716382:secret:slackCustomerFeedbackApiUrl-RbboJM",
     slackWorkspaceId: "TR9RS3MUL",
     slackChannelId: "C02K74F4UH2",
     awsSlackNotificationsEnabled: true,
