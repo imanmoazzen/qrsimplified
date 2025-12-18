@@ -25,7 +25,6 @@ const AppRouter = () => {
   const [isGoogleFontLoaded, setIsGoogleFontLoaded] = useState(false);
 
   useEffect(() => {
-    console.log(user);
     removeInitialLoadingIndicator();
   }, []);
 
