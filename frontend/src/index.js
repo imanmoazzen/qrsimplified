@@ -1,7 +1,4 @@
-import "react-tooltip/dist/react-tooltip.css";
-
 import "./index.css";
-import "./tooltip_overrides.css";
 
 import ReactDOM from "react-dom/client";
 

@@ -1,6 +1,5 @@
-import { useEffect, useId } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Tooltip } from "react-tooltip";
 
 import Step from "../../commonModules/help/components/Step.js";
 import { HELPS } from "../../commonModules/help/index.js";
@@ -25,8 +24,6 @@ const DecoratedButton = ({
   isDisabled = false,
   isBusy = false,
   isRippling = false,
-  tooltipContent = "",
-  tooltipPlacement = "top",
   extraContainerClasses = "",
   extraClasses = "",
   GTMClass,
@@ -39,7 +36,6 @@ const DecoratedButton = ({
   ...rest
 }) => {
   const dispatch = useDispatch();
-  const id = useId();
   const activeHelpId = useSelector(helpModule.getActiveHelpId);
   const activeStepId = useSelector(helpModule.getActiveStepId);
   const activeStep = HELPS?.[activeHelpId]?.[activeStepId];
@@ -75,15 +71,7 @@ const DecoratedButton = ({
 
   return (
     <div tabIndex={-1} className={`${styles["main-container"]} ${extraContainerClasses}`}>
-      <button
-        aria-disabled={isDisabled}
-        className={buttonClassNames}
-        onClick={buttonClicked}
-        data-tooltip-id={id}
-        data-tooltip-content={tooltipContent}
-        data-tooltip-place={tooltipPlacement}
-        {...rest}
-      >
+      <button aria-disabled={isDisabled} className={buttonClassNames} onClick={buttonClicked} {...rest}>
         {!isBusy && icon && <span className="material-symbols-outlined">{icon}</span>}
         {isBusy && <span className={`${styles["progress"]} material-symbols-outlined`}>progress_activity</span>}
         {buttonText && <label>{buttonText}</label>}
@@ -97,7 +85,6 @@ const DecoratedButton = ({
           help
         </span>
       )}
-      {tooltipContent && <Tooltip id={id} />}
       {isHelpButtonActive && <Step {...activeStep} />}
     </div>
   );

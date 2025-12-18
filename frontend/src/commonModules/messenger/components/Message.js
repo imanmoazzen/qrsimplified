@@ -1,4 +1,3 @@
-import cx from "classnames";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -50,11 +49,14 @@ const Message = ({ message }) => {
 
   const onClose = () => dispatch(removeMessageByID({ id: message.id }));
 
-  const animationClasses = cx({
-    [styles["sliding-in"]]: slidingIn,
-    [styles["fading-out"]]: fadingOut,
-    [styles["replay-message"]]: replayMessage,
-  });
+  const animationClasses = [
+    styles["error"],
+    slidingIn && styles["sliding-in"],
+    fadingOut && styles["fading-out"],
+    replayMessage && styles["replay-message"],
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   switch (message.type) {
     case USER_MESSAGE_TYPES.ERROR:
@@ -62,7 +64,7 @@ const Message = ({ message }) => {
         <MessageBox
           icon={"error"}
           content={message.content}
-          containerClass={cx(styles["error"], animationClasses)}
+          containerClass={animationClasses}
           onClose={onClose}
           onInteract={restartMessageTimeout}
           id={message.id}
@@ -73,7 +75,7 @@ const Message = ({ message }) => {
         <MessageBox
           icon={"info"}
           content={message.content}
-          containerClass={cx(styles["info"], animationClasses)}
+          containerClass={animationClasses}
           onClose={onClose}
           onInteract={restartMessageTimeout}
           id={message.id}
@@ -84,7 +86,7 @@ const Message = ({ message }) => {
         <MessageBox
           icon={"error"}
           content={message.content}
-          containerClass={cx(styles["warning"], animationClasses)}
+          containerClass={animationClasses}
           onClose={onClose}
           onInteract={restartMessageTimeout}
           id={message.id}
@@ -96,7 +98,7 @@ const Message = ({ message }) => {
           icon={"info"}
           heading={"Please Wait!"}
           content={message.content}
-          containerClass={cx(styles["info"], animationClasses)}
+          containerClass={animationClasses}
           onClose={onClose}
           onInteract={restartMessageTimeout}
           id={message.id}
@@ -108,7 +110,7 @@ const Message = ({ message }) => {
           icon={"check_circle"}
           heading={"Success!"}
           content={message.content}
-          containerClass={cx(styles["success"], animationClasses)}
+          containerClass={animationClasses}
           onClose={onClose}
           onInteract={restartMessageTimeout}
           id={message.id}
@@ -119,7 +121,7 @@ const Message = ({ message }) => {
         <MessageBox
           icon={"sync"}
           content={message.content}
-          containerClass={cx(styles["warning"], animationClasses)}
+          containerClass={animationClasses}
           onClose={onClose}
           onInteract={restartMessageTimeout}
           id={message.id}
