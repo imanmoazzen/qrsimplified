@@ -11,7 +11,7 @@
 
   p {
     @include rfont(title);
-    @include typing(32, 32ch, 4s, 3s);
+    @include typing(32, 32ch, 4s, 2s);
     line-height: 1.6;
     color: lightgray;
     width: 0;
@@ -23,7 +23,7 @@
       width: 100%;
       white-space: initial;
       font-size: small;
-      @include fadeUpAnimation(2rem, 0.5s, 2.5s);
+      @include fadeUpAnimation(2rem, 0.5s, 2s);
     }
   }
 }
@@ -44,7 +44,7 @@
 
 .usecases {
   @include flexCenter(column, 1rem);
-  @include fadeUpAnimation(2rem, 0.5s, 7s);
+  @include fadeUpAnimation(2rem, 0.5s, 6s);
   width: 350px;
   margin-top: 4rem;
   opacity: 0;
