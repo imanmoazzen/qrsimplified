@@ -78,14 +78,10 @@
       }
 
       .logo-loading-image {
-        width: 512px;
+        width: 256px;
         margin-bottom: -2rem;
         aspect-ratio: 1;
         animation: scaleUp 1s ease-in-out forwards;
-
-        @media (max-width: 767px) {
-          width: 192px;
-        }
       }
 
       .loading-message {
@@ -94,28 +90,19 @@
         font-size: 36px;
         letter-spacing: 0.25rem;
         color: var(--google-meet-light-gray);
-
-        @media (max-width: 767px) {
-          font-size: 28px;
-        }
       }
 
-      @keyframes backAndForth {
-        0% {
-          transform: scaleX(1);
-          left: -200px;
+      .hidden-loader {
+        visibility: hidden;
+        display: none;
+      }
+
+      @media (max-width: 767px) {
+        .logo-loading-image {
+          width: 192px;
         }
-        49% {
-          transform: scaleX(1);
-          left: 100%;
-        }
-        51% {
-          transform: scaleX(-1);
-          left: 100%;
-        }
-        100% {
-          transform: scaleX(-1);
-          left: -200px;
+        .loading-message {
+          font-size: 28px;
         }
       }
 
@@ -132,11 +119,6 @@
         to {
           opacity: 1;
         }
-      }
-
-      .hidden-loader {
-        visibility: hidden;
-        display: none;
       }
     </style>
 
