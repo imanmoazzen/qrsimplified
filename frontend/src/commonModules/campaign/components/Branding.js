@@ -148,6 +148,7 @@ const Branding = ({ setStep, borningCampaignId }) => {
       setState(STATES.INIT);
       setStep(3);
     } catch (error) {
+      console(error);
       setState(STATES.ERROR);
     }
   };

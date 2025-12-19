@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 import Feedback from "../commonComponents/Feedback/Feedback.js";
 import Authentication from "../commonModules/auth/components/Authentication/Authentication.js";
@@ -11,17 +11,21 @@ import { brandingChanged } from "../commonModules/campaign/store/uiReducer.js";
 import Cart from "../commonModules/project-root/components/Cart/Cart.js";
 import FAQPage from "../commonModules/project-root/components/Cart/FAQPage.js";
 import Navbar from "../commonModules/project-root/components/Navbar/Navbar.js";
+import Redirect from "../commonModules/project-root/components/Redirect/Redirect.js";
 import Referral from "../commonModules/project-root/components/Referral/Referral.js";
 import StripeReturnPage from "../commonModules/project-root/components/Stripe/StripeReturnPage.js";
-import Redirect from "../commonModules/project-root/components/Track/Track.js";
 import { removeInitialLoadingIndicator } from "../commonUtil/initialLoadingIndicator.js";
 import { AUTHENTICATION_PAGES } from "../frontEndConstants.js";
 import { auth } from "../index.js";
 
 const AppRouter = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const user = useSelector(auth.userSelector);
   const [isGoogleFontLoaded, setIsGoogleFontLoaded] = useState(false);
+
+  const isAnonymous = useSelector(auth.isAnonymousSelector);
 
   useEffect(() => {
     removeInitialLoadingIndicator();
@@ -41,6 +45,11 @@ const AppRouter = () => {
     const fallbackTimer = setTimeout(() => setIsGoogleFontLoaded(true), 500);
     return () => clearTimeout(fallbackTimer);
   }, []);
+
+  useEffect(() => {
+    const anonymousAllowed = ["/qr", "/upgrade", "/lead", "/login"];
+    if (!anonymousAllowed.some((path) => pathname.includes(path)) && isAnonymous) navigate("/signup");
+  }, [pathname, isAnonymous]);
 
   useEffect(() => {
     dispatch(
