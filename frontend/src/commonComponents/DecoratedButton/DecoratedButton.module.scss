@@ -8,7 +8,7 @@
 
 .button {
   position: relative;
-  @include flexCenter(row, 4px);
+  @include flexCenter(row, 6px);
   padding: 0.6rem 1rem;
   background: white;
   border: 1px solid black;

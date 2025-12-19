@@ -46,3 +46,8 @@ function getBuckets(timestamp, now, startOfToday) {
     all: true,
   };
 }
+
+export const getLeadKeys = (campaign) =>
+  Object.entries(campaign?.lead ?? {})
+    .filter(([, value]) => value === true)
+    .map(([key]) => key);

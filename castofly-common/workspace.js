@@ -7,6 +7,6 @@ export const obfuscate = (string) => {
 
 export const deobfuscate = (encoded) => {
   const decoded = Buffer.from(encoded, "base64").toString("utf8");
-  const [secret, email] = decoded.split(":");
-  return secret === WORKSPACE_SECRET ? email : null;
+  const [secret, string] = decoded.split(":");
+  return secret === WORKSPACE_SECRET ? string : null;
 };

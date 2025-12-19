@@ -1,0 +1,70 @@
+@import "../../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(column, 3rem);
+  width: 100%;
+}
+
+.steps-container {
+  @include flexCenter(row, 1rem);
+  width: 100%;
+
+  @include mobile {
+    flex-direction: column;
+    width: fit-content;
+  }
+}
+
+.step {
+  @include flexCenter(column, 0.5rem);
+
+  span {
+    text-align: center;
+    @include labelStyle();
+  }
+
+  img {
+    width: 200px;
+    aspect-ratio: 1;
+    box-shadow: 0 0 4px gray;
+    border-radius: var(--border-radius);
+
+    @include mobile {
+      width: 128px;
+    }
+  }
+}
+
+.arrow {
+  font-size: 32px;
+  color: var(--google-meet-gray);
+
+  @include mobile {
+    transform: rotate(90deg);
+    margin-bottom: 1rem;
+  }
+}
+
+.image {
+  width: 128px;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.how-it-works {
+  @include flexCenter(column, 0.25rem);
+
+  h4 {
+    margin: 0;
+  }
+
+  margin-bottom: -2.25rem;
+  @include labelStyle();
+}
+
+.message {
+  @include labelStyle(1);
+  color: var(--primary-color);
+}

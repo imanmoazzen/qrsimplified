@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 
 import Feedback from "../commonComponents/Feedback/Feedback.js";
 import Authentication from "../commonModules/auth/components/Authentication/Authentication.js";
 import Campaign from "../commonModules/campaign/components/Campaign.js";
+import LeadPage from "../commonModules/campaign/components/LeadPage.js";
 import UpgradePage from "../commonModules/campaign/components/UpgradePage.js";
 import { brandingChanged } from "../commonModules/campaign/store/uiReducer.js";
 import Cart from "../commonModules/project-root/components/Cart/Cart.js";
@@ -18,18 +19,12 @@ import { AUTHENTICATION_PAGES } from "../frontEndConstants.js";
 import { auth } from "../index.js";
 
 const AppRouter = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { pathname } = useLocation();
   const user = useSelector(auth.userSelector);
   const [isGoogleFontLoaded, setIsGoogleFontLoaded] = useState(false);
 
   useEffect(() => {
     removeInitialLoadingIndicator();
-  }, []);
-
-  useEffect(() => {
-    if (pathname.includes("welcome")) navigate("/folder/root?onboarding=true");
   }, []);
 
   useEffect(() => {
@@ -71,6 +66,7 @@ const AppRouter = () => {
     <Routes>
       <Route path="qr" element={<Redirect />} />
       <Route path="upgrade" element={<UpgradePage />} />
+      <Route path="lead" element={<LeadPage />} />
       <Route
         path="/"
         element={

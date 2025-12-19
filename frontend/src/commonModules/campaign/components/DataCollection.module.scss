@@ -1,0 +1,45 @@
+@import "../../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(column, 1.5rem);
+}
+
+.switch-container {
+  @include flexCenter(row, 1rem);
+
+  > span:first-child {
+    @include labelStyle();
+  }
+}
+
+.details-container {
+  @include flexCenter(column, 0.5rem);
+  @include fadeUpAnimation();
+}
+
+.chechboxes-container {
+  @include flexCenter(row, 1rem);
+  flex-wrap: wrap;
+
+  @include mobile {
+    gap: 0.5rem;
+  }
+}
+
+.tip {
+  @include labelStyle(1);
+  color: var(--primary-color);
+}
+
+.input-checkbox {
+  width: fit-content;
+
+  label {
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  input {
+    cursor: pointer;
+  }
+}

@@ -13,6 +13,7 @@ import { useFadeInImage } from "../../../hooks/useFadeInImage.js";
 import { campaignModule, server } from "../../../index.js";
 import { CAMPAIGN_PAGES, campaignPageChanged, campaignsChanged } from "../store/uiReducer.js";
 import { downloadImage } from "../utils.js";
+import DataCollection from "./DataCollection.js";
 import styles from "./EditPage.module.scss";
 import { QR_STATES } from "./QRCode.js";
 
@@ -30,6 +31,7 @@ const EditPage = () => {
   const [state, setState] = useState(STATES.INIT);
   const [name, setName] = useState("");
   const [destination, setDestination] = useState("");
+  const [lead, setLead] = useState();
   const [message, setMessage] = useState("");
   const [requestToArchive, setRequestToArchive] = useState(false);
 
@@ -40,6 +42,7 @@ const EditPage = () => {
   useEffect(() => {
     setName(campaign?.name ?? "");
     setDestination(campaign?.destination ?? "");
+    setLead(campaign?.lead ?? null);
   }, [campaign]);
 
   const update = () => {
@@ -64,12 +67,14 @@ const EditPage = () => {
       .requestFromApiv2(`/campaign`, {
         method: "PUT",
         mode: "cors",
-        data: { campaign_id: campaign.campaign_id, fieldsToSet: { name, destination } },
+        data: { campaign_id: campaign.campaign_id, fieldsToSet: { name, destination, lead } },
       })
       .then(() =>
         dispatch(
           campaignsChanged(
-            campaigns.map((item) => (item.campaign_id === campaign.campaign_id ? { ...item, name, destination } : item))
+            campaigns.map((item) =>
+              item.campaign_id === campaign.campaign_id ? { ...item, name, destination, lead } : item
+            )
           )
         )
       )
@@ -155,6 +160,13 @@ const EditPage = () => {
           extraClasses={styles["cta-button"]}
         />
       </div>
+
+      <DataCollection
+        lead={lead}
+        setLead={setLead}
+        onUpdate={() => setState(STATES.EDITING)}
+        extraClasses={styles["data-collection"]}
+      />
 
       {(state === STATES.EDITING || state === STATES.UPDATING) && (
         <div className={styles["buttons"]}>

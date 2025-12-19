@@ -3,6 +3,14 @@
 
 .main-container {
   @include parent-container();
+
+  &.more-space {
+    width: fit-content;
+
+    @include mobile {
+      width: 100%;
+    }
+  }
 }
 
 .qr-code-image {
