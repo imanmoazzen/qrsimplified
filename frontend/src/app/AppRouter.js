@@ -5,6 +5,7 @@ import { Outlet, Route, Routes } from "react-router-dom";
 import Feedback from "../commonComponents/Feedback/Feedback.js";
 import Authentication from "../commonModules/auth/components/Authentication/Authentication.js";
 import Campaign from "../commonModules/campaign/components/Campaign.js";
+import LeadPage from "../commonModules/campaign/components/LeadPage.js";
 import UpgradePage from "../commonModules/campaign/components/UpgradePage.js";
 import { brandingChanged } from "../commonModules/campaign/store/uiReducer.js";
 import Cart from "../commonModules/project-root/components/Cart/Cart.js";
@@ -65,6 +66,7 @@ const AppRouter = () => {
     <Routes>
       <Route path="qr" element={<Redirect />} />
       <Route path="upgrade" element={<UpgradePage />} />
+      <Route path="lead" element={<LeadPage />} />
       <Route
         path="/"
         element={

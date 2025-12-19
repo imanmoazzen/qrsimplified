@@ -1,108 +1,84 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-import DecoratedButton from "../../../commonComponents/DecoratedButton/DecoratedButton.js";
-import InputBox from "../../../commonComponents/InputBox/InputBox.js";
-import SimpleSwitch from "../../../commonComponents/SimpleSwitch/SimpleSwitch.js";
+import DecoratedButton, { BUTTON_THEMES } from "../../../commonComponents/DecoratedButton/DecoratedButton.js";
+import { COMMON_MESSAGES } from "../../../frontEndConstants.js";
 import { useFadeInImage } from "../../../hooks/useFadeInImage.js";
+import { campaignModule, server } from "../../../index.js";
+import DataCollection from "./DataCollection.js";
 import FORM from "./form.png";
 import LANDING from "./landing.png";
 import styles from "./LeadCollection.module.scss";
-import QR from "./qr.png";
 
-const LeadCollection = () => {
-  const [noDataCollection, setNoDataCollection] = useState(true);
+const LeadCollection = ({ campaignId, setStep }) => {
+  const qrCode = useSelector(campaignModule.getQRCode);
+  const [lead, setLead] = useState(null);
+  const [isBusy, setIsBusy] = useState(false);
+  const [message, setMessage] = useState("");
 
-  const qrImg = useFadeInImage({ src: QR, alt: "QR image placeholder" });
   const landingImg = useFadeInImage({ src: LANDING, alt: "landging image" });
   const formImg = useFadeInImage({ src: FORM, alt: "form image" });
 
-  const [isNameChecked, setIsNameChecked] = useState(true);
-  const [isEmailChecked, setIsEmailChecked] = useState(true);
-  const [isPhoneChecked, setIsPhoneChecked] = useState(false);
-  const [isJobTitleChecked, setIsJobTitleChecked] = useState(false);
-  const [isCommentsChecked, setIsCommentsChecked] = useState(true);
+  const finish = async () => {
+    try {
+      setIsBusy(true);
+
+      await server.requestFromApiv2(`/campaign`, {
+        method: "PUT",
+        mode: "cors",
+        data: { campaign_id: campaignId, fieldsToSet: { lead } },
+      });
+
+      setIsBusy(false);
+      setStep(4);
+    } catch (error) {
+      setMessage(COMMON_MESSAGES.GENERIC_ERROR);
+      setIsBusy(false);
+    }
+  };
 
   return (
     <div className={styles["main-container"]}>
-      <div className={styles["switch-container"]}>
-        <span>Collect user info before redirecting?</span>
-        <SimpleSwitch
-          leftLabel="No"
-          rightLabel="Yes"
-          onFlip={() => setNoDataCollection(!noDataCollection)}
-          isKnobOnLeft={noDataCollection}
-        />
+      <DataCollection lead={lead} setLead={setLead} />
+
+      <div className={styles["how-it-works"]}>
+        <h4>{!lead ? "Without data collection" : "With data collection"}</h4>
+        <span>Scan QR code to test</span>
       </div>
 
-      <h4>{noDataCollection ? "Without data collection" : "With data collection"}</h4>
       <div className={styles["steps-container"]}>
         <div className={styles["step"]}>
+          <img className={styles["qr-code-image"]} src={qrCode} alt="QR code for the campaign" />
           <span>Visitor scans the QR code</span>
-          {qrImg}
         </div>
 
-        <span className="material-symbols-outlined">arrow_forward</span>
+        <span className={`material-symbols-outlined ${styles["arrow"]}`}>arrow_forward</span>
 
-        {!noDataCollection && (
+        {lead && (
           <>
             <div className={styles["step"]}>
-              <span>Visitor enters details (e.g. email)</span>
               {formImg}
+              <span>Visitor enters details (e.g. email)</span>
             </div>
-            <span className="material-symbols-outlined">arrow_forward</span>
+            <span className={`material-symbols-outlined ${styles["arrow"]}`}>arrow_forward</span>
           </>
         )}
 
         <div className={styles["step"]}>
-          <span>Visitor is taken to the landing page</span>
           {landingImg}
+          <span>Visitor is taken to the landing page</span>
         </div>
       </div>
 
-      <DecoratedButton icon="open_in_new" buttonText="Test It" />
+      <DecoratedButton
+        buttonText={isBusy ? "Processing…" : "Finish"}
+        icon="celebration"
+        onClick={finish}
+        isBusy={isBusy}
+        theme={BUTTON_THEMES.COLORED}
+      />
 
-      {!noDataCollection && (
-        <div className={styles["details-container"]}>
-          <span className={styles["tip"]}>Collect only essential information to reduce visitor friction</span>
-          <div className={styles["chechboxes-container"]}>
-            <InputBox
-              type="checkbox"
-              label="Name"
-              value={isNameChecked}
-              setValue={setIsNameChecked}
-              extraClasses={styles["input-checkbox"]}
-            />
-            <InputBox
-              type="checkbox"
-              label="Email"
-              value={isEmailChecked}
-              setValue={setIsEmailChecked}
-              extraClasses={styles["input-checkbox"]}
-            />
-            <InputBox
-              type="checkbox"
-              label="Phone"
-              value={isPhoneChecked}
-              setValue={setIsPhoneChecked}
-              extraClasses={styles["input-checkbox"]}
-            />
-            <InputBox
-              type="checkbox"
-              label="Job Title"
-              value={isJobTitleChecked}
-              setValue={setIsJobTitleChecked}
-              extraClasses={styles["input-checkbox"]}
-            />
-            <InputBox
-              type="checkbox"
-              label="Comments"
-              value={isCommentsChecked}
-              setValue={setIsCommentsChecked}
-              extraClasses={styles["input-checkbox"]}
-            />
-          </div>
-        </div>
-      )}
+      {message && <span className={styles["message"]}>{message}</span>}
     </div>
   );
 };

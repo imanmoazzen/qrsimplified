@@ -14,6 +14,7 @@ import {
 import { downloadImage } from "../utils.js";
 import Branding from "./Branding.js";
 import styles from "./CreationPage.module.scss";
+import LeadCollection from "./LeadCollection.js";
 import QRCode from "./QRCode.js";
 
 const CreationPage = () => {
@@ -27,21 +28,22 @@ const CreationPage = () => {
 
   useEffect(() => {
     if (step === 1) {
-      setInfo("Start by entering a name and landing page for your QR code");
       setTitle("Add QR Code Details");
+      setInfo("Start by entering a name and landing page for your QR code");
     } else if (step === 2) {
-      setInfo("Add your logo and colors to reflect your brand");
       setTitle("QR Code Branding");
+      setInfo("Add your logo and colors to reflect your brand");
     } else if (step === 3) {
-      setInfo("Download and add this QR code to your marketing materials");
+      setTitle("Lead Collection");
+      setInfo("Capture visitor details to better understand your scans");
+    } else if (step === 4) {
       setTitle("QR Code Ready");
+      setInfo("Download and add this QR code to your marketing materials");
     }
   }, [step]);
 
-  // "Create Branded QR Code"
-
   return (
-    <div className={styles["main-container"]}>
+    <div className={`${styles["main-container"]} ${step === 3 && styles["more-space"]}`}>
       <Header title={title} info={info} />
 
       {step === 1 && (
@@ -54,9 +56,11 @@ const CreationPage = () => {
         />
       )}
 
-      {step === 2 && <Branding setStep={setStep} borningCampaignId={borningCampaignId} />}
+      {step === 2 && <Branding borningCampaignId={borningCampaignId} setStep={setStep} />}
 
-      {step === 3 && (
+      {step === 3 && <LeadCollection campaignId={borningCampaignId} setStep={setStep} />}
+
+      {step === 4 && (
         <>
           <div className={styles["image-container"]}>
             <img className={styles["qr-code-image"]} src={qrCode} alt="QR code for the campaign" />

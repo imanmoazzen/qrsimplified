@@ -13,9 +13,9 @@ import {
 import { getGeoLocation } from "../../../common-utilities/getGeoLocation.js";
 import { TABLE_NAMES } from "../../config.js";
 import { dynamo } from "../../index.js";
-import { errorResponse, forbiddenResponse, successResponse } from "../standardResponses.js";
+import { errorResponse, successResponse } from "../standardResponses.js";
 import { getUser } from "../user.js";
-import { getCampaignAnalytics } from "./utils.js";
+import { getCampaignAnalytics, getLeadKeys } from "./utils.js";
 
 export const getCampaigns = async (userId) => {
   try {
@@ -28,11 +28,25 @@ export const getCampaigns = async (userId) => {
       validCampaigns.map((item) => query(dynamo, TABLE_NAMES.CAMPAIGN_VISITS, { campaign_id: item.campaign_id }))
     );
 
-    const campaigns = validCampaigns.map((item, index) => ({
-      ...item,
-      visits: visitsForEachCampaign[index].length,
-      analytics: getCampaignAnalytics(visitsForEachCampaign[index]),
-    }));
+    const campaigns = validCampaigns.map((campaign, index) => {
+      const visits = sortByCreationTime(visitsForEachCampaign[index]) ?? [];
+
+      const leadKeys = getLeadKeys(campaign);
+      let leads = null;
+
+      if (leadKeys?.length) {
+        leads = visits
+          .map((visit) => Object.fromEntries(leadKeys.map((key) => [key, visit[key] ?? ""])))
+          .filter((lead) => Object.values(lead).some((v) => v !== ""));
+      }
+
+      return {
+        ...campaign,
+        visits: visits.length,
+        analytics: getCampaignAnalytics(visits),
+        leads,
+      };
+    });
 
     return successResponse("campaigns feteched", { campaigns: sortByCreationTime(campaigns, true) });
   } catch (err) {
@@ -144,13 +158,7 @@ export const visit = async (user_id, campaign_id, event) => {
 
     switch (campaign.status) {
       case CAMPAIGN_STATUS.EXPIRED:
-        return {
-          statusCode: 302,
-          headers: {
-            Location: `${process.env.APP_BASE_URL}/upgrade?status=${CAMPAIGN_STATUS.EXPIRED}`,
-          },
-          body: "",
-        };
+        return redirect(`${process.env.APP_BASE_URL}/upgrade?status=${CAMPAIGN_STATUS.EXPIRED}`);
 
       case CAMPAIGN_STATUS.TRIAL: {
         const visits = await query(dynamo, TABLE_NAMES.CAMPAIGN_VISITS, { campaign_id });
@@ -163,33 +171,23 @@ export const visit = async (user_id, campaign_id, event) => {
             { status: CAMPAIGN_STATUS.EXPIRED }
           );
 
-          return {
-            statusCode: 302,
-            headers: {
-              Location: `${process.env.APP_BASE_URL}/upgrade?status=${CAMPAIGN_STATUS.EXPIRED}`,
-            },
-            body: "",
-          };
+          return redirect(`${process.env.APP_BASE_URL}/upgrade?status=${CAMPAIGN_STATUS.EXPIRED}`);
         }
         break;
       }
 
       case CAMPAIGN_STATUS.ARCHIVED:
-        return {
-          statusCode: 302,
-          headers: {
-            Location: `${process.env.APP_BASE_URL}/upgrade?status=${CAMPAIGN_STATUS.ARCHIVED}`,
-          },
-          body: "",
-        };
+        return redirect(`${process.env.APP_BASE_URL}/upgrade?status=${CAMPAIGN_STATUS.ARCHIVED}`);
     }
 
     const geo = await getGeoLocation(event);
     const { country, city } = geo;
 
+    const visit_id = uuid();
+
     const item = {
       campaign_id,
-      visit_id: uuid(),
+      visit_id,
       creation_time: Date.now(),
       country,
       city,
@@ -197,14 +195,51 @@ export const visit = async (user_id, campaign_id, event) => {
 
     await putItem(dynamo, TABLE_NAMES.CAMPAIGN_VISITS, item);
 
-    return {
-      statusCode: 302,
-      headers: {
-        Location: campaign.destination,
-      },
-      body: "",
-    };
+    const leadKeys = getLeadKeys(campaign);
+
+    if (leadKeys.length) {
+      const user = await getUser(user_id);
+
+      const params = new URLSearchParams();
+
+      leadKeys.forEach((key) => {
+        params.set(key, "true");
+      });
+
+      if (user?.branding?.logo) params.set("logo", user?.branding?.logo);
+      params.set("destination", campaign?.destination);
+      params.set("campaign_id", campaign_id);
+      params.set("visit_id", visit_id);
+
+      return redirect(`${process.env.APP_BASE_URL}/lead?${params.toString()}`);
+    }
+
+    return redirect(campaign.destination);
   } catch (err) {
     return errorResponse(`cannot count the visit and return the destination url: ${err?.message}`);
   }
+};
+
+export const updateVisit = async (requestBody) => {
+  const { campaign_id, visit_id, fieldsToSet } = requestBody;
+
+  try {
+    const item = await getItem(dynamo, TABLE_NAMES.CAMPAIGN_VISITS, { campaign_id, visit_id });
+    if (!item) throw new Error("item doesn't exist");
+
+    await updateItemSet(dynamo, TABLE_NAMES.CAMPAIGN_VISITS, { campaign_id, visit_id }, fieldsToSet);
+    return successResponse("item was updated");
+  } catch (err) {
+    return errorResponse(`cannot update the item: ${err?.message}`);
+  }
+};
+
+const redirect = (url) => {
+  return {
+    statusCode: 302,
+    headers: {
+      Location: url,
+    },
+    body: "",
+  };
 };

@@ -10,7 +10,6 @@ import Label from "../../../commonComponents/Label/Label.js";
 import { APP_PAGES } from "../../../frontEndConstants.js";
 import { campaignModule } from "../../../index.js";
 import { CAMPAIGN_PAGES, campaignPageChanged } from "../store/uiReducer.js";
-import LeadCollection from "./LeadCollection.js";
 import styles from "./MainPage.module.scss";
 
 const MainPage = () => {
@@ -22,8 +21,6 @@ const MainPage = () => {
   return (
     <div className={styles["main-container"]}>
       <Header title="Your QR Codes" info="View analytics or manage your active QR codes" />
-
-      <LeadCollection />
 
       {page === CAMPAIGN_PAGES.MAIN && campaigns.length === 0 && (
         <div className={styles["empty-container"]}>

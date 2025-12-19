@@ -64,5 +64,8 @@ export const API_V2_DEFINITION = {
     "referral": {
       POST: AUTH,
     },
+    "lead": {
+      PUT: NOAUTH,
+    },
   },
 };

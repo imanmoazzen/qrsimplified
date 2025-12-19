@@ -1,0 +1,30 @@
+@import "../../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(column, 2rem);
+  @include fadeUpAnimation();
+  padding: 3rem;
+
+  @include mobile {
+    padding: 2rem;
+  }
+
+  img {
+    width: 128px;
+    height: auto;
+  }
+}
+
+.form {
+  @include flexCenter(column, 1rem);
+  width: 550px;
+  max-width: 100%;
+}
+
+.text-area label {
+  padding: 0 !important;
+}
+
+.button {
+  margin-top: 2rem;
+}
