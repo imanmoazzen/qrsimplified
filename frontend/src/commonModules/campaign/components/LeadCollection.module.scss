@@ -1,0 +1,55 @@
+@import "../../../styles/_styles.scss";
+
+.main-container {
+  @include flexCenter(column, 2rem);
+
+  h4 {
+    margin-block: 0;
+    margin-bottom: -1.5rem;
+  }
+}
+
+.switch-container {
+  @include flexCenter(row, 1rem);
+}
+
+.details-container {
+  @include flexCenter(column, 0.5rem);
+}
+
+.chechboxes-container {
+  @include flexCenter(row, 1rem);
+}
+
+.tip {
+  @include labelStyle();
+}
+
+.steps-container {
+  @include flexCenter(row, 1rem);
+  border: 1px solid black;
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  padding-bottom: 0;
+}
+
+.step {
+  @include flexCenter(column);
+
+  span {
+    text-align: center;
+  }
+
+  img {
+    width: 128px;
+    aspect-ratio: 1;
+  }
+}
+
+.image {
+  width: 128px;
+}
+
+.input-checkbox {
+  width: fit-content;
+}

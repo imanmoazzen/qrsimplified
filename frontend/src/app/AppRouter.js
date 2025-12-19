@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 
 import Feedback from "../commonComponents/Feedback/Feedback.js";
 import Authentication from "../commonModules/auth/components/Authentication/Authentication.js";
@@ -18,18 +18,12 @@ import { AUTHENTICATION_PAGES } from "../frontEndConstants.js";
 import { auth } from "../index.js";
 
 const AppRouter = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { pathname } = useLocation();
   const user = useSelector(auth.userSelector);
   const [isGoogleFontLoaded, setIsGoogleFontLoaded] = useState(false);
 
   useEffect(() => {
     removeInitialLoadingIndicator();
-  }, []);
-
-  useEffect(() => {
-    if (pathname.includes("welcome")) navigate("/folder/root?onboarding=true");
   }, []);
 
   useEffect(() => {
