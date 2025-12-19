@@ -155,6 +155,19 @@
       <img class="logo-loading-image" src="%PUBLIC_URL%/logo/logo.png" alt="software is loading" />
       <span class="loading-message"> SIMPLIFIED </span>
     </div>
+    <!-- ensuring the initial loader doesn't show up twice -->
+    <script>
+      (function () {
+        const path = window.location.pathname;
+        const loaderNoAllowed = ["/upgrade", "/lead"];
+
+        if (loaderNoAllowed.some((p) => path.startsWith(p))) {
+          const loader = document.getElementById("initial-loader");
+          if (loader) loader.classList.add("hidden-loader");
+        }
+      })();
+    </script>
+
     <main id="root"></main>
     <!--
       This HTML file is a template.

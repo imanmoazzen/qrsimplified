@@ -15,13 +15,15 @@ const DataCollection = ({ lead, setLead, onUpdate, extraClasses }) => {
   const flip = () => {
     const newState = !noDataCollection;
     setNoDataCollection(newState);
-    setLead(newState ? null : { name: true, email: true, comment: true });
-    onUpdate?.();
+    const newLead = newState ? null : { name: true, email: true, comment: true };
+    setLead(newLead);
+    onUpdate?.(newLead);
   };
 
   const update = (fieldToUpdate) => {
-    setLead({ ...lead, ...fieldToUpdate });
-    onUpdate?.();
+    const newLead = { ...lead, ...fieldToUpdate };
+    setLead(newLead);
+    onUpdate?.(newLead);
   };
 
   return (

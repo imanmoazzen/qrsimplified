@@ -13,33 +13,26 @@ import styles from "./LeadCollection.module.scss";
 const LeadCollection = ({ campaignId, setStep }) => {
   const qrCode = useSelector(campaignModule.getQRCode);
   const [lead, setLead] = useState(null);
-  const [isBusy, setIsBusy] = useState(false);
   const [message, setMessage] = useState("");
 
   const landingImg = useFadeInImage({ src: LANDING, alt: "landging image" });
   const formImg = useFadeInImage({ src: FORM, alt: "form image" });
 
-  const finish = async () => {
+  const update = async (newLead) => {
     try {
-      setIsBusy(true);
-
       await server.requestFromApiv2(`/campaign`, {
         method: "PUT",
         mode: "cors",
-        data: { campaign_id: campaignId, fieldsToSet: { lead } },
+        data: { campaign_id: campaignId, fieldsToSet: { lead: newLead } },
       });
-
-      setIsBusy(false);
-      setStep(4);
     } catch (error) {
       setMessage(COMMON_MESSAGES.GENERIC_ERROR);
-      setIsBusy(false);
     }
   };
 
   return (
     <div className={styles["main-container"]}>
-      <DataCollection lead={lead} setLead={setLead} />
+      <DataCollection lead={lead} setLead={setLead} onUpdate={(newLead) => update(newLead)} />
 
       <div className={styles["how-it-works"]}>
         <h4>{!lead ? "Without data collection" : "With data collection"}</h4>
@@ -71,10 +64,9 @@ const LeadCollection = ({ campaignId, setStep }) => {
       </div>
 
       <DecoratedButton
-        buttonText={isBusy ? "Processing…" : "Finish"}
+        buttonText={"Finish"}
         icon="celebration"
-        onClick={finish}
-        isBusy={isBusy}
+        onClick={() => setStep(4)}
         theme={BUTTON_THEMES.COLORED}
       />
 
