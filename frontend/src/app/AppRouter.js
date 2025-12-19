@@ -23,9 +23,8 @@ const AppRouter = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const user = useSelector(auth.userSelector);
-  const [isGoogleFontLoaded, setIsGoogleFontLoaded] = useState(false);
-
   const isAnonymous = useSelector(auth.isAnonymousSelector);
+  const [isGoogleFontLoaded, setIsGoogleFontLoaded] = useState(false);
 
   useEffect(() => {
     removeInitialLoadingIndicator();
