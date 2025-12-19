@@ -35,9 +35,7 @@ const AnalyticsPage = () => {
 
     const ORDER = ["name", "email", "phone", "title", "comment"];
     const headers = ORDER.filter((key) => leads.some((l) => l[key] != null));
-
     const rows = leads.map((obj) => headers.map((h) => `"${String(obj[h] ?? "").replace(/"/g, '""')}"`).join(","));
-
     const csv = [headers.join(","), ...rows].join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -99,7 +97,7 @@ const AnalyticsPage = () => {
         })}
       </div>
 
-      {campaign?.leads && (
+      {campaign?.lead && (
         <div className={styles["leads-container"]}>
           <span>{campaign?.leads?.length ?? 0} leads are collected</span>
           <DecoratedButton buttonText="Download Leads" icon="download" onClick={downloadCSV} />
