@@ -1,9 +1,9 @@
+import { APP_PAGES } from "castofly-common/appPages.js";
 import { API_RESPONSE_TYPES, EMAIL_TYPES, USER_FEEDBACK_LISTENERS } from "castofly-common/commonConstants.js";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { APP_PAGES } from "../../frontEndConstants.js";
 import { auth, server } from "../../index.js";
 import DecoratedButton, { BUTTON_THEMES } from "../DecoratedButton/DecoratedButton.js";
 import DynamicTextArea from "../DynamicTextArea/DynamicTextArea.js";

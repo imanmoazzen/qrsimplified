@@ -3,18 +3,19 @@ import { getItem, query } from "../../common-aws-utils-v3/dynamoUtils.js";
 import { TABLE_NAMES } from "../config.js";
 import { dynamo } from "../index.js";
 import { errorResponse, successResponse } from "./standardResponses.js";
+import { getUser } from "./user.js";
 
 export const getReferralInfo = async (userId) => {
   try {
+    const user = await getUser(userId);
+    if (!user || !user.referral_id) return { campaign: null, visits: 0, purchases: [] };
+
+    const referral_id = user.referral_id;
+
     const [campaign, visits, sources] = await Promise.all([
-      getItem(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, {
-        user_id: userId,
-        campaign_id: userId,
-      }),
-      query(dynamo, TABLE_NAMES.CAMPAIGN_VISITS, {
-        campaign_id: userId,
-      }),
-      query(dynamo, TABLE_NAMES.REFERRAL_RECORDS, { referrer_user_id: userId }),
+      getItem(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, { user_id: userId, campaign_id: referral_id }),
+      query(dynamo, TABLE_NAMES.CAMPAIGN_VISITS, { campaign_id: referral_id }),
+      query(dynamo, TABLE_NAMES.REFERRAL_RECORDS, { referral_id }),
     ]);
 
     if (!campaign || campaign.status !== CAMPAIGN_STATUS.REFERRAL)

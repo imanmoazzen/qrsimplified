@@ -1,0 +1,24 @@
+export const UNIQUE_APP_ROUTER_KEY = "/portal";
+
+export const APP_PAGES = {
+  DASHBOARD: "/",
+  CART: `${UNIQUE_APP_ROUTER_KEY}/cart`,
+  PROFILE: `${UNIQUE_APP_ROUTER_KEY}/profile`,
+  FAQ: `${UNIQUE_APP_ROUTER_KEY}/faq`,
+  UPGRADE: `${UNIQUE_APP_ROUTER_KEY}/upgrade`,
+  FEEDBACK: `${UNIQUE_APP_ROUTER_KEY}/feedback`,
+  LOGIN: `${UNIQUE_APP_ROUTER_KEY}/login`,
+  SIGNUP: `${UNIQUE_APP_ROUTER_KEY}/signup`,
+  REFERRAL: `${UNIQUE_APP_ROUTER_KEY}/referral`,
+  SUCCESS_PAYMENT: `${UNIQUE_APP_ROUTER_KEY}/success`,
+  LEAD: `${UNIQUE_APP_ROUTER_KEY}/lead`,
+};
+
+export const AUTHENTICATION_PAGES = {
+  LOGIN: APP_PAGES.LOGIN,
+  SIGNUP: APP_PAGES.SIGNUP,
+  CONFIRM_SIGNUP: `${UNIQUE_APP_ROUTER_KEY}/confirm-sign-up`,
+  FORGOT_PASSWORD: `${UNIQUE_APP_ROUTER_KEY}/forgot-password`,
+  RESET_PASSWORD: `${UNIQUE_APP_ROUTER_KEY}/reset-password`,
+  RESET_PASSWORD_BY_USERNAME: `${UNIQUE_APP_ROUTER_KEY}/reset-password/:username`,
+};

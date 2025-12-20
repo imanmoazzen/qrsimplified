@@ -1,7 +1,7 @@
 import { getJWTPayload } from "castofly-common";
+import { AUTHENTICATION_PAGES } from "castofly-common/appPages.js";
 
 import { history } from "../../../commonUtil/history.js";
-import { AUTHENTICATION_PAGES } from "../../../frontEndConstants.js";
 import config from "../config.js";
 
 const TOKEN_URL = `${config.cognito.userPoolBaseUri}/oauth2/token`;

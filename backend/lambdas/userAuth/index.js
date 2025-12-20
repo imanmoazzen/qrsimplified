@@ -7,6 +7,7 @@ import { handle } from "hono/aws-lambda";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 
+import { AUTHENTICATION_PAGES } from "../../../castofly-common/appPages.js";
 import { HTTP_STATUS_CODES } from "../../../castofly-common/commonConstants.js";
 import { isEmailValid } from "../../../castofly-common/validators.js";
 import { BACKEND_CONFIG } from "../../configurationConstants.js";
@@ -30,7 +31,7 @@ const userAuthApi = new Hono();
 userAuthApi.use("*", logger());
 userAuthApi.use("*", cors());
 
-userAuthApi.post("/forgot-password", async (context) => forgotPassword(context));
+userAuthApi.post(AUTHENTICATION_PAGES.FORGOT_PASSWORD, async (context) => forgotPassword(context));
 
 export const handler = handle(userAuthApi);
 

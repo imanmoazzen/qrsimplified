@@ -1,3 +1,4 @@
+import { APP_PAGES } from "castofly-common/appPages.js";
 import { CAMPAIGN_STATUS } from "castofly-common/campaigns.js";
 import { convertToHumanReadableDate } from "castofly-common/convertToHumanReadableDate.js";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +8,6 @@ import DecoratedButton, { BUTTON_THEMES } from "../../../commonComponents/Decora
 import Header from "../../../commonComponents/Header/Header.js";
 import { ILLUSTRATIONS } from "../../../commonComponents/Illustrations/Illustrations.js";
 import Label from "../../../commonComponents/Label/Label.js";
-import { APP_PAGES } from "../../../frontEndConstants.js";
 import { campaignModule } from "../../../index.js";
 import { CAMPAIGN_PAGES, campaignPageChanged } from "../store/uiReducer.js";
 import styles from "./MainPage.module.scss";

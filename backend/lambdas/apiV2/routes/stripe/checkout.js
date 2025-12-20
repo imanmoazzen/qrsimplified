@@ -12,7 +12,7 @@ export async function checkout(requestBody, user_id) {
     const { stripe, env } = await getStripeObject();
     if (!stripe || !env) throw new Error("stripe cannot be instantiated");
 
-    const { product_name, success_url, cancel_url, referrer_user_id } = requestBody;
+    const { product_name, success_url, cancel_url, referral_id } = requestBody;
     if (!product_name) throw new Error("product name is missing");
 
     const product = getProductByName(product_name, env);
@@ -38,7 +38,7 @@ export async function checkout(requestBody, user_id) {
       line_items: [{ price: price_id, quantity: 1 }],
       customer_email: email,
       mode: "payment",
-      metadata: { product_name, price_id, referrer_user_id },
+      metadata: { product_name, price_id, referral_id },
       ...(promotion_code && { discounts: [{ promotion_code }] }),
       success_url,
       cancel_url,

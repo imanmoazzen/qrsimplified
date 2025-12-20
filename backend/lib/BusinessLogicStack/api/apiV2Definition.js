@@ -52,20 +52,20 @@ export const API_V2_DEFINITION = {
     },
   },
   campaign: {
-    "GET": AUTH,
-    "POST": AUTH,
-    "PUT": AUTH,
-    "DELETE": AUTH,
-    "{user_id}": {
+    GET: AUTH,
+    POST: AUTH,
+    PUT: AUTH,
+    DELETE: AUTH,
+    referral: {
+      POST: AUTH,
+    },
+    lead: {
+      PUT: NOAUTH,
+    },
+    id: {
       "{campaign_id}": {
         GET: NOAUTH,
       },
-    },
-    "referral": {
-      POST: AUTH,
-    },
-    "lead": {
-      PUT: NOAUTH,
     },
   },
 };

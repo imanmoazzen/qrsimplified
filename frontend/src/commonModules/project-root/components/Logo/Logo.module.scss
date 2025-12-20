@@ -2,9 +2,9 @@
 
 .main-container {
   @include flexCenter(row, 0.5rem);
+  justify-content: flex-start;
   height: 36px;
   padding: 0;
-  width: fit-content;
   padding-left: 1rem;
   cursor: pointer;
 

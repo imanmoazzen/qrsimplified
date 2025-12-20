@@ -1,3 +1,4 @@
+import { APP_PAGES } from "castofly-common/appPages.js";
 import {
   API_RESPONSE_TYPES,
   EMAIL_TYPES,
@@ -14,7 +15,7 @@ import DropdownSelector from "../../../../commonComponents/DropdownSelector/Drop
 import Header from "../../../../commonComponents/Header/Header.js";
 import SegmentedToggle from "../../../../commonComponents/SegmentedToggle/SegmentedToggle.js";
 import WaitIndicator from "../../../../commonComponents/WaitIndicator/WaitIndicator.js";
-import { APP_PAGES, COMMON_MESSAGES } from "../../../../frontEndConstants.js";
+import { COMMON_MESSAGES } from "../../../../frontEndConstants.js";
 import { useFadeInImage } from "../../../../hooks/useFadeInImage.js";
 import { auth, server } from "../../../../index.js";
 import { generateReferralQRCode } from "../../../campaign/utils.js";
@@ -75,8 +76,8 @@ const Referral = () => {
           return;
         }
 
-        const creationResponse = await generateReferralQRCode(user_id);
-        setCampaign(creationResponse.data.campaign);
+        const referralCampaign = await generateReferralQRCode();
+        setCampaign(referralCampaign);
       } catch {
         setMessage(COMMON_MESSAGES.GENERIC_ERROR);
       } finally {

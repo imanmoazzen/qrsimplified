@@ -159,6 +159,7 @@
     <script>
       (function () {
         const path = window.location.pathname;
+        // I need to check this
         const loaderNoAllowed = ["/upgrade", "/lead"];
 
         if (loaderNoAllowed.some((p) => path.startsWith(p))) {

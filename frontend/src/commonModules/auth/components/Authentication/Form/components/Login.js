@@ -118,7 +118,7 @@ const LoginForm = ({ onSubmit, redirectToken = null }) => {
 
           <DecoratedButton
             buttonText="Forgot password?"
-            onClick={() => navigate("/forgot-password")}
+            onClick={() => navigate(AUTHENTICATION_PAGES.FORGOT_PASSWORD)}
             isDisabled={isSubmitting}
             extraClasses={styles["link-styled-button"]}
           />

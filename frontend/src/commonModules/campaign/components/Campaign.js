@@ -1,4 +1,5 @@
 import { API_RESPONSE_TYPES } from "castofly-common";
+import { APP_PAGES } from "castofly-common/appPages.js";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,7 +40,7 @@ const Campaign = () => {
         })
         .then((res) => {
           if (res.data.message === API_RESPONSE_TYPES.FORBIDDEN) {
-            navigate("/login");
+            navigate(APP_PAGES.LOGIN);
             return;
           }
 

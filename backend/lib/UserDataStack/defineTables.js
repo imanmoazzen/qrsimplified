@@ -12,7 +12,7 @@ export function defineTables(parent, cdkConfig) {
   const gsiNames = {
     [BACKEND_CONFIG.GSI.COGNITO_ATTRIBUTES_EMAIL_GSI]: "email-index",
     [BACKEND_CONFIG.GSI.USER_DATA_EMAIL_GSI]: "email-index",
-    [BACKEND_CONFIG.GSI.SLACK_USER_ID_GSI]: "slack_user_id-index",
+    [BACKEND_CONFIG.GSI.CAMPAIGN_ID_GSI]: "campaign_id-index",
   };
 
   tables.anonymous_users = new UserDataTable(parent, "anonymous_users", {
@@ -61,7 +61,7 @@ export function defineTables(parent, cdkConfig) {
   tables.referral_records = new UserDataTable(parent, "referral_records", {
     cdkConfig,
     primaryKeys: {
-      referrer_user_id: AttributeType.STRING,
+      referral_id: AttributeType.STRING,
       purchase_id: AttributeType.STRING,
     },
   });
@@ -70,6 +70,18 @@ export function defineTables(parent, cdkConfig) {
     cdkConfig,
     primaryKeys: {
       user_id: AttributeType.STRING,
+      campaign_id: AttributeType.STRING,
+    },
+    gsiIndices: {
+      [gsiNames[BACKEND_CONFIG.GSI.CAMPAIGN_ID_GSI]]: {
+        campaign_id: AttributeType.STRING,
+      },
+    },
+  });
+
+  tables.campaign_id_counter = new UserDataTable(parent, "campaign_id_counter", {
+    cdkConfig,
+    primaryKeys: {
       campaign_id: AttributeType.STRING,
     },
   });

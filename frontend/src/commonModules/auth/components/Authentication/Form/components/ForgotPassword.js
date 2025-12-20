@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import DecoratedButton from "../../../../../../commonComponents/DecoratedButton/DecoratedButton.js";
 import InputBox from "../../../../../../commonComponents/InputBox/InputBox.js";
 import { EditorUIContext } from "../../../../../../contexts/EditorUIProvider.js";
+import { AUTHENTICATION_PAGES } from "../../../../../../frontEndConstants.js";
 import styles from "./Common.module.scss";
 
 const ForgotPassword = ({ module }) => {
@@ -26,7 +27,7 @@ const ForgotPassword = ({ module }) => {
 
     try {
       const { resolvedUsername, forwardAddress } = await module.forgotPassword(email);
-      navigate("/reset-password", { state: { username: resolvedUsername, email: forwardAddress } });
+      navigate(AUTHENTICATION_PAGES.RESET_PASSWORD, { state: { username: resolvedUsername, email: forwardAddress } });
     } catch (err) {
       context.setErrorMessage("Could not reset password for the account, please contact support or try again");
     } finally {
