@@ -1,3 +1,4 @@
+import { APP_PAGES, AUTHENTICATION_PAGES, UNIQUE_APP_ROUTER_KEY } from "castofly-common/appPages.js";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, Route, Routes, useLocation, useNavigate } from "react-router-dom";
@@ -15,7 +16,6 @@ import Redirect from "../commonModules/project-root/components/Redirect/Redirect
 import Referral from "../commonModules/project-root/components/Referral/Referral.js";
 import StripeReturnPage from "../commonModules/project-root/components/Stripe/StripeReturnPage.js";
 import { removeInitialLoadingIndicator } from "../commonUtil/initialLoadingIndicator.js";
-import { AUTHENTICATION_PAGES } from "../frontEndConstants.js";
 import { auth } from "../index.js";
 
 const AppRouter = () => {
@@ -31,23 +31,30 @@ const AppRouter = () => {
   }, []);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const referrer_user_id = params.get("ref");
-
-    if (referrer_user_id && referrer_user_id !== user?.user_id) {
-      localStorage.setItem("referrer_user_id", referrer_user_id);
-    }
-  }, []);
-
-  useEffect(() => {
     document.fonts.load('24px "Material Symbols Outlined"').then(() => setIsGoogleFontLoaded(true));
     const fallbackTimer = setTimeout(() => setIsGoogleFontLoaded(true), 500);
     return () => clearTimeout(fallbackTimer);
   }, []);
 
   useEffect(() => {
-    const anonymousAllowed = ["/qr", "/upgrade", "/lead", "/login"];
-    if (!anonymousAllowed.some((path) => pathname.includes(path)) && isAnonymous) navigate("/signup");
+    const params = new URLSearchParams(window.location.search);
+    const referral_id = params.get("ref");
+
+    if (referral_id && referral_id !== user?.referral_id) {
+      localStorage.setItem("referral_id", referral_id);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (pathname === "/" && isAnonymous) {
+      navigate(APP_PAGES.SIGNUP);
+      return;
+    }
+
+    if (!pathname.startsWith(UNIQUE_APP_ROUTER_KEY)) return;
+
+    const anonymousAllowed = [APP_PAGES.UPGRADE, APP_PAGES.LEAD, APP_PAGES.LOGIN];
+    if (!anonymousAllowed.some((path) => pathname.includes(path)) && isAnonymous) navigate(APP_PAGES.SIGNUP);
   }, [pathname, isAnonymous]);
 
   useEffect(() => {
@@ -68,13 +75,17 @@ const AppRouter = () => {
     document.body.style.visibility = isGoogleFontLoaded ? "visible" : "hidden";
   }, [isGoogleFontLoaded]);
 
-  if (!isGoogleFontLoaded) return;
+  if (!isGoogleFontLoaded) return null;
 
   return (
     <Routes>
-      <Route path="qr" element={<Redirect />} />
-      <Route path="upgrade" element={<UpgradePage />} />
-      <Route path="lead" element={<LeadPage />} />
+      <Route path="/:campaign_id" element={<Redirect />} />
+      <Route path={APP_PAGES.LEAD} element={<LeadPage />} />
+      <Route path={APP_PAGES.UPGRADE} element={<UpgradePage />} />
+      {Object.values(AUTHENTICATION_PAGES).map((path, index) => (
+        <Route key={index} path={path} element={<Authentication />} />
+      ))}
+
       <Route
         path="/"
         element={
@@ -85,24 +96,13 @@ const AppRouter = () => {
         }
       >
         <Route index element={<Campaign />} />
-        <Route path="cart" element={<Cart />} />
-        <Route path="faq" element={<FAQPage />} />
-        <Route path="success" element={<StripeReturnPage />} />
-        <Route path="cancel" element={<StripeReturnPage isUpgrade={false} />} />
-        <Route path="feedback" element={<Feedback />} />
-        <Route path="referral" element={<Referral />} />
+        <Route path={APP_PAGES.CART} element={<Cart />} />
+        <Route path={APP_PAGES.FAQ} element={<FAQPage />} />
+        <Route path={APP_PAGES.SUCCESS_PAYMENT} element={<StripeReturnPage />} />
+        <Route path={APP_PAGES.FEEDBACK} element={<Feedback />} />
+        <Route path={APP_PAGES.REFERRAL} element={<Referral />} />
       </Route>
       <Route path="*" element={<span>Invalid URL!</span>} />
-      {[
-        AUTHENTICATION_PAGES.CONFIRM_SIGNUP,
-        AUTHENTICATION_PAGES.FORGOT_PASSWORD,
-        AUTHENTICATION_PAGES.LOGIN,
-        AUTHENTICATION_PAGES.RESET_PASSWORD,
-        AUTHENTICATION_PAGES.RESET_PASSWORD_BY_USERNAME,
-        AUTHENTICATION_PAGES.SIGNUP,
-      ].map((path, index) => (
-        <Route key={index} path={path} element={<Authentication path={path} />} />
-      ))}
     </Routes>
   );
 };

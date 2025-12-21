@@ -1,18 +1,23 @@
 import { v4 as uuid } from "uuid";
 
+import { APP_PAGES } from "../../../../../castofly-common/appPages.js";
 import { CAMPAIGN_STATUS, TRIAL_CAMPAIGN_VISIT_LIMIT } from "../../../../../castofly-common/campaigns.js";
 import { sortByCreationTime } from "../../../../../castofly-common/sort.js";
+import { getBase36, toSafeKey } from "../../../../../castofly-common/stringHelpers.js";
+import { BACKEND_CONFIG } from "../../../../configurationConstants.js";
 import {
   batchDeleteItems,
   deleteItem,
   getItem,
   putItem,
   query,
+  queryGSI,
+  updateItemAdd,
   updateItemSet,
 } from "../../../common-aws-utils-v3/dynamoUtils.js";
 import { getGeoLocation } from "../../../common-utilities/getGeoLocation.js";
 import { TABLE_NAMES } from "../../config.js";
-import { dynamo } from "../../index.js";
+import { dynamo, ssmCache } from "../../index.js";
 import { errorResponse, successResponse } from "../standardResponses.js";
 import { getUser } from "../user.js";
 import { getCampaignAnalytics, getLeadKeys } from "./utils.js";
@@ -56,24 +61,31 @@ export const getCampaigns = async (userId) => {
 
 export const addCampaign = async (requestBody, userId) => {
   try {
-    const { campaign_id, name, tracking_link, destination } = requestBody;
-    if (!campaign_id || !name || !tracking_link || !destination) throw new Error("required params are missing");
+    const { name, destination } = requestBody;
+    if (!name || !destination) throw new Error("required params are missing");
 
-    const [user, allCampaigns] = await Promise.all([
+    const sanitizedKey = toSafeKey(name) || `qr-${getBase36()}`;
+
+    const [user, allCampaigns, campaignIdItem] = await Promise.all([
       getUser(userId),
       query(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, { user_id: userId }),
+      getItem(dynamo, TABLE_NAMES.CAMPAIGN_ID_COUNTER, { campaign_id: sanitizedKey }),
     ]);
+
+    let selectedId;
+    if (!campaignIdItem) selectedId = sanitizedKey;
+    else selectedId = `${sanitizedKey}-${(campaignIdItem?.counter ?? 0) + 1}${getBase36(1)}`;
+    const tracking_link = `${process.env.APP_BASE_URL}/${selectedId}`;
 
     const qr_credits = user?.qr_credits ?? 0;
     const validCampaigns = allCampaigns.filter(
       (item) => item.status !== CAMPAIGN_STATUS.ARCHIVED && item.status !== CAMPAIGN_STATUS.REFERRAL
     );
-
     const status = qr_credits > validCampaigns.length ? CAMPAIGN_STATUS.LIVE : CAMPAIGN_STATUS.TRIAL;
 
     const item = {
       user_id: userId,
-      campaign_id,
+      campaign_id: selectedId,
       name,
       tracking_link,
       destination,
@@ -81,7 +93,10 @@ export const addCampaign = async (requestBody, userId) => {
       status,
     };
 
-    await putItem(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, item);
+    await Promise.all([
+      putItem(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, item),
+      updateItemAdd(dynamo, TABLE_NAMES.CAMPAIGN_ID_COUNTER, { campaign_id: sanitizedKey }, { counter: 1 }),
+    ]);
 
     return successResponse("item was added", { item });
   } catch (err) {
@@ -89,25 +104,36 @@ export const addCampaign = async (requestBody, userId) => {
   }
 };
 
-export const addReferralCampaign = async (requestBody, userId) => {
+export const addReferralCampaign = async (userId) => {
   try {
-    const { tracking_link, s3URL } = requestBody;
-    if (!tracking_link || !s3URL) throw new Error("required params are missing");
+    const user = await getUser(userId);
+    const { display_name, email } = user ?? {};
+    if (!user || !email) throw new Error("user is not valid");
 
-    const campaign = {
+    const sanitizedKey = toSafeKey(display_name || email) || `ref-${getBase36()}`;
+    const campaignIdItem = await getItem(dynamo, TABLE_NAMES.CAMPAIGN_ID_COUNTER, { campaign_id: sanitizedKey });
+
+    let selectedId;
+    if (!campaignIdItem) selectedId = sanitizedKey;
+    else selectedId = `${sanitizedKey}-${(campaignIdItem?.counter ?? 0) + 1}${getBase36(1)}`;
+    const tracking_link = `${process.env.APP_BASE_URL}/${selectedId}`;
+
+    const item = {
       user_id: userId,
-      campaign_id: userId,
+      campaign_id: selectedId,
       name: "Referral QR Code",
       tracking_link,
-      destination: `${process.env.APP_BASE_URL}/signup/?ref=${userId}`,
+      destination: `${process.env.APP_BASE_URL}${APP_PAGES.SIGNUP}/?ref=${selectedId}`,
       creation_time: Date.now(),
       status: CAMPAIGN_STATUS.REFERRAL,
-      s3URL,
     };
 
-    await putItem(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, campaign);
+    await Promise.all([
+      putItem(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, item),
+      updateItemAdd(dynamo, TABLE_NAMES.CAMPAIGN_ID_COUNTER, { campaign_id: sanitizedKey }, { counter: 1 }),
+    ]);
 
-    return successResponse("item was added", { campaign });
+    return successResponse("item was added", { item });
   } catch (err) {
     return errorResponse(`cannot add item: ${err?.message}`);
   }
@@ -149,16 +175,22 @@ export const deleteCampaign = async (requestBody, userId) => {
   }
 };
 
-export const visit = async (user_id, campaign_id, event) => {
+export const visit = async (campaign_id, event) => {
   try {
-    if (!user_id || !campaign_id) throw new Error("required params are missing");
+    if (!campaign_id) throw new Error("campaign id is missing");
 
-    const campaign = await getItem(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, { user_id, campaign_id });
-    if (!campaign) throw new Error("the campaign doesn't exist");
+    const CAMPAIGN_ID_GSI = await ssmCache.getValue(BACKEND_CONFIG.GSI.CAMPAIGN_ID_GSI);
+    const results = await queryGSI(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, { campaign_id }, CAMPAIGN_ID_GSI);
+
+    const campaign = results?.[0];
+    if (!campaign)
+      return redirect(`${process.env.APP_BASE_URL}${APP_PAGES.UPGRADE}?status=${CAMPAIGN_STATUS.NOT_EXISTS}`);
+
+    const user_id = campaign.user_id;
 
     switch (campaign.status) {
       case CAMPAIGN_STATUS.EXPIRED:
-        return redirect(`${process.env.APP_BASE_URL}/upgrade?status=${CAMPAIGN_STATUS.EXPIRED}`);
+        return redirect(`${process.env.APP_BASE_URL}${APP_PAGES.UPGRADE}?status=${CAMPAIGN_STATUS.EXPIRED}`);
 
       case CAMPAIGN_STATUS.TRIAL: {
         const visits = await query(dynamo, TABLE_NAMES.CAMPAIGN_VISITS, { campaign_id });
@@ -171,13 +203,13 @@ export const visit = async (user_id, campaign_id, event) => {
             { status: CAMPAIGN_STATUS.EXPIRED }
           );
 
-          return redirect(`${process.env.APP_BASE_URL}/upgrade?status=${CAMPAIGN_STATUS.EXPIRED}`);
+          return redirect(`${process.env.APP_BASE_URL}${APP_PAGES.UPGRADE}?status=${CAMPAIGN_STATUS.EXPIRED}`);
         }
         break;
       }
 
       case CAMPAIGN_STATUS.ARCHIVED:
-        return redirect(`${process.env.APP_BASE_URL}/upgrade?status=${CAMPAIGN_STATUS.ARCHIVED}`);
+        return redirect(`${process.env.APP_BASE_URL}${APP_PAGES.UPGRADE}?status=${CAMPAIGN_STATUS.ARCHIVED}`);
     }
 
     const geo = await getGeoLocation(event);
@@ -211,7 +243,7 @@ export const visit = async (user_id, campaign_id, event) => {
       params.set("campaign_id", campaign_id);
       params.set("visit_id", visit_id);
 
-      return redirect(`${process.env.APP_BASE_URL}/lead?${params.toString()}`);
+      return redirect(`${process.env.APP_BASE_URL}${APP_PAGES.LEAD}?${params.toString()}`);
     }
 
     return redirect(campaign.destination);

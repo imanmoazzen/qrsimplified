@@ -1,8 +1,8 @@
 import { AuthenticationDetails, CognitoUser, CognitoUserPool } from "amazon-cognito-identity-js";
+import { APP_PAGES, AUTHENTICATION_PAGES } from "castofly-common/appPages.js";
 
 import appSettings from "../../../appSettings.js";
 import { history } from "../../../commonUtil/history.js";
-import { APP_PAGES, AUTHENTICATION_PAGES } from "../../../frontEndConstants.js";
 import { AbstractModule } from "../../project-root/index.js";
 import { authenticate, getAccessToken, removeAuthTokens } from "../components/cognitoUtils.js";
 import config from "../config.js";
@@ -12,7 +12,7 @@ import uiReducer, { setSession, setSessionLoadComplete, uiInitialState } from ".
 const ACCESS_TOKEN_KEY = config.accessTokenKey;
 const ID_TOKEN_KEY = config.idTokenKey;
 const REFRESH_TOKEN_KEY = config.refreshTokenKey;
-const FORGOT_PASSWORD_URL = `${appSettings.get("api.user_auth_endpoint")}/forgot-password`;
+const FORGOT_PASSWORD_URL = `${appSettings.get("api.user_auth_endpoint")}${AUTHENTICATION_PAGES.FORGOT_PASSWORD}`;
 
 export default class AuthModule extends AbstractModule {
   userPool;
@@ -196,7 +196,7 @@ export default class AuthModule extends AbstractModule {
     }
     const LOGOUT_BASE_URL = `${config.cognito.userPoolBaseUri}/logout?`;
     const CLIENT_ID = `client_id=${config.cognito.clientId}`;
-    const LOGOUT_URI = `&logout_uri=${config.cognito.callbackUri}/login`;
+    const LOGOUT_URI = `&logout_uri=${config.cognito.callbackUri}${APP_PAGES.LOGIN}`;
     window.location.href = LOGOUT_BASE_URL + CLIENT_ID + LOGOUT_URI;
   }
 }

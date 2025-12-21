@@ -1,8 +1,8 @@
+import { APP_PAGES } from "castofly-common/appPages.js";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { APP_PAGES } from "../../frontEndConstants.js";
 import DecoratedButton, { BUTTON_THEMES } from "../DecoratedButton/DecoratedButton.js";
 import PopupMenu from "../PopupMenu/PopupMenu.js";
 import UserCircle from "../UserCircle/UserCircle.js";

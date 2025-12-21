@@ -5,6 +5,7 @@
   @include flexCenter();
   padding-right: 1rem;
   z-index: 4;
+  justify-content: flex-end;
 
   @include mobile {
     padding-right: 0.5rem;

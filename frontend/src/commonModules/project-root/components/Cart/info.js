@@ -8,8 +8,8 @@ export const PAYMENENT = [
 
 export const CHANGE = [
   {
-    title: "Replace Your QR Code",
-    text: "Yes. When you purchase a single QR code, you own it for life and can update its name and landing page at any time. If you want to change the branding, you’ll need to archive the current QR code and create a new one.",
+    title: "Edit Your QR Code",
+    text: "Yes. When you purchase a single QR code, you own it for life and can update its name and landing page at any time. If you want to change the branding, you’ll need to delete the current QR code and create a new one.",
     icon: "autorenew",
   },
 ];

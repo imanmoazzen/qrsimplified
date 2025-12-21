@@ -3,7 +3,6 @@
 import QRCode from "qrcode";
 import { v4 as uuid } from "uuid";
 
-import appSettings from "../../appSettings.js";
 import { removeDataBase64 } from "../../commonUtil/stringUtils.js";
 import { server } from "../../index.js";
 
@@ -130,13 +129,18 @@ export async function mergeQrAndLogo(qrSvgString, logoImage, scale) {
   return canvas.toDataURL("image/png");
 }
 
-export const generateReferralQRCode = async (userId) => {
-  const tracking_link = getTrackingLink(userId);
-  const svgCode = await generateQRCodeAsSVG(tracking_link);
+export const generateReferralQRCode = async () => {
+  const creationRes = await server.requestFromApiv2(`/campaign/referral`, {
+    method: "POST",
+    mode: "cors",
+  });
+
+  const campaign = creationRes.data.item;
+  const svgCode = await generateQRCodeAsSVG(campaign.tracking_link);
   const data = await mergeQrAndLogo(svgCode, "/logo/logo-app.png", 9);
   const sanitizedForS3 = removeDataBase64(data);
 
-  const res = await server.requestFromApiv2("/assets/upload", {
+  const uploadRes = await server.requestFromApiv2("/assets/upload", {
     method: "POST",
     mode: "cors",
     data: {
@@ -147,19 +151,21 @@ export const generateReferralQRCode = async (userId) => {
     },
   });
 
-  return await server.requestFromApiv2(`/campaign/referral`, {
-    method: "POST",
-    mode: "cors",
-    data: { tracking_link, s3URL: res.data.url },
-  });
-};
+  await Promise.all([
+    server.requestFromApiv2(`/campaign`, {
+      method: "PUT",
+      mode: "cors",
+      data: {
+        campaign_id: campaign.campaign_id,
+        fieldsToSet: { s3URL: uploadRes.data.url },
+      },
+    }),
+    server.requestFromApiv2("/user/updateInfo", {
+      method: "POST",
+      mode: "cors",
+      data: { referral_id: campaign.campaign_id },
+    }),
+  ]);
 
-export const getTrackingLink = (userId, campaignId) => {
-  if (!campaignId) return `${appSettings.get("app_base_url")}/qr?id=${userId}`;
-  return `${appSettings.get("app_base_url")}/qr?id=${userId}:${campaignId}`;
-};
-
-export const getIds = (trackingId) => {
-  const [user_id, campaign_id] = trackingId?.split(":") || [];
-  return [user_id, campaign_id];
+  return { ...campaign, s3URL: uploadRes.data.url };
 };

@@ -9,32 +9,6 @@ export const DOCUMENT_HEAD_META = {
   VIEWPORT: "width=device-width, initial-scale=1",
 };
 
-export const AUTHENTICATION_PAGES = {
-  CONFIRM_SIGNUP: "/confirm-sign-up",
-  FORGOT_PASSWORD: "/forgot-password",
-  LOGIN: "/login",
-  RESET_PASSWORD: "/reset-password",
-  RESET_PASSWORD_BY_USERNAME: "/reset-password/:username",
-  SIGNUP: "/signup",
-};
-
-export const ERROR_PAGES = {
-  ACCESS_DENIED: "/error/403",
-  NOT_FOUND: "/error/404",
-  UNKNOWN: "/error/500",
-};
-
-export const APP_PAGES = {
-  CART: "/cart",
-  PROFILE: "/profile",
-  FAQ: "/faq",
-  DASHBOARD: "/",
-  UPGRADE: "/upgrade",
-  FEEDBACK: "/feedback",
-  SIGNUP: "/signup",
-  REFERRAL: "/referral",
-};
-
 export const JSON_CONTENT_TYPE = "application/json";
 
 export const PRIMARY_COLOR = "#564de6";

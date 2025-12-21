@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuid } from "uuid";
 
 import DecoratedButton, { BUTTON_THEMES } from "../../../commonComponents/DecoratedButton/DecoratedButton.js";
 import InputBox from "../../../commonComponents/InputBox/InputBox.js";
 import { isValidHttpsUrl } from "../../../commonUtil/stringUtils.js";
 import { COMMON_MESSAGES } from "../../../frontEndConstants.js";
-import { auth, campaignModule, server } from "../../../index.js";
+import { campaignModule, server } from "../../../index.js";
 import { CAMPAIGN_PAGES, campaignPageChanged } from "../store/uiReducer.js";
-import { generateQRCodeAsSVG, getTrackingLink } from "../utils.js";
+import { generateQRCodeAsSVG } from "../utils.js";
 import styles from "./QRCode.module.scss";
 
 export const QR_STATES = {
@@ -22,7 +21,6 @@ export const QR_STATES = {
 
 const QRCode = ({ onSuccess }) => {
   const dispatch = useDispatch();
-  const userId = useSelector(auth.userIdSelector);
   const branding = useSelector(campaignModule.getBranding);
   const [name, setName] = useState("");
   const [destination, setDestination] = useState("");
@@ -39,17 +37,14 @@ const QRCode = ({ onSuccess }) => {
 
       setState(QR_STATES.CREATING_NEW_CAMPAIGN);
 
-      const campaign_id = uuid();
-      const tracking_link = getTrackingLink(userId, campaign_id);
+      const res = await server.requestFromApiv2(`/campaign`, {
+        method: "POST",
+        mode: "cors",
+        data: { name, destination },
+      });
 
-      const [svgCode] = await Promise.all([
-        generateQRCodeAsSVG(tracking_link, color, background),
-        server.requestFromApiv2(`/campaign`, {
-          method: "POST",
-          mode: "cors",
-          data: { campaign_id, tracking_link, destination, name },
-        }),
-      ]);
+      const { tracking_link, campaign_id } = res.data.item;
+      const svgCode = await generateQRCodeAsSVG(tracking_link, color, background);
 
       onSuccess?.(svgCode, campaign_id);
       setState(QR_STATES.INIT);

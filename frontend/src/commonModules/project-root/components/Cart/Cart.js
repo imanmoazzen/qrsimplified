@@ -1,4 +1,5 @@
 import { API_RESPONSE_TYPES } from "castofly-common";
+import { APP_PAGES } from "castofly-common/appPages.js";
 import { PRODUCT_NAMES, getProductByName } from "castofly-common/purchases/products.js";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -6,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import DecoratedButton, { BUTTON_THEMES } from "../../../../commonComponents/DecoratedButton/DecoratedButton.js";
 import Header from "../../../../commonComponents/Header/Header.js";
-import { APP_PAGES, COMMON_MESSAGES } from "../../../../frontEndConstants.js";
+import { COMMON_MESSAGES } from "../../../../frontEndConstants.js";
 import { auth, server } from "../../../../index.js";
 import styles from "./Cart.module.scss";
 import { FAQs } from "./FAQs.js";
@@ -42,9 +43,9 @@ const Cart = () => {
         mode: "cors",
         data: {
           product_name: selectedProductName,
-          success_url: window.location.origin + "/success",
+          success_url: window.location.origin + APP_PAGES.SUCCESS_PAYMENT,
           cancel_url: window.location.origin + APP_PAGES.CART,
-          referrer_user_id: localStorage.getItem("referrer_user_id"),
+          referral_id: localStorage.getItem("referral_id"),
         },
       });
 

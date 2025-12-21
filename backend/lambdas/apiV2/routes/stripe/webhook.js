@@ -52,7 +52,7 @@ export async function webhook(exactRequestBody, signature) {
 
     const product_name = object?.metadata?.product_name;
     const price_id = object?.metadata?.price_id;
-    const referrer_user_id = object?.metadata?.referrer_user_id;
+    const referral_id = object?.metadata?.referral_id;
     const coupon_id = object?.discounts?.[0]?.promotion_code;
 
     switch (eventType) {
@@ -74,9 +74,9 @@ export async function webhook(exactRequestBody, signature) {
           updateItemSet(dynamo, TABLE_NAMES.PURCHASES, { user_id, purchase_id }, payerFields),
           updateItemAdd(dynamo, TABLE_NAMES.USER_DATA, { user_id }, { qr_credits }),
           updateTrialOrExpiredCampaign(user_id, qr_credits),
-          referrer_user_id
+          referral_id
             ? putItem(dynamo, TABLE_NAMES.REFERRAL_RECORDS, {
-                referrer_user_id,
+                referral_id,
                 purchase_id,
                 referee_user_id: user_id,
                 referee_display_name: user?.display_name,

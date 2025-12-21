@@ -3,6 +3,7 @@ import { BillingMode } from "aws-cdk-lib/aws-dynamodb";
 import dotenv from "dotenv";
 import GitBranch from "git-branch";
 
+import { APP_PAGES } from "../../castofly-common/appPages.js";
 import { AUTH_SUBDOMAINS } from "../../castofly-common/commonConstants.js";
 import { COGNITO_HOSTED_DOMAIN_TYPES } from "../lib/constants.js";
 import { ENVS } from "../lib/constants.js";
@@ -39,7 +40,7 @@ const environmentConfig = {
     hostedZoneAppRecordName: undefined,
     hostedZoneCertificateArn: undefined,
     cdkShouldMakeARecords: false,
-    cognitoPostSignoutURLs: { [AUTH_SUBDOMAINS.APP]: "http://localhost:3000/login" },
+    cognitoPostSignoutURLs: { [AUTH_SUBDOMAINS.APP]: `http://localhost:3000${APP_PAGES.LOGIN}` },
     cognitoCallbackURLs: { [AUTH_SUBDOMAINS.APP]: "http://localhost:3000" },
     cognitoHostedDomainType: COGNITO_HOSTED_DOMAIN_TYPES.COGNITO,
     cognitoHostedDomainName: undefined,
@@ -92,7 +93,7 @@ const environmentConfig = {
     existingDistributionId: "E1OB2SY65S1MJ2", // I don't need this for production
     existingDistributionDomainName: "d1koo92i6l34el.cloudfront.net", // I don't need this for production
     cdkShouldMakeARecords: false,
-    cognitoPostSignoutURLs: { [AUTH_SUBDOMAINS.APP]: "https://qrsimplified.com/login" },
+    cognitoPostSignoutURLs: { [AUTH_SUBDOMAINS.APP]: `https://qrsimplified.com${APP_PAGES.LOGIN}` },
     cognitoCallbackURLs: { [AUTH_SUBDOMAINS.APP]: "https://qrsimplified.com" },
     cognitoHostedDomainType: COGNITO_HOSTED_DOMAIN_TYPES.CUSTOM,
     cognitoHostedDomainName: "login.qrsimplified.com",

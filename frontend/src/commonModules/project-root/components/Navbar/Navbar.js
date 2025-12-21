@@ -1,8 +1,8 @@
+import { APP_PAGES } from "castofly-common/appPages.js";
 import { useNavigate } from "react-router-dom";
 
 import DecoratedButton from "../../../../commonComponents/DecoratedButton/DecoratedButton.js";
 import UserMenu from "../../../../commonComponents/UserMenu/UserMenu.js";
-import { APP_PAGES } from "../../../../frontEndConstants.js";
 import { auth } from "../../../../index.js";
 import Logo from "../Logo/Logo.js";
 import styles from "./Navbar.module.scss";

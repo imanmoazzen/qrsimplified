@@ -99,7 +99,7 @@ const AnalyticsPage = () => {
 
       {campaign?.lead && (
         <div className={styles["leads-container"]}>
-          <span>{campaign?.leads?.length ?? 0} leads are collected</span>
+          <span className={styles["info"]}>{campaign?.leads?.length ?? 0} leads are collected</span>
           <DecoratedButton buttonText="Download Leads" icon="download" onClick={downloadCSV} />
         </div>
       )}

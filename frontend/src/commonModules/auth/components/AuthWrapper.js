@@ -1,10 +1,10 @@
+import { APP_PAGES, AUTHENTICATION_PAGES } from "castofly-common/appPages.js";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { history } from "../../../commonUtil/history.js";
 import { STATE_KEYS, getStateParts } from "../../../commonUtil/stateParameters.js";
-import { APP_PAGES, AUTHENTICATION_PAGES } from "../../../frontEndConstants.js";
 import {
   COGNITO_AUTH_CODE_KEY,
   COGNITO_ERRORS,
