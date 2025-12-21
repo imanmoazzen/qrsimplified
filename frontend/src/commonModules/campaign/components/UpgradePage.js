@@ -54,7 +54,6 @@ const UpgradePage = () => {
 
       <span className={`material-symbols-outlined ${styles["qr-code"]}`}>qr_code</span>
       <Header title={title} />
-
       <p> {info}</p>
 
       {!isAnonymous && status !== CAMPAIGN_STATUS.ARCHIVED && status !== CAMPAIGN_STATUS.NOT_EXISTS && (
