@@ -30,7 +30,11 @@ const LeadPage = () => {
     if (!isValid && destination) window.location.href = destination;
   }, [campaign_id, visit_id]);
 
-  const userLogo = useFadeInImage({ src: logo, alt: "logo for this campaign" });
+  const userLogo = useFadeInImage({
+    extraContainerClasses: styles["logo-container"],
+    src: logo,
+    alt: "logo for this campaign",
+  });
 
   const handleClick = async () => {
     try {
@@ -47,11 +51,11 @@ const LeadPage = () => {
     }
   };
 
-  // if (!isValid) return null;
+  if (!isValid) return null;
 
   return (
     <div className={styles["main-container"]}>
-      <div className={styles["logo-container"]}>{userLogo}</div>
+      {userLogo}
       <Header title={"Share a Few Details"}>
         <Label text="We’d love to learn more about you" />
       </Header>

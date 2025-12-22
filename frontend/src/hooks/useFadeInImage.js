@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 let shimmerInjected = false;
 
-export const useFadeInImage = ({ src, alt = "", extraImgStyle }) => {
+export const useFadeInImage = ({ src, alt = "", extraContainerClasses, extraImgStyle }) => {
   const imgRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -39,7 +39,7 @@ export const useFadeInImage = ({ src, alt = "", extraImgStyle }) => {
   if (!src) return null;
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className={extraContainerClasses} style={{ position: "relative" }}>
       {!loaded && (
         <div
           style={{
