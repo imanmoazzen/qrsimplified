@@ -47,11 +47,11 @@ const LeadPage = () => {
     }
   };
 
-  if (!isValid) return null;
+  // if (!isValid) return null;
 
   return (
     <div className={styles["main-container"]}>
-      {userLogo}
+      <div className={styles["logo-container"]}>{userLogo}</div>
       <Header title={"Share a Few Details"}>
         <Label text="We’d love to learn more about you" />
       </Header>
