@@ -3,15 +3,22 @@
 .main-container {
   @include flexCenter(column, 2rem);
   @include fadeUpAnimation();
-  padding: 3rem;
+  padding: 4rem;
 
   @include mobile {
     padding: 2rem;
   }
+}
+
+.logo-container {
+  width: 96px;
+  height: 96px;
+  @include flexCenter();
 
   img {
-    width: 128px;
-    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
 }
 

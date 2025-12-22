@@ -30,7 +30,11 @@ const LeadPage = () => {
     if (!isValid && destination) window.location.href = destination;
   }, [campaign_id, visit_id]);
 
-  const userLogo = useFadeInImage({ src: logo, alt: "logo for this campaign" });
+  const userLogo = useFadeInImage({
+    src: logo,
+    extraContainerClasses: styles["logo-container"],
+    alt: "logo for this campaign",
+  });
 
   const handleClick = async () => {
     try {
