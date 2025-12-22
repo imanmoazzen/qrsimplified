@@ -34,7 +34,7 @@ const MainPage = () => {
           <TitleRow />
           {campaigns.map((campaign) => (
             <div key={campaign.campaign_id} className={styles["campaign-container"]}>
-              <span>{campaign.name}</span>
+              <span className={styles["name"]}>{campaign.name}</span>
               <span className={styles["date"]}>{convertToHumanReadableDate(campaign.creation_time / 1000)}</span>
               <span>{campaign.visits ?? 0}</span>
               <DecoratedButton
@@ -66,7 +66,7 @@ export default MainPage;
 export const TitleRow = () => {
   return (
     <div className={`${styles["campaign-container"]} ${styles["title-container"]}`}>
-      <span>Name</span>
+      <span className={styles["name"]}>Name</span>
       <span className={styles["date"]}>Date</span>
       <span>Visits</span>
       <span>Status</span>
