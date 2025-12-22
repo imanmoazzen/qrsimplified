@@ -3,38 +3,39 @@ import { v4 as uuid } from "uuid";
 import { CAMPAIGN_STATUS } from "../../../../../castofly-common/campaigns.js";
 import { getCampaignAnalytics } from "./utils.js";
 
+// THIS DATA IS GENERATED FOR IMAN'S DEMO
+
 export const IMAN_USER_IDS_IN_BOTH_ENV = [
   "74185438-0051-70e0-b292-15eaf51fb71d",
   "c4c814d8-7091-7095-9c9a-97fc762e42a1",
 ]; // dev and prod
 
-export const COUNTRY_MODES = {
+const COUNTRY_MODES = {
   US_ONLY: "US_ONLY",
   CA_ONLY: "CA_ONLY",
   MIXED: "MIXED",
 };
 
-// ✅ now you can choose per-campaign (or set a default for all)
 export const generateMockupDataForDemo = () => {
   const c1 = buildMockCampaignResponse({
     name: "VMX 2025",
-    visitsCount: 12000,
-    leadsCount: 1002,
+    visitsCount: 7012,
+    leadsCount: 1,
     countryMode: COUNTRY_MODES.US_ONLY,
     creation_time: 1736208000000, // Jan 7, 2025
   });
 
   const c2 = buildMockCampaignResponse({
     name: "WVC 2025",
-    visitsCount: 9500,
-    leadsCount: 407,
+    visitsCount: 5501,
+    leadsCount: 1,
     countryMode: COUNTRY_MODES.US_ONLY,
     creation_time: 1738627200000, // Feb 4, 2025
   });
 
   const c3 = buildMockCampaignResponse({
     name: "US Campaign 2025",
-    visitsCount: 7800,
+    visitsCount: 9820,
     leadsCount: 801,
     countryMode: COUNTRY_MODES.US_ONLY,
     creation_time: 1740787200000, // Mar 1, 2025
@@ -42,7 +43,7 @@ export const generateMockupDataForDemo = () => {
 
   const c4 = buildMockCampaignResponse({
     name: "NAVC Ignite 2024",
-    visitsCount: 5202,
+    visitsCount: 2065,
     leadsCount: 1,
     countryMode: COUNTRY_MODES.MIXED,
     creation_time: 1706745600000, // Feb 1, 2024
@@ -50,7 +51,7 @@ export const generateMockupDataForDemo = () => {
 
   const c5 = buildMockCampaignResponse({
     name: "CVMA 2024",
-    visitsCount: 4109,
+    visitsCount: 809,
     leadsCount: 1,
     countryMode: COUNTRY_MODES.CA_ONLY,
     creation_time: 1711929600000, // Apr 1, 2024
