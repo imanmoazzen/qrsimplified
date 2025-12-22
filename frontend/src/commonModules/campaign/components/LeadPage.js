@@ -31,8 +31,8 @@ const LeadPage = () => {
   }, [campaign_id, visit_id]);
 
   const userLogo = useFadeInImage({
-    extraContainerClasses: styles["logo-container"],
     src: logo,
+    extraContainerClasses: styles["logo-container"],
     alt: "logo for this campaign",
   });
 
