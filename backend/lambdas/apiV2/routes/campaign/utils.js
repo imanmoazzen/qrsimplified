@@ -1,3 +1,5 @@
+import { getCountryName } from "../../../../../castofly-common/countryName.js";
+
 export function getCampaignAnalytics(visits) {
   const now = Date.now();
   const d = new Date();
@@ -17,22 +19,26 @@ export function getCampaignAnalytics(visits) {
     if (buckets.last30) byCountry[country].last30++;
     if (buckets.all) byCountry[country].all++;
 
-    if (!byCity[city]) byCity[city] = { today: 0, last7: 0, last30: 0, all: 0 };
-    if (buckets.today) byCity[city].today++;
-    if (buckets.last7) byCity[city].last7++;
-    if (buckets.last30) byCity[city].last30++;
-    if (buckets.all) byCity[city].all++;
+    const cityKey = `${city}, ${getCountryName(country)}`;
+    if (!byCity[cityKey]) byCity[cityKey] = { today: 0, last7: 0, last30: 0, all: 0, country };
+    if (buckets.today) byCity[cityKey].today++;
+    if (buckets.last7) byCity[cityKey].last7++;
+    if (buckets.last30) byCity[cityKey].last30++;
+    if (buckets.all) byCity[cityKey].all++;
   }
-  return {
-    countries: Object.entries(byCountry).map(([country, counts]) => ({
-      country,
-      ...counts,
-    })),
-    cities: Object.entries(byCity).map(([city, counts]) => ({
-      city,
-      ...counts,
-    })),
-  };
+
+  const countries = Object.entries(byCountry).map(([country, counts]) => ({
+    label: getCountryName(country),
+    country,
+    ...counts,
+  }));
+
+  const cities = Object.entries(byCity).map(([label, counts]) => ({
+    label,
+    ...counts,
+  }));
+
+  return { countries, cities };
 }
 
 function getBuckets(timestamp, now, startOfToday) {

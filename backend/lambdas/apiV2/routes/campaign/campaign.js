@@ -20,6 +20,7 @@ import { TABLE_NAMES } from "../../config.js";
 import { dynamo, ssmCache } from "../../index.js";
 import { errorResponse, successResponse } from "../standardResponses.js";
 import { getUser } from "../user.js";
+import { IMAN_USER_IDS_IN_BOTH_ENV, generateMockupDataForDemo } from "./mockupData.js";
 import { getCampaignAnalytics, getLeadKeys } from "./utils.js";
 
 export const getCampaigns = async (userId) => {
@@ -53,7 +54,13 @@ export const getCampaigns = async (userId) => {
       };
     });
 
-    return successResponse("campaigns feteched", { campaigns: sortByCreationTime(campaigns, true) });
+    let temp = campaigns;
+    if (IMAN_USER_IDS_IN_BOTH_ENV.includes(userId)) {
+      const fakeCampaigns = generateMockupDataForDemo();
+      temp = [...campaigns, ...fakeCampaigns];
+    }
+
+    return successResponse("campaigns feteched", { campaigns: sortByCreationTime(temp, true) });
   } catch (err) {
     return errorResponse(`cannot fetch campaings: ${err?.message}`);
   }

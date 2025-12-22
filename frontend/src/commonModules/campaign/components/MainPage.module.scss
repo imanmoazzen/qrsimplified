@@ -27,11 +27,11 @@
 
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr 1fr 1fr 75px 75px 50px;
+  grid-template-columns: 1fr 0.75fr 75px 75px 75px 25px;
   gap: 0.5rem;
 
   @include mobile {
-    grid-template-columns: 1fr 1fr 1fr 75px 50px;
+    grid-template-columns: 1fr 0.75fr 50px 75px 25px;
 
     .date {
       display: none;
@@ -43,6 +43,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: center;
+  }
+
+  .name {
+    text-align: left;
   }
 
   &.title-container span {

@@ -7,7 +7,6 @@ import { ILLUSTRATIONS } from "../../../commonComponents/Illustrations/Illustrat
 import Label from "../../../commonComponents/Label/Label.js";
 import { campaignModule } from "../../../index.js";
 import { REGION_FILTERS, TIME_FILTERS, regionFilterChanged, timeFilterChanged } from "../store/uiReducer.js";
-import { getCountryName } from "../utils.js";
 import styles from "./AnalyticsPage.module.scss";
 import Filter from "./Filter.js";
 
@@ -27,6 +26,9 @@ const AnalyticsPage = () => {
   if (timeFilter === TIME_FILTERS.LAST_7_DAYS) timeKey = "last7";
   if (timeFilter === TIME_FILTERS.LAST_30_DAYS) timeKey = "last30";
   if (timeFilter === TIME_FILTERS.ALL) timeKey = "all";
+
+  const cloneData = [...data];
+  cloneData.sort((a, b) => (b[timeKey] ?? 0) - (a[timeKey] ?? 0));
 
   const downloadCSV = () => {
     const filename = `${campaign.name}-leads.csv`;
@@ -70,27 +72,26 @@ const AnalyticsPage = () => {
       </div>
 
       <div className={styles["analytics"]}>
-        {data.length === 0 && (
+        {cloneData.length === 0 && (
           <div className={styles["empty-container"]}>
             <img src={ILLUSTRATIONS.CAMPAIGN} alt="no data to show" />
             <Label text="No data available yet." />
           </div>
         )}
-        {data.length > 0 && (
+        {cloneData.length > 0 && (
           <div className={`${styles["row"]} ${styles["title"]}`}>
             <span>{regionFilter}</span>
             <span>Visits</span>
           </div>
         )}
-        {data.map((item, index) => {
-          const countryCode = countries[index]["country"];
-          const country = getCountryName(countryCode);
-          const city = cities[index]["city"];
-          const text = regionFilter === REGION_FILTERS.COUNTRY ? country : `${city}, ${country}`;
-
+        {cloneData.map((item, index) => {
           return (
             <div key={index} className={styles["row"]}>
-              <Region countryCode={countryCode} text={text} />
+              <div className={styles["region"]}>
+                {item?.country?.length === 2 && <ReactCountryFlag countryCode={item?.country} svg />}
+                <span>{item.label}</span>
+              </div>
+
               <span>{item[timeKey]}</span>
             </div>
           );
@@ -108,12 +109,3 @@ const AnalyticsPage = () => {
 };
 
 export default AnalyticsPage;
-
-const Region = ({ countryCode, text }) => {
-  return (
-    <div className={styles["region"]}>
-      {countryCode.length === 2 && <ReactCountryFlag countryCode={countryCode} svg />}
-      <span>{text}</span>
-    </div>
-  );
-};
