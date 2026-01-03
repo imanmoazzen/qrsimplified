@@ -1,4 +1,5 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 import { deleteObject } from "../../../common-aws-utils-v3/s3Utils.js";
 import { s3 } from "../../index.js";
@@ -7,7 +8,31 @@ import { errorResponse, successResponse } from "../standardResponses.js";
 const BUCKET_NAME = process.env.MAIN_DATA_BUCKET_NAME;
 const REGION = process.env.AWS_REGION;
 
-export const upload = async (requestBody, userId = "anonymous") => {
+export const getSignedUploadUrl = async (requestBody, userId = "anonymous") => {
+  try {
+    const { name, type, folder = "untitled" } = requestBody;
+    const key = `${folder}/${userId}/${name}`;
+
+    const signedURL = await getSignedUrl(
+      s3,
+      new PutObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: key,
+        ContentType: type,
+      }),
+      { expiresIn: 60 * 10 }
+    );
+
+    const publicURL = `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${key}`;
+    return successResponse("got signed and public url", { signedURL, publicURL });
+  } catch (error) {
+    return errorResponse(`failed to get signed url: ${error?.message}`);
+  }
+};
+
+// file must be pure base64, without data:...;base64,
+// This approach is not suitable for large files
+export const uploadBase64 = async (requestBody, userId = "anonymous") => {
   try {
     const { file, name, type, folder = "uploads" } = requestBody;
 

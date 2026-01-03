@@ -32,15 +32,16 @@ export async function downloadImage(url, fileName = "image.png") {
   URL.revokeObjectURL(blobUrl);
 }
 
-export const generateQRCodeAsSVG = async (text, color, background) => {
+export const generateQRCodeAsSvgURL = async (text) => {
   const svg = await QRCode.toString(text, {
     type: "svg",
     errorCorrectionLevel: "H",
+    margin: 2,
   });
 
-  const svgDataUrl = "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+  const svgUrl = "data:image/svg+xml;utf8," + encodeURIComponent(svg);
 
-  return recolorSvgDataUrl(svgDataUrl, color, background);
+  return svgUrl;
 };
 
 export const recolorSvgDataUrl = (dataUrl, color = "#000000", background = "#0000") => {
@@ -122,7 +123,8 @@ export const generateReferralQRCode = async () => {
   });
 
   const campaign = creationRes.data.item;
-  const svgCode = await generateQRCodeAsSVG(campaign.tracking_link);
+  const svgURL = await generateQRCodeAsSvgURL(campaign.tracking_link);
+  const svgCode = recolorSvgDataUrl(svgURL);
   const data = await mergeQrAndLogo(svgCode, "/logo/logo-app.png", 9);
   const sanitizedForS3 = removeDataBase64(data);
 

@@ -18,7 +18,7 @@ import {
 import AnalyticsPage from "./AnalyticsPage.js";
 import styles from "./Campaign.module.scss";
 import CreationPage from "./CreationPage.js";
-import EditPage from "./EditPage.js";
+import EditPage from "./Edit/EditPage.js";
 import MainPage from "./MainPage.js";
 
 const Campaign = () => {

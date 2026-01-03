@@ -2,6 +2,16 @@
 
 .main-container {
   @include flexCenter(column, 1.5rem);
+  width: 100%;
+  padding: 0.5rem;
+  background-color: var(--light-background);
+  border-radius: var(--border-radius);
+  border: 1px solid transparent;
+
+  &.active {
+    background-color: transparent;
+    border-color: gray;
+  }
 }
 
 .switch-container {

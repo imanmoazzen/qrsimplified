@@ -19,6 +19,14 @@ export const REGION_FILTERS = {
   CITY: "City",
 };
 
+export const DEFAULT_BRANDING = {
+  logo: null,
+  logo_scale: 4,
+  color: "#000000",
+  background: "#0000",
+  isTransparent: true,
+};
+
 export const uiInitialState = {
   isDashboardingLoading: true,
   page: CAMPAIGN_PAGES.MAIN,
@@ -27,13 +35,7 @@ export const uiInitialState = {
   timeFilter: TIME_FILTERS.TODAY,
   regionFilter: REGION_FILTERS.COUNTRY,
   qrCode: null,
-  branding: {
-    logo: null,
-    logo_scale: 4,
-    color: "#000000",
-    background: "#0000",
-    isTransparent: true,
-  },
+  branding: DEFAULT_BRANDING,
 };
 
 const slice = createSlice({
