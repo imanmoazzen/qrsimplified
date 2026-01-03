@@ -13,23 +13,21 @@ const FAQPage = () => {
   const helpImg = useFadeInImage({ src: ILLUSTRATIONS.FAQ, alt: "FAQ image", extraImgStyle: { width: 256 } });
 
   return (
-    <>
-      <div className={styles["main-container"]}>
-        <DecoratedButton
-          buttonText={"Close"}
-          icon={"close"}
-          onClick={() => navigate("/")}
-          extraContainerClasses={styles["close-container"]}
-          theme={BUTTON_THEMES.TRANSPARENT}
-        />
+    <div className={styles["main-container"]}>
+      <DecoratedButton
+        buttonText={"Close"}
+        icon={"close"}
+        onClick={() => navigate("/")}
+        extraContainerClasses={styles["close-container"]}
+        theme={BUTTON_THEMES.TRANSPARENT}
+      />
 
-        <Demo />
+      <Demo />
 
-        <FAQs isInitiallyOpen={true} extraClasses={styles["faq"]} />
+      <FAQs isInitiallyOpen={true} extraClasses={styles["faq"]} />
 
-        {helpImg}
-      </div>
-    </>
+      {helpImg}
+    </div>
   );
 };
 
