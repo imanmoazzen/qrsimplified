@@ -5,7 +5,7 @@ import SimpleSwitch from "../../../commonComponents/SimpleSwitch/SimpleSwitch.js
 import styles from "./DataCollection.module.scss";
 
 const DataCollection = ({ lead, setLead, onUpdate, extraClasses }) => {
-  const [noDataCollection, setNoDataCollection] = useState();
+  const [noDataCollection, setNoDataCollection] = useState(false);
   const { name = false, email = false, phone = false, title = false, comment = false } = lead ?? {};
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const DataCollection = ({ lead, setLead, onUpdate, extraClasses }) => {
   };
 
   return (
-    <div className={`${styles["main-container"]} ${extraClasses}`}>
+    <div className={`${styles["main-container"]} ${!noDataCollection && styles["active"]} ${extraClasses}`}>
       <div className={styles["switch-container"]}>
         <span>Collect info before redirect?</span>
         <SimpleSwitch leftLabel="No" rightLabel="Yes" onFlip={flip} isKnobOnLeft={noDataCollection} />

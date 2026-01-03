@@ -1,0 +1,94 @@
+@import "../../../../styles/_mixin.scss";
+@import "../../styles/_campaignStyles.scss";
+
+.main-container {
+  @include parent-container();
+  width: 1440px;
+  --max-subcontainer-width: 512px;
+
+  @include belowBigDesktop {
+    width: var(--max-subcontainer-width);
+  }
+}
+
+.core-container {
+  @include flexCenter(row, 4rem);
+  width: 100%;
+  align-items: stretch;
+
+  @include belowBigDesktop {
+    flex-direction: column;
+  }
+}
+
+.edit-container {
+  @include flexCenter(column, 2rem);
+  max-width: var(--max-subcontainer-width);
+  width: 100%;
+}
+
+.result-container {
+  @include flexCenter(column, 1rem);
+  justify-content: flex-start;
+  max-width: var(--max-subcontainer-width);
+  width: 100%;
+  background-color: var(--light-background);
+  padding: 2rem 1rem;
+  border-radius: var(--border-radius);
+
+  @include belowBigDesktop {
+    background-color: transparent;
+    padding: 0;
+  }
+}
+
+.link-container {
+  position: relative;
+  @include flexCenter(row);
+  width: 100%;
+  align-items: first baseline;
+}
+
+.cta-button {
+  position: absolute;
+  right: 0;
+  padding: 0;
+  padding-bottom: 0.75rem;
+  font-size: small;
+}
+
+.input-box {
+  input {
+    padding: 0.5rem;
+  }
+
+  &.no-editable input {
+    background-color: var(--light-background);
+    pointer-events: none;
+    color: var(--google-meet-light-gray);
+  }
+}
+
+.data-collection {
+  width: 100%;
+  margin-block: 1rem;
+
+  div[class*="switch-container"] {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.buttons {
+  @include buttonPanel(0);
+  margin-bottom: 4rem;
+}
+
+.download {
+  margin-bottom: 4rem;
+}
+
+.info {
+  @include labelStyle(1);
+  color: var(--primary-color);
+}

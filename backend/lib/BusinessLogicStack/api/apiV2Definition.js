@@ -44,6 +44,9 @@ export const API_V2_DEFINITION = {
     },
   },
   assets: {
+    sign: {
+      POST: AUTH,
+    },
     upload: {
       POST: AUTH,
     },

@@ -11,7 +11,7 @@ class FileSelector {
     const inputElement = document.createElement("input");
     inputElement.type = "file";
     inputElement.accept = filter;
-    inputElement.multiple = true;
+    inputElement.multiple = false;
     inputElement.click();
     inputElement.addEventListener("input", () => {
       this.files = [...inputElement.files];

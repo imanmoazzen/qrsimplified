@@ -12,10 +12,10 @@ import {
   qrCodeChanged,
 } from "../store/uiReducer.js";
 import { downloadImage } from "../utils.js";
-import Branding from "./Branding.js";
+import Branding from "./Branding/Branding.js";
 import styles from "./CreationPage.module.scss";
 import LeadCollection from "./LeadCollection.js";
-import QRCode from "./QRCode.js";
+import NameAndLandingPage from "./NameAndLandingPage.js";
 
 const CreationPage = () => {
   const dispatch = useDispatch();
@@ -23,7 +23,6 @@ const CreationPage = () => {
   const [step, setStep] = useState(1);
   const [title, setTitle] = useState("");
   const [info, setInfo] = useState("");
-  const [isDownloadRippling, setIsDownloadRippling] = useState(true);
   const [borningCampaignId, setBorningCampaignId] = useState();
 
   useEffect(() => {
@@ -47,7 +46,7 @@ const CreationPage = () => {
       <Header title={title} info={info} />
 
       {step === 1 && (
-        <QRCode
+        <NameAndLandingPage
           onSuccess={(item, campaign_id) => {
             dispatch(qrCodeChanged(item));
             setBorningCampaignId(campaign_id);
@@ -75,17 +74,12 @@ const CreationPage = () => {
               }}
               buttonText="Go to Dashboard"
               icon="Home"
-              isRippling={!isDownloadRippling}
             />
 
             <DecoratedButton
-              onClick={async () => {
-                setIsDownloadRippling(false);
-                await downloadImage(qrCode);
-              }}
+              onClick={async () => await downloadImage(qrCode)}
               buttonText="Download QR Code"
               icon="download"
-              isRippling={isDownloadRippling}
             />
           </div>
         </>

@@ -1,0 +1,19 @@
+@import "../../../../styles/_styles.scss";
+
+.archive-container {
+  @include flexCenter(column, 0.5rem);
+  margin-top: auto;
+
+  > span {
+    @include labelStyle();
+  }
+}
+
+.confirm-container {
+  @include flexCenter(column, 1rem);
+  margin-top: auto;
+}
+
+.buttons {
+  @include buttonPanel(0);
+}

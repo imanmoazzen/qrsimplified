@@ -7,8 +7,8 @@ import { isValidHttpsUrl } from "../../../commonUtil/stringUtils.js";
 import { COMMON_MESSAGES } from "../../../frontEndConstants.js";
 import { campaignModule, server } from "../../../index.js";
 import { CAMPAIGN_PAGES, campaignPageChanged } from "../store/uiReducer.js";
-import { generateQRCodeAsSVG } from "../utils.js";
-import styles from "./QRCode.module.scss";
+import { generateQRCodeAsSvgURL, recolorSvgDataUrl } from "../utils.js";
+import styles from "./NameAndLandingPage.module.scss";
 
 export const QR_STATES = {
   INIT: "Init",
@@ -19,7 +19,7 @@ export const QR_STATES = {
   ERROR: COMMON_MESSAGES.GENERIC_ERROR,
 };
 
-const QRCode = ({ onSuccess }) => {
+const NameAndLandingPage = ({ onSuccess }) => {
   const dispatch = useDispatch();
   const branding = useSelector(campaignModule.getBranding);
   const [name, setName] = useState("");
@@ -44,7 +44,8 @@ const QRCode = ({ onSuccess }) => {
       });
 
       const { tracking_link, campaign_id } = res.data.item;
-      const svgCode = await generateQRCodeAsSVG(tracking_link, color, background);
+      const svgURL = await generateQRCodeAsSvgURL(tracking_link);
+      const svgCode = recolorSvgDataUrl(svgURL, color, background);
 
       onSuccess?.(svgCode, campaign_id);
       setState(QR_STATES.INIT);
@@ -129,4 +130,4 @@ const QRCode = ({ onSuccess }) => {
   );
 };
 
-export default QRCode;
+export default NameAndLandingPage;

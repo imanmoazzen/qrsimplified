@@ -1,0 +1,31 @@
+@import "../../../../styles/_mixin.scss";
+
+.main-container {
+  position: relative;
+  @include flexCenter(column-reverse);
+
+  .qr-code-image {
+    width: 256px;
+  }
+
+  .upload-button-container {
+    position: absolute;
+
+    button[class*="busy"] {
+      pointer-events: none;
+      background-color: white;
+    }
+  }
+}
+
+.logo {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  transition: width 0.3s ease;
+  height: auto;
+}
+
+.moving-bar {
+  @include movingBar();
+}

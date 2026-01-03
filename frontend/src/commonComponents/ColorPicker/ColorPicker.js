@@ -6,10 +6,10 @@ import styles from "./ColorPicker.module.scss";
 export const COLOR_PICKER_OPTIONS = [
   "#B80000",
   "#DB3E00",
-  "#FEB72D",
+  "#f5bb00",
   "#008B02",
   "#006B76",
-  "#635bff",
+  "#4335e6",
   "#886ce7",
   "#EB9694",
   "#FAD0C3",
