@@ -1,7 +1,7 @@
 import CloseButton from "../CloseButton/CloseButton.js";
 import styles from "./Overlay.module.scss";
 
-const Overlay = ({ isActive, onClick, extraClasses, isResponsive }) => {
+const Overlay = ({ isActive, isCloseButtonRequired, onClick, extraClasses, isResponsive }) => {
   return (
     <div
       className={`${styles["overlay"]} ${isActive ? styles["active"] : ""} ${
@@ -9,7 +9,7 @@ const Overlay = ({ isActive, onClick, extraClasses, isResponsive }) => {
       } ${extraClasses}`}
       onClick={() => onClick?.()}
     >
-      {isActive && <CloseButton onClick={() => onClick?.()} extraClasses={styles["close"]} />}
+      {isActive && isCloseButtonRequired && <CloseButton onClick={() => onClick?.()} extraClasses={styles["close"]} />}
     </div>
   );
 };
