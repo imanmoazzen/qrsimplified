@@ -237,15 +237,10 @@ export const visit = async (campaign_id, event) => {
     const leadKeys = getLeadKeys(campaign);
 
     if (leadKeys.length) {
-      const user = await getUser(user_id);
-
       const params = new URLSearchParams();
+      leadKeys.forEach((key) => params.set(key, "true"));
 
-      leadKeys.forEach((key) => {
-        params.set(key, "true");
-      });
-
-      if (user?.branding?.logo) params.set("logo", user?.branding?.logo);
+      if (campaign?.branding?.logo) params.set("logo", campaign?.branding?.logo);
       params.set("destination", campaign?.destination);
       params.set("campaign_id", campaign_id);
       params.set("visit_id", visit_id);
