@@ -65,7 +65,11 @@ const Modal = ({
         )}
       </div>
 
-      <Overlay isActive={active} onClick={overlayCancels ? () => cancel() : null} />
+      <Overlay
+        isActive={active}
+        isCloseButtonRequired={isCloseButtonRequired}
+        onClick={overlayCancels ? () => cancel() : null}
+      />
     </>
   );
 };

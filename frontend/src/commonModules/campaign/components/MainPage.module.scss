@@ -12,9 +12,16 @@
 
 .empty-container {
   @include flexCenter(column);
+  margin-top: 2rem;
 
   img {
     width: 256px;
+  }
+
+  @include mobile {
+    img {
+      width: 196px;
+    }
   }
 }
 
