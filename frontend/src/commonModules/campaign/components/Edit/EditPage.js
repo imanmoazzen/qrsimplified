@@ -9,11 +9,17 @@ import DecoratedButtonWithTimeout from "../../../../commonComponents/DecoratedBu
 import Header from "../../../../commonComponents/Header/Header.js";
 import InputBox from "../../../../commonComponents/InputBox/InputBox.js";
 import WaitIndicator from "../../../../commonComponents/WaitIndicator/WaitIndicator.js";
-import { isValidHttpsUrl, removeDataBase64 } from "../../../../commonUtil/stringUtils.js";
+import { base64ToFile, isValidHttpsUrl } from "../../../../commonUtil/stringUtils.js";
 import { COMMON_MESSAGES } from "../../../../frontEndConstants.js";
 import { campaignModule, server } from "../../../../index.js";
 import { campaignsChanged } from "../../store/uiReducer.js";
-import { downloadImage, generateQRCodeAsSvgURL, mergeQrAndLogo, recolorSvgDataUrl } from "../../utils.js";
+import {
+  downloadImage,
+  generateQRCodeAsSvgURL,
+  mergeQrAndLogo,
+  recolorSvgDataUrl,
+  transferQRCodeFileToS3,
+} from "../../utils.js";
 import Adjustment from "../Branding/Adjustment.js";
 import QRCodeAndLogo from "../Branding/QRCodeAndLogo.js";
 import DataCollection from "../DataCollection.js";
@@ -92,22 +98,8 @@ const EditPage = () => {
 
       if (isBrandingChanged) {
         const data = await mergeQrAndLogo(qrCode, branding.logo, branding.logo_scale);
-        const sanitizedForS3 = removeDataBase64(data);
-
-        const uploadResponse = await server.requestFromApiv2("/assets/upload", {
-          method: "POST",
-          mode: "cors",
-          data: {
-            file: sanitizedForS3,
-            name: campaign.campaign_id,
-            type: "image/png",
-            folder: "qr-codes",
-          },
-        });
-
-        if (uploadResponse?.data.message !== API_RESPONSE_TYPES.SUCCESS) throw new Error("upload failed");
-
-        s3URL = uploadResponse.data.url;
+        const file = base64ToFile(data, campaign.campaign_id);
+        s3URL = await transferQRCodeFileToS3(file, "qr-codes");
       }
 
       const fieldsToSet = { name, destination, lead, branding, s3URL };

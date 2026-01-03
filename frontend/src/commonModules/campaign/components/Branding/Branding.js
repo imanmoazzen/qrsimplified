@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import DecoratedButton, { BUTTON_THEMES } from "../../../../commonComponents/DecoratedButton/DecoratedButton.js";
-import { removeDataBase64 } from "../../../../commonUtil/stringUtils.js";
+import { base64ToFile } from "../../../../commonUtil/stringUtils.js";
 import { COMMON_MESSAGES } from "../../../../frontEndConstants.js";
 import { campaignModule, server } from "../../../../index.js";
 import { CAMPAIGN_PAGES, brandingChanged, campaignPageChanged, qrCodeChanged } from "../../store/uiReducer.js";
-import { mergeQrAndLogo, recolorSvgDataUrl } from "../../utils.js";
+import { mergeQrAndLogo, recolorSvgDataUrl, transferQRCodeFileToS3 } from "../../utils.js";
 import Adjustment from "./Adjustment.js";
 import styles from "./Branding.module.scss";
 import QRCodeAndLogo from "./QRCodeAndLogo.js";
@@ -62,23 +62,15 @@ const Branding = ({ setStep, borningCampaignId }) => {
     try {
       setState(STATES.PROCESSING);
       const data = await mergeQrAndLogo(qrCode, logo, logo_scale);
-      const sanitizedForS3 = removeDataBase64(data);
+      const file = base64ToFile(data, borningCampaignId);
+      const s3URL = await transferQRCodeFileToS3(file, "qr-codes");
 
-      const res = await server.requestFromApiv2("/assets/upload", {
-        method: "POST",
-        mode: "cors",
-        data: {
-          file: sanitizedForS3,
-          name: borningCampaignId,
-          type: "image/png",
-          folder: "qr-codes",
-        },
-      });
+      console.log(s3URL);
 
       await server.requestFromApiv2(`/campaign`, {
         method: "PUT",
         mode: "cors",
-        data: { campaign_id: borningCampaignId, fieldsToSet: { s3URL: res.data.url, branding } },
+        data: { campaign_id: borningCampaignId, fieldsToSet: { s3URL, branding } },
       });
 
       dispatch(qrCodeChanged(data));

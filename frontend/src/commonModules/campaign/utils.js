@@ -1,9 +1,10 @@
 // QRCodeStyling can be used for styling down the road https://qr-code-styling.com/
 
+import { API_RESPONSE_TYPES } from "castofly-common";
 import QRCode from "qrcode";
 import { v4 as uuid } from "uuid";
 
-import { removeDataBase64 } from "../../commonUtil/stringUtils.js";
+import { base64ToFile } from "../../commonUtil/stringUtils.js";
 import { server } from "../../index.js";
 
 export function fileToBase64(file) {
@@ -125,19 +126,10 @@ export const generateReferralQRCode = async () => {
   const campaign = creationRes.data.item;
   const svgURL = await generateQRCodeAsSvgURL(campaign.tracking_link);
   const svgCode = recolorSvgDataUrl(svgURL);
-  const data = await mergeQrAndLogo(svgCode, "/logo/logo-app.png", 9);
-  const sanitizedForS3 = removeDataBase64(data);
 
-  const uploadRes = await server.requestFromApiv2("/assets/upload", {
-    method: "POST",
-    mode: "cors",
-    data: {
-      file: sanitizedForS3,
-      name: uuid(),
-      type: "image/png",
-      folder: "qr-codes",
-    },
-  });
+  const data = await mergeQrAndLogo(svgCode, "/logo/logo-app.png", 9);
+  const file = base64ToFile(data, uuid());
+  const s3URL = await transferQRCodeFileToS3(file, "qr-codes");
 
   await Promise.all([
     server.requestFromApiv2(`/campaign`, {
@@ -145,7 +137,7 @@ export const generateReferralQRCode = async () => {
       mode: "cors",
       data: {
         campaign_id: campaign.campaign_id,
-        fieldsToSet: { s3URL: uploadRes.data.url },
+        fieldsToSet: { s3URL },
       },
     }),
     server.requestFromApiv2("/user/updateInfo", {
@@ -155,5 +147,27 @@ export const generateReferralQRCode = async () => {
     }),
   ]);
 
-  return { ...campaign, s3URL: uploadRes.data.url };
+  return { ...campaign, s3URL };
+};
+
+export const transferQRCodeFileToS3 = async (file, folder, name) => {
+  const signRes = await server.requestFromApiv2("/assets/sign", {
+    method: "POST",
+    data: { name: name ?? file.name, type: file.type, folder },
+  });
+
+  if (signRes?.data?.message !== API_RESPONSE_TYPES.SUCCESS) throw new Error("failed to get signed url");
+
+  const { signedURL, publicURL } = signRes.data ?? {};
+  if (!signedURL) throw new Error("signed url missing");
+
+  const putRes = await fetch(signedURL, {
+    method: "PUT",
+    headers: { "Content-Type": file.type },
+    body: file,
+  });
+
+  if (!putRes.ok) throw new Error(`S3 upload failed: ${putRes.status}`);
+
+  return publicURL;
 };

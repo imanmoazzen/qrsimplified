@@ -1,13 +1,11 @@
-import { API_RESPONSE_TYPES } from "castofly-common";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
 
 import DecoratedButton from "../../../../commonComponents/DecoratedButton/DecoratedButton.js";
 import { fileSelector } from "../../../../commonComponents/FileSelector/FileSelector.js";
 import { useFadeInImage } from "../../../../hooks/useFadeInImage.js";
-import { server } from "../../../../index.js";
 import { DEFAULT_BRANDING } from "../../store/uiReducer.js";
-import { getSizeFromScale } from "../../utils.js";
+import { getSizeFromScale, transferQRCodeFileToS3 } from "../../utils.js";
 import styles from "./QRCodeAndLogo.module.scss";
 
 const QRCodeAndLogo = ({ qrCode, branding = DEFAULT_BRANDING, onBrandingChanged, onError }) => {
@@ -26,28 +24,10 @@ const QRCodeAndLogo = ({ qrCode, branding = DEFAULT_BRANDING, onBrandingChanged,
       fileSelector.getImages().forEach(async (file) => {
         try {
           setIsUploading(true);
-
-          const signRes = await server.requestFromApiv2("/assets/sign", {
-            method: "POST",
-            data: { name: uuid(), type: file.type, folder: "logos" },
-          });
-
-          if (signRes?.data?.message !== API_RESPONSE_TYPES.SUCCESS) throw new Error("failed to get signed url");
-
-          const { signedURL, publicURL } = signRes.data ?? {};
-
-          if (!signedURL) throw new Error("signed url missing");
-
-          const putRes = await fetch(signedURL, {
-            method: "PUT",
-            headers: { "Content-Type": file.type },
-            body: file,
-          });
-
-          if (!putRes.ok) throw new Error(`S3 upload failed: ${putRes.status}`);
-
-          onBrandingChanged?.({ ...branding, logo: publicURL });
+          const s3URL = await transferQRCodeFileToS3(file, "logos", uuid());
+          onBrandingChanged?.({ ...branding, logo: s3URL });
         } catch (error) {
+          console.log(error);
           onError?.();
         } finally {
           setIsUploading(false);
