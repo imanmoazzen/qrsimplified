@@ -65,8 +65,6 @@ const Branding = ({ setStep, borningCampaignId }) => {
       const file = base64ToFile(data, borningCampaignId);
       const s3URL = await transferQRCodeFileToS3(file, "qr-codes");
 
-      console.log(s3URL);
-
       await server.requestFromApiv2(`/campaign`, {
         method: "PUT",
         mode: "cors",

@@ -15,7 +15,7 @@ const QRCodeAndLogo = ({ qrCode, branding = DEFAULT_BRANDING, onBrandingChanged,
 
   const logoImg = useFadeInImage({
     src: logo,
-    alt: "logo for the company",
+    alt: "logo for the business",
     extraImgStyle: { width: `${size}px` },
   });
 

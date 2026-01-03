@@ -24,7 +24,7 @@ const UpgradePage = () => {
     isLive = true;
   } else if (status === CAMPAIGN_STATUS.TRIAL) {
     title = "Trial QR Code";
-    info = `Trial QR code lets you test that scanning works, but it can only be scanned up to ${TRIAL_CAMPAIGN_VISIT_LIMIT} times. \nBuy the QR code to unlock unlimited, lifetime scans.`;
+    info = `Trial QR code lets you test that scanning works, but it can only be scanned up to ${TRIAL_CAMPAIGN_VISIT_LIMIT} times. Buy the QR code to unlock unlimited, lifetime scans.`;
   } else if (status === CAMPAIGN_STATUS.EXPIRED) {
     title = "Expired QR Code";
     info = `This QR code has expired and no longer redirects. ${

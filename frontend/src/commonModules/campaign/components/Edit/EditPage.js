@@ -12,7 +12,7 @@ import WaitIndicator from "../../../../commonComponents/WaitIndicator/WaitIndica
 import { base64ToFile, isValidHttpsUrl } from "../../../../commonUtil/stringUtils.js";
 import { COMMON_MESSAGES } from "../../../../frontEndConstants.js";
 import { campaignModule, server } from "../../../../index.js";
-import { campaignsChanged } from "../../store/uiReducer.js";
+import { DEFAULT_BRANDING, campaignsChanged } from "../../store/uiReducer.js";
 import {
   downloadImage,
   generateQRCodeAsSvgURL,
@@ -53,15 +53,17 @@ const EditPage = () => {
   }, [campaign]);
 
   const reset = (campaign) => {
+    const campaignBranding = campaign?.branding ?? DEFAULT_BRANDING;
+
     setState(STATES.LOADING);
-    setBranding(campaign?.branding);
+    setBranding(campaignBranding);
     setName(campaign?.name ?? "");
     setDestination(campaign?.destination ?? "");
     setLead(campaign?.lead ?? null);
 
     generateQRCodeAsSvgURL(tracking_link)
       .then((svgURL) => {
-        const svgCode = recolorSvgDataUrl(svgURL, campaign?.branding?.color, campaign?.branding?.background);
+        const svgCode = recolorSvgDataUrl(svgURL, campaignBranding?.color, campaignBranding?.background);
         setQRCode(svgCode);
       })
       .catch(() => setMessage(COMMON_MESSAGES.GENERIC_ERROR))
@@ -212,27 +214,27 @@ const EditPage = () => {
               onError={() => setMessage(COMMON_MESSAGES.GENERIC_ERROR)}
             />
 
-            <div className={styles["buttons"]}>
-              {(state === STATES.EDITING || state === STATES.UPDATING) && (
-                <>
-                  {state !== STATES.UPDATING && <DecoratedButton buttonText="Cancel" icon="close" onClick={cancel} />}
-                  <DecoratedButton
-                    buttonText={state === STATES.UPDATING ? "Updating..." : "Update"}
-                    icon="check"
-                    onClick={update}
-                    theme={BUTTON_THEMES.COLORED}
-                    isBusy={state === STATES.UPDATING}
-                  />
-                </>
-              )}
-              {state === STATES.INIT && (
+            {(state === STATES.EDITING || state === STATES.UPDATING) && (
+              <div className={styles["buttons"]}>
+                {state !== STATES.UPDATING && <DecoratedButton buttonText="Cancel" icon="close" onClick={cancel} />}
                 <DecoratedButton
-                  onClick={async () => await downloadImage(campaign.s3URL)}
-                  buttonText="Download QR Code"
-                  icon="download"
+                  buttonText={state === STATES.UPDATING ? "Updating..." : "Update"}
+                  icon="check"
+                  onClick={update}
+                  theme={BUTTON_THEMES.COLORED}
+                  isBusy={state === STATES.UPDATING}
                 />
-              )}
-            </div>
+              </div>
+            )}
+
+            {state === STATES.INIT && (
+              <DecoratedButton
+                onClick={async () => await downloadImage(campaign.s3URL)}
+                buttonText="Download QR Code"
+                icon="download"
+                extraContainerClasses={styles["download"]}
+              />
+            )}
 
             {state === STATES.INIT && <Archive onError={() => setMessage(COMMON_MESSAGES.GENERIC_ERROR)} />}
           </div>
