@@ -97,7 +97,6 @@ const EditPage = () => {
     try {
       let s3URL = campaign?.s3URL;
       const isBrandingChanged = jsonToHash(campaign?.branding) !== jsonToHash(branding);
-      console.log("isBrandingChanged", isBrandingChanged);
 
       if (isBrandingChanged) {
         const data = await mergeQrAndLogo(qrCode, branding.logo, branding.logo_scale);
@@ -106,7 +105,6 @@ const EditPage = () => {
       }
 
       const fieldsToSet = { name, destination, lead, branding, s3URL };
-      console.log("fieldsToSet", fieldsToSet);
 
       const updateResponse = await server.requestFromApiv2(`/campaign`, {
         method: "PUT",
@@ -117,8 +115,6 @@ const EditPage = () => {
         },
       });
 
-      console.log("updateResponse", updateResponse);
-
       if (updateResponse?.data.message !== API_RESPONSE_TYPES.SUCCESS) throw new Error("update failed");
 
       dispatch(
@@ -127,7 +123,6 @@ const EditPage = () => {
         )
       );
     } catch (error) {
-      console.log(error);
       setMessage(COMMON_MESSAGES.GENERIC_ERROR);
     } finally {
       setState(STATES.INIT);

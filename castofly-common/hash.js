@@ -24,8 +24,8 @@ export function stringToHash(str) {
   return cyrb53(str);
 }
 
-export function jsonToHash(obj = {}) {
-  const jsonString = JSON.stringify(obj);
+export function jsonToHash(obj) {
+  const jsonString = JSON.stringify(obj ?? {});
   return cyrb53(jsonString);
 }
 
