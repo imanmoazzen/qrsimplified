@@ -82,7 +82,7 @@ export const addCampaign = async (requestBody, userId) => {
     let selectedId;
     if (!campaignIdItem) selectedId = sanitizedKey;
     else selectedId = `${sanitizedKey}-${(campaignIdItem?.counter ?? 0) + 1}${getBase36(1)}`;
-    const tracking_link = `${process.env.APP_BASE_URL}/${selectedId}`;
+    const tracking_link = `${process.env.APP_BASE_URL}/redirect.html?campaign_id=${selectedId}`;
 
     const qr_credits = user?.qr_credits ?? 0;
     const validCampaigns = allCampaigns.filter(
@@ -123,7 +123,7 @@ export const addReferralCampaign = async (userId) => {
     let selectedId;
     if (!campaignIdItem) selectedId = sanitizedKey;
     else selectedId = `${sanitizedKey}-${(campaignIdItem?.counter ?? 0) + 1}${getBase36(1)}`;
-    const tracking_link = `${process.env.APP_BASE_URL}/${selectedId}`;
+    const tracking_link = `${process.env.APP_BASE_URL}/redirect.html?campaign_id=${selectedId}`;
 
     const item = {
       user_id: userId,
