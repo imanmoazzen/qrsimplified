@@ -1,0 +1,16 @@
+<script>
+  const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+
+  // this must be updated if local or production redeployed from sctracth again as the base are updated
+  // it's not safe to get them from config using import here so for now, I hard-coded them
+  const config = {
+    apiV2URL: isLocal
+      ? "https://nprjpm16wd.execute-api.us-east-1.amazonaws.com/default"
+      : "https://di0ssgj8dl.execute-api.us-east-1.amazonaws.com/default",
+  };
+
+  const params = new URLSearchParams(location.search);
+  const campaign_id = params.get("campaign_id");
+
+  if (campaign_id) window.location.replace(`${config.apiV2URL}/campaign/id/${campaign_id}`);
+</script>
