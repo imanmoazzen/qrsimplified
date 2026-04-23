@@ -175,8 +175,11 @@
   width: 0;
   border-right: 2px solid transparent;
 
-  animation: typing $duration steps($num, end) $delay forwards, showCursor 0s linear $delay forwards,
-    blink 0.7s step-end $delay infinite, hideCursor 0.1s linear ($duration + $delay) forwards;
+  animation:
+    typing $duration steps($num, end) $delay forwards,
+    showCursor 0s linear $delay forwards,
+    blink 0.7s step-end $delay infinite,
+    hideCursor 0.1s linear ($duration + $delay) forwards;
 
   @keyframes typing {
     from {

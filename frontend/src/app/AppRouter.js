@@ -1,6 +1,6 @@
-import { APP_PAGES, AUTHENTICATION_PAGES, UNIQUE_APP_ROUTER_KEY } from "castofly-common/appPages.js";
+import { APP_PAGES, UNIQUE_APP_ROUTER_KEY } from "castofly-common/appPages.js";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Outlet, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 import Feedback from "../commonComponents/Feedback/Feedback.js";
@@ -8,7 +8,6 @@ import Authentication from "../commonModules/auth/components/Authentication/Auth
 import Campaign from "../commonModules/campaign/components/Campaign.js";
 import LeadPage from "../commonModules/campaign/components/LeadPage.js";
 import UpgradePage from "../commonModules/campaign/components/UpgradePage.js";
-import { brandingChanged } from "../commonModules/campaign/store/uiReducer.js";
 import Cart from "../commonModules/project-root/components/Cart/Cart.js";
 import FAQPage from "../commonModules/project-root/components/Cart/FAQPage.js";
 import Navbar from "../commonModules/project-root/components/Navbar/Navbar.js";
@@ -18,9 +17,11 @@ import StripeReturnPage from "../commonModules/project-root/components/Stripe/St
 import { removeInitialLoadingIndicator } from "../commonUtil/initialLoadingIndicator.js";
 import { auth } from "../index.js";
 
+// import { brandingChanged } from "../commonModules/campaign/store/uiReducer.js";
+
 const AppRouter = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { pathname } = useLocation();
   const user = useSelector(auth.userSelector);
   const isAnonymous = useSelector(auth.isAnonymousSelector);
@@ -58,6 +59,11 @@ const AppRouter = () => {
   }, [pathname, isAnonymous]);
 
   useEffect(() => {
+    document.body.style.visibility = isGoogleFontLoaded ? "visible" : "hidden";
+  }, [isGoogleFontLoaded]);
+
+  /*
+  useEffect(() => {
     dispatch(
       brandingChanged(
         user?.branding ?? {
@@ -70,10 +76,7 @@ const AppRouter = () => {
       )
     );
   }, [user]);
-
-  useEffect(() => {
-    document.body.style.visibility = isGoogleFontLoaded ? "visible" : "hidden";
-  }, [isGoogleFontLoaded]);
+  */
 
   if (!isGoogleFontLoaded) return null;
 
@@ -82,9 +85,8 @@ const AppRouter = () => {
       <Route path="/:campaign_id" element={<Redirect />} />
       <Route path={APP_PAGES.LEAD} element={<LeadPage />} />
       <Route path={APP_PAGES.UPGRADE} element={<UpgradePage />} />
-      {Object.values(AUTHENTICATION_PAGES).map((path, index) => (
-        <Route key={index} path={path} element={<Authentication />} />
-      ))}
+      <Route path={APP_PAGES.LOGIN} element={<Authentication />} />
+      <Route path={APP_PAGES.SIGNUP} element={<Authentication />} />
 
       <Route
         path="/"

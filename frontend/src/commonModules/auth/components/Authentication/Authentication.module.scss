@@ -48,3 +48,8 @@
     width: 50vw;
   }
 }
+
+.message {
+  @include rfont(small);
+  color: var(--primary-color);
+}

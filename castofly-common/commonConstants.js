@@ -39,3 +39,17 @@ export const AUTH_SUBDOMAINS = {
 };
 
 export const REFERRAL_PERCENTAGE = 25;
+
+export const LOGIN_ERROR = {
+  EMAIL_NOT_VALID: "Please enter a valid email address.",
+  EMAIL_MISSING: "Email is required to send the login code.", // not sure
+  EMAIL_MISSING_VERIFICATION: "Email is missing for verification.", // not sure the same about the rest
+  EMAIL_NOT_SET: "Email is not set for this account.",
+  EMAIL_ALREADY_IN_USE_PASSWORDLESS: "An account with this email already exists. Please continue with your email.",
+  EMAIL_ALREADY_IN_USE_GOOGLE: "An account with this email exists. Please continue with Google.",
+  CODE_MISSING: "The code is missing.",
+  CODE_EXPIRED: "The code has expired.",
+  CODE_INCORRECT: "The code is incorrect.",
+  TOO_MANY_ATTEMPTS: "Too many attempts. Please wait a little and try again.",
+  TOO_MANY_WRONG_ATTEMPTS: "Too many incorrect attempts. Please try again later.",
+};

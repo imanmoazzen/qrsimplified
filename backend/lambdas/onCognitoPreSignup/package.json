@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "npm install && del-cli ./build/index.js && esbuild index.js --bundle --platform=node --outdir=build --external:\"@aws-sdk/*\" && cd ./build && bestzip function.zip . -x function.zip -q -r --filesync && cd ..",
-    "deploy-dev": "npm run build && aws lambda update-function-code --function-name castofly_onCognitoPreSignup --zip-file fileb://build/function.zip --no-cli-pager --profile development"
+    "deploy-dev": "npm run build && aws lambda update-function-code --function-name qrsimplified_onCognitoPreSignup --zip-file fileb://build/function.zip --no-cli-pager --profile qr-dev"
   },
   "author": "",
   "license": "ISC",

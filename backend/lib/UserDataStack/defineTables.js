@@ -94,5 +94,19 @@ export function defineTables(parent, cdkConfig) {
     },
   });
 
+  tables.passwordless_codes = new UserDataTable(parent, "passwordless_codes", {
+    cdkConfig,
+    primaryKeys: {
+      email: AttributeType.STRING,
+    },
+  });
+
+  tables.passwordless_sessions = new UserDataTable(parent, "passwordless_sessions", {
+    cdkConfig,
+    primaryKeys: {
+      sessionId: AttributeType.STRING,
+    },
+  });
+
   return { tables, gsiNames };
 }
