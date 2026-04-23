@@ -22,11 +22,12 @@ function AuthWrapper({ module, children }) {
   const searchParams = new URLSearchParams(window.location.search);
   const session = useSelector(module.sessionSelector);
 
-  const { isAuthenticated } = session ?? {};
+  const { isAnonymous, isAuthenticated } = session ?? {};
 
   useEffect(() => {
     if (isAuthenticated) removeInitialLoadingIndicator();
-  }, [isAuthenticated]);
+    if (!isAnonymous && isAuthenticated) history.navigate(APP_PAGES.DASHBOARD);
+  }, [isAnonymous, isAuthenticated]);
 
   // This useEffect is wholly concerned with detecting errors in the query string
   // when signing up
