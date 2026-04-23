@@ -41,7 +41,13 @@ const Authentication = () => {
           setMessage={setMessage}
         />
 
-        {!isPasswordLessStarted && <span>OR</span>}
+        {!isPasswordLessStarted && (
+          <div className={styles["divider"]}>
+            <span className={styles["text"]}>OR</span>
+            <span className={styles["line"]}></span>
+          </div>
+        )}
+
         {!isPasswordLessStarted && (
           <GoogleIdentityProvider isRippling={message === LOGIN_ERROR.EMAIL_ALREADY_IN_USE_GOOGLE} />
         )}

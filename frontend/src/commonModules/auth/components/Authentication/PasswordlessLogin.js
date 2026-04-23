@@ -1,7 +1,7 @@
 import { isEmailValid } from "castofly-common";
 import { APP_PAGES } from "castofly-common/appPages.js";
 import { LOGIN_ERROR } from "castofly-common/commonConstants.js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -26,10 +26,6 @@ const PasswordlessLogin = ({ setIsPasswordLessStarted, message, setMessage }) =>
 
   const isStartOverRequired = message === LOGIN_ERROR.CODE_EXPIRED;
 
-  useEffect(() => {
-    if (state !== PASSWORDLESS_FLOW_STATE.CODE) setIsPasswordLessStarted?.(true);
-  }, [state]);
-
   const handleCodeGeneration = async () => {
     if (!isEmailValid(email)) return setMessage(LOGIN_ERROR.EMAIL_NOT_VALID);
 
@@ -39,6 +35,7 @@ const PasswordlessLogin = ({ setIsPasswordLessStarted, message, setMessage }) =>
     try {
       const state = await startEmailPasswordlessLogin(email);
       setState(state);
+      setIsPasswordLessStarted(true);
       setMessage(`A code has been sent to ${email}. Paste or enter it above.`);
     } catch (error) {
       if (error?.message.includes(LOGIN_ERROR.EMAIL_ALREADY_IN_USE_GOOGLE)) {
@@ -100,7 +97,7 @@ const PasswordlessLogin = ({ setIsPasswordLessStarted, message, setMessage }) =>
           <InputBox
             value={email}
             setValue={setEmail}
-            placeholder="Email Address"
+            placeholder="Enter your email address"
             onFocus={() => setMessage("")}
             onBlur={handleCodeGeneration}
             isRippling={
@@ -108,8 +105,8 @@ const PasswordlessLogin = ({ setIsPasswordLessStarted, message, setMessage }) =>
             }
           />
           <DecoratedButton
-            icon="login"
-            buttonText={isBusy ? "Processing..." : "Continue with Email"}
+            icon="mail"
+            buttonText={isBusy ? "Processing..." : "Send code"}
             onClick={handleCodeGeneration}
             extraContainerClasses={styles["button-container"]}
             theme={BUTTON_THEMES.COLORED}

@@ -132,12 +132,6 @@ async function getSession() {
   const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
   if (!isTokenValid(accessToken)) await attemptTokenRefresh();
 
-  const idToken = localStorage.getItem(ID_TOKEN_KEY);
-  const payload = getJWTPayload(idToken);
-
-  const { sub, email, given_name, picture } = payload;
-  const display_name = given_name || (email?.split("@")[0] ?? "");
-
   const response = await server.requestFromApiv2("/user/info", {
     method: "GET",
     mode: "cors",

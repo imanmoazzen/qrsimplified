@@ -1,7 +1,7 @@
-import { APP_PAGES } from "castofly-common/appPages.js";
+import { APP_PAGES, UNIQUE_APP_ROUTER_KEY } from "castofly-common/appPages.js";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { history } from "../../../commonUtil/history.js";
 import { removeInitialLoadingIndicator } from "../../../commonUtil/initialLoadingIndicator.js";
@@ -17,16 +17,39 @@ import { setSession } from "../store/uiReducer.js";
 import { authenticate, handleCallbackURL } from "./cognitoUtils.js";
 
 function AuthWrapper({ module, children }) {
-  history.navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  history.navigate = navigate;
+
+  const { pathname } = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
   const session = useSelector(module.sessionSelector);
 
-  const { isAuthenticated } = session ?? {};
+  const { isAnonymous, isAuthenticated } = session ?? {};
 
   useEffect(() => {
     if (isAuthenticated) removeInitialLoadingIndicator();
-  }, [isAuthenticated]);
+  }, [isAnonymous, isAuthenticated]);
+
+  useEffect(() => {
+    if (!isAnonymous) return;
+
+    if (pathname === "/") return navigate(APP_PAGES.SIGNUP);
+    if (!pathname.startsWith(UNIQUE_APP_ROUTER_KEY)) return;
+
+    const anonymousAllowed = [APP_PAGES.UPGRADE, APP_PAGES.LEAD, APP_PAGES.LOGIN, APP_PAGES.SIGNUP];
+    if (!anonymousAllowed.some((path) => pathname.includes(path))) navigate(APP_PAGES.SIGNUP);
+  }, [pathname, isAnonymous]);
+
+  useEffect(() => {
+    if (
+      !isAnonymous &&
+      isAuthenticated &&
+      [APP_PAGES.LOGIN, APP_PAGES.SIGNUP].some((path) => pathname.includes(path))
+    ) {
+      navigate(APP_PAGES.DASHBOARD);
+    }
+  }, [pathname, isAnonymous, isAuthenticated]);
 
   // This useEffect is wholly concerned with detecting errors in the query string
   // when signing up
