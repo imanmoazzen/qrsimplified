@@ -17,6 +17,6 @@ export const SIGNUP_ERRORS = {
   UNKNOWN_ERROR: "UNKNOWN_ERROR",
 };
 
-export const COGNITO_PRESIGNUP_FAILURE_RE = /PreSignUp failed with error The email: (.*)/;
+export const COGNITO_PRESIGNUP_FAILURE_RE = /PreSignUp failed with error (.*)/;
 
 export const COGNITO_AUTH_CODE_KEY = "code";

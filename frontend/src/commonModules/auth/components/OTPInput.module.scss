@@ -1,0 +1,15 @@
+@import "../../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(row, 0.5rem);
+}
+
+.input {
+  @include flexCenter();
+  width: 36px;
+  height: 42px;
+  font-size: 16px;
+  text-align: center;
+  border-radius: var(--border-radius);
+  border: 1px solid black;
+}

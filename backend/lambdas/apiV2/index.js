@@ -43,13 +43,7 @@ export async function handler(event) {
     }
   } catch (err) {
     statusCode = HTTP_STATUS_CODES.CLIENT_ERROR;
-    console.log(err);
     body = errorResponse(err.message);
-  }
-
-  if (body?.isActualResponse) {
-    delete body.isActualResponse;
-    return body;
   }
 
   return makeLambdaProxyResponse(body, statusCode);

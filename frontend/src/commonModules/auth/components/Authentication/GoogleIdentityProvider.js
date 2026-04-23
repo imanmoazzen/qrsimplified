@@ -1,5 +1,5 @@
-import { STATE_KEYS, makeState } from "../../../../../../commonUtil/stateParameters.js";
-import config from "../../../../config.js";
+import { STATE_KEYS, makeState } from "../../../../commonUtil/stateParameters.js";
+import config from "../../config.js";
 import styles from "./GoogleIdentityProvider.module.scss";
 
 const SIGNIN_BASE_URL = `${config.cognito.userPoolBaseUri}/oauth2/authorize?`;
@@ -12,7 +12,7 @@ const REDIRECT_URI = `&redirect_uri=${config.cognito.callbackUri}`;
 
 const OAUTH_ENDPOINT_URI = `${SIGNIN_BASE_URL}${RESPONSE_TYPE}${CLIENT_ID}${SCOPE}${IDENTITY_PROVIDER}${FORCE_ACCOUNT_SELECTION}${REDIRECT_URI}`;
 
-const GoogleIdentityProvider = () => {
+const GoogleIdentityProvider = ({ isRippling }) => {
   const url = new URL(window.location.href);
 
   const redirectData = url.searchParams.get("redirect");
@@ -20,16 +20,13 @@ const GoogleIdentityProvider = () => {
     ? OAUTH_ENDPOINT_URI + "&state=" + makeState(STATE_KEYS.AUTH, window.atob(redirectData))
     : OAUTH_ENDPOINT_URI;
 
-  const isLogIn = url?.pathname?.includes("login");
-  const message = isLogIn ? "Log in with your Google account" : "Sign up with your Google account";
-
   return (
     <section className={styles["identity-provider"]}>
       <a aria-label="Click to sign in with your Google account" href={oauthEndpoint}>
         <GoogleLogo />
         Continue with Google
       </a>
-      <span>{message}</span>
+      {isRippling && <span className={styles["ripple"]}></span>}
     </section>
   );
 };

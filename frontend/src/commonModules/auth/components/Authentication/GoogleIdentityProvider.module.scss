@@ -1,12 +1,9 @@
-.identity-provider {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+@import "../../../../styles/_mixin.scss";
 
-  span {
-    text-align: center;
-    margin-top: 4px;
-  }
+.identity-provider {
+  position: relative;
+  @include flexCenter();
+  border-radius: var(--border-radius);
 
   a {
     display: inline-flex;
@@ -15,9 +12,10 @@
     width: auto;
     padding: 12px 32px 12px 72px;
     border: 1px solid transparent;
-    border-radius: var(--border-radius);
+    border-radius: inherit;
+
     cursor: pointer;
-    background-color: var(--primary-color);
+    background-color: var(--navbar-secondary-background-color);
     color: #ffffff;
     font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
 
@@ -35,11 +33,14 @@
     display: inline-flex;
     position: absolute;
     top: 2px;
-    left: 2px;
+    left: 26px;
     width: 42px;
     height: calc(100% - 4px);
     padding: 8px;
-    background-color: #ffffff;
     border-radius: var(--border-radius);
   }
+}
+
+.ripple {
+  @include ripple();
 }

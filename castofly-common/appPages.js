@@ -13,12 +13,3 @@ export const APP_PAGES = {
   SUCCESS_PAYMENT: `${UNIQUE_APP_ROUTER_KEY}/success`,
   LEAD: `${UNIQUE_APP_ROUTER_KEY}/lead`,
 };
-
-export const AUTHENTICATION_PAGES = {
-  LOGIN: APP_PAGES.LOGIN,
-  SIGNUP: APP_PAGES.SIGNUP,
-  CONFIRM_SIGNUP: `${UNIQUE_APP_ROUTER_KEY}/confirm-sign-up`,
-  FORGOT_PASSWORD: `${UNIQUE_APP_ROUTER_KEY}/forgot-password`,
-  RESET_PASSWORD: `${UNIQUE_APP_ROUTER_KEY}/reset-password`,
-  RESET_PASSWORD_BY_USERNAME: `${UNIQUE_APP_ROUTER_KEY}/reset-password/:username`,
-};

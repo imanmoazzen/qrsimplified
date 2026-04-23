@@ -1,7 +1,7 @@
-import { APP_PAGES, AUTHENTICATION_PAGES, UNIQUE_APP_ROUTER_KEY } from "castofly-common/appPages.js";
+import { APP_PAGES } from "castofly-common/appPages.js";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 
 import Feedback from "../commonComponents/Feedback/Feedback.js";
 import Authentication from "../commonModules/auth/components/Authentication/Authentication.js";
@@ -15,20 +15,12 @@ import Navbar from "../commonModules/project-root/components/Navbar/Navbar.js";
 import Redirect from "../commonModules/project-root/components/Redirect/Redirect.js";
 import Referral from "../commonModules/project-root/components/Referral/Referral.js";
 import StripeReturnPage from "../commonModules/project-root/components/Stripe/StripeReturnPage.js";
-import { removeInitialLoadingIndicator } from "../commonUtil/initialLoadingIndicator.js";
 import { auth } from "../index.js";
 
 const AppRouter = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { pathname } = useLocation();
   const user = useSelector(auth.userSelector);
-  const isAnonymous = useSelector(auth.isAnonymousSelector);
   const [isGoogleFontLoaded, setIsGoogleFontLoaded] = useState(false);
-
-  useEffect(() => {
-    removeInitialLoadingIndicator();
-  }, []);
 
   useEffect(() => {
     document.fonts.load('24px "Material Symbols Outlined"').then(() => setIsGoogleFontLoaded(true));
@@ -44,18 +36,6 @@ const AppRouter = () => {
       localStorage.setItem("referral_id", referral_id);
     }
   }, [user]);
-
-  useEffect(() => {
-    if (pathname === "/" && isAnonymous) {
-      navigate(APP_PAGES.SIGNUP);
-      return;
-    }
-
-    if (!pathname.startsWith(UNIQUE_APP_ROUTER_KEY)) return;
-
-    const anonymousAllowed = [APP_PAGES.UPGRADE, APP_PAGES.LEAD, APP_PAGES.LOGIN];
-    if (!anonymousAllowed.some((path) => pathname.includes(path)) && isAnonymous) navigate(APP_PAGES.SIGNUP);
-  }, [pathname, isAnonymous]);
 
   useEffect(() => {
     dispatch(
@@ -82,9 +62,8 @@ const AppRouter = () => {
       <Route path="/:campaign_id" element={<Redirect />} />
       <Route path={APP_PAGES.LEAD} element={<LeadPage />} />
       <Route path={APP_PAGES.UPGRADE} element={<UpgradePage />} />
-      {Object.values(AUTHENTICATION_PAGES).map((path, index) => (
-        <Route key={index} path={path} element={<Authentication />} />
-      ))}
+      <Route path={APP_PAGES.LOGIN} element={<Authentication />} />
+      <Route path={APP_PAGES.SIGNUP} element={<Authentication />} />
 
       <Route
         path="/"

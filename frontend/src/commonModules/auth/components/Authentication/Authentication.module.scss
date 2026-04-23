@@ -30,6 +30,7 @@
   min-height: inherit;
   animation: expandWidth 1s ease forwards;
   overflow: hidden;
+  padding: 2rem 1rem;
 
   img {
     width: 200px;
@@ -46,5 +47,28 @@
   }
   to {
     width: 50vw;
+  }
+}
+
+.message {
+  @include rfont(small);
+  color: var(--primary-color);
+}
+
+.divider {
+  position: relative;
+  @include flexCenter();
+  width: 200px;
+  margin-block: 1rem;
+
+  .text {
+    position: absolute;
+    background-color: white;
+    padding: 0.5rem;
+  }
+
+  .line {
+    border-bottom: 1px solid black;
+    width: 100%;
   }
 }
