@@ -1,6 +1,6 @@
 import { APP_PAGES, UNIQUE_APP_ROUTER_KEY } from "castofly-common/appPages.js";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 import Feedback from "../commonComponents/Feedback/Feedback.js";
@@ -8,6 +8,7 @@ import Authentication from "../commonModules/auth/components/Authentication/Auth
 import Campaign from "../commonModules/campaign/components/Campaign.js";
 import LeadPage from "../commonModules/campaign/components/LeadPage.js";
 import UpgradePage from "../commonModules/campaign/components/UpgradePage.js";
+import { brandingChanged } from "../commonModules/campaign/store/uiReducer.js";
 import Cart from "../commonModules/project-root/components/Cart/Cart.js";
 import FAQPage from "../commonModules/project-root/components/Cart/FAQPage.js";
 import Navbar from "../commonModules/project-root/components/Navbar/Navbar.js";
@@ -21,7 +22,7 @@ import { auth } from "../index.js";
 
 const AppRouter = () => {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
   const user = useSelector(auth.userSelector);
   const isAnonymous = useSelector(auth.isAnonymousSelector);
@@ -47,6 +48,20 @@ const AppRouter = () => {
   }, [user]);
 
   useEffect(() => {
+    dispatch(
+      brandingChanged(
+        user?.branding ?? {
+          logo: null,
+          logo_scale: 4,
+          color: "#000000",
+          background: "#0000",
+          isTransparent: true,
+        }
+      )
+    );
+  }, [user]);
+
+  useEffect(() => {
     if (pathname === "/" && isAnonymous) {
       navigate(APP_PAGES.SIGNUP);
       return;
@@ -61,22 +76,6 @@ const AppRouter = () => {
   useEffect(() => {
     document.body.style.visibility = isGoogleFontLoaded ? "visible" : "hidden";
   }, [isGoogleFontLoaded]);
-
-  /*
-  useEffect(() => {
-    dispatch(
-      brandingChanged(
-        user?.branding ?? {
-          logo: null,
-          logo_scale: 4,
-          color: "#000000",
-          background: "#0000",
-          isTransparent: true,
-        }
-      )
-    );
-  }, [user]);
-  */
 
   if (!isGoogleFontLoaded) return null;
 

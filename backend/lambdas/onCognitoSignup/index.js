@@ -28,8 +28,6 @@ function userDataFromEvent(event) {
     username,
     display_name: computeInitialDisplayName(email, family_name, given_name, account_from_google),
     picture,
-    cognito_created: Date.now(),
-    cognito_modified: Date.now(),
     account_from_google,
   };
 }

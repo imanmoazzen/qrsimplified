@@ -69,7 +69,7 @@ const LeadPage = () => {
         {isTitlePresent && <InputBox label="Job Title:" setValue={(value) => setLead({ ...lead, title: value })} />}
         {isCommentPresent && (
           <DynamicTextArea
-            label="Additional Comments:"
+            label="Notes:"
             placeholder="Add any additional context here (e.g., we met at the Vegas trade show)"
             extraClasses={styles["text-area"]}
             onTempTextChanged={(value) => setLead({ ...lead, comment: value })}

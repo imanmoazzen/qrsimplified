@@ -14,11 +14,7 @@ export async function getUserInfo(userId) {
   try {
     const user = await getUser(userId);
 
-    return successResponse("Successfully got user attributes and subscription info", {
-      user,
-      isAuthenticated: true,
-      isAnonymous: false,
-    });
+    return successResponse("Successfully got user attributes and subscription info", { user });
   } catch (err) {
     return errorResponse("Failed to get user attributes");
   }

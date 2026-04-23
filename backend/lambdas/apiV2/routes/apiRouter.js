@@ -1,9 +1,8 @@
 import getJWTPayload from "../../../../castofly-common/getJWTPayload.js";
 import assetsRouter from "./assets/assetsRouter.js";
 import campaignRouter from "./campaign/campaignRouter.js";
+import guestRouter from "./guestRouter.js";
 import leadsRouter from "./leads/leadsRouter.js";
-import guestRouter from "./login/guestRouter.js";
-import loginRouter from "./login/loginRouter.js";
 import stripeRouter from "./stripe/stripeRouter.js";
 import userRouter from "./userRouter.js";
 
@@ -42,9 +41,6 @@ export default async function apiRouter(event) {
     }
     case "campaign": {
       return await campaignRouter(routeKey, requestBody, pathParameters, userId, event);
-    }
-    case "login": {
-      return await loginRouter(routeKey, requestBody);
     }
     default: {
       throw new Error("Route is defined in API Gateway but unknown to lambda function. Check main router file.");

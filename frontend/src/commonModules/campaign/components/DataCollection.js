@@ -66,7 +66,7 @@ const DataCollection = ({ lead, setLead, onUpdate, extraClasses }) => {
             />
             <InputBox
               type="checkbox"
-              label="Comments"
+              label="Notes"
               value={comment}
               setValue={(value) => update({ comment: value })}
               extraClasses={styles["input-checkbox"]}

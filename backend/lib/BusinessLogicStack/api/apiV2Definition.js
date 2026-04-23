@@ -71,12 +71,4 @@ export const API_V2_DEFINITION = {
       },
     },
   },
-  login: {
-    code: {
-      POST: NOAUTH,
-    },
-    verify: {
-      POST: NOAUTH,
-    },
-  },
 };

@@ -109,7 +109,7 @@ const PasswordlessLogin = ({ setIsPasswordLessStarted, message, setMessage }) =>
           />
           <DecoratedButton
             icon="login"
-            buttonText={isBusy ? "Please wait..." : "Continue with Email"}
+            buttonText={isBusy ? "Processing..." : "Continue with Email"}
             onClick={handleCodeGeneration}
             extraContainerClasses={styles["button-container"]}
             theme={BUTTON_THEMES.COLORED}
@@ -123,7 +123,7 @@ const PasswordlessLogin = ({ setIsPasswordLessStarted, message, setMessage }) =>
           <OTPInput setCode={setCode} length={state === PASSWORDLESS_FLOW_STATE.SIGNUP ? 6 : 8} />
           <DecoratedButton
             icon={isStartOverRequired ? "refresh" : "check"}
-            buttonText={isBusy ? "Please wait..." : isStartOverRequired ? "Start Over" : "Confirm"}
+            buttonText={isBusy ? "Processing..." : isStartOverRequired ? "Start Over" : "Confirm"}
             onClick={handleCodeVerification}
             extraClasses={styles["confirm-button"]}
             theme={BUTTON_THEMES.COLORED}

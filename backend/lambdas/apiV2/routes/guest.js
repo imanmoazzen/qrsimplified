@@ -1,11 +1,11 @@
 import { sign, verify } from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 
-import { putItem, updateItemSet } from "../../../common-aws-utils-v3/dynamoUtils.js";
-import { getSecret } from "../../../common-aws-utils-v3/secretsManagerUtils.js";
-import { TABLE_NAMES } from "../../config.js";
-import { dynamo, secretsManager } from "../../index.js";
-import { errorResponse, successResponse } from "../standardResponses.js";
+import { putItem, updateItemSet } from "../../common-aws-utils-v3/dynamoUtils.js";
+import { getSecret } from "../../common-aws-utils-v3/secretsManagerUtils.js";
+import { TABLE_NAMES } from "../config.js";
+import { dynamo, secretsManager } from "../index.js";
+import { errorResponse, successResponse } from "./standardResponses.js";
 
 export async function getAnonymousToken() {
   const tokenPayload = {

@@ -10,6 +10,7 @@ import { getJWTPayload } from "castofly-common";
 import { APP_PAGES } from "castofly-common/appPages.js";
 
 import { history } from "../../../commonUtil/history.js";
+import { server } from "../../../index.js";
 import config from "../config.js";
 
 const clientId = config.cognito.clientId;
@@ -137,9 +138,12 @@ async function getSession() {
   const { sub, email, given_name, picture } = payload;
   const display_name = given_name || (email?.split("@")[0] ?? "");
 
-  const user = { user_id: sub, email, display_name, picture };
+  const response = await server.requestFromApiv2("/user/info", {
+    method: "GET",
+    mode: "cors",
+  });
 
-  return { isAnonymous: false, isAuthenticated: true, user };
+  return { isAnonymous: false, isAuthenticated: true, user: response?.data?.user ?? {} };
 }
 
 // NOTE: This function only works on access and id tokens.

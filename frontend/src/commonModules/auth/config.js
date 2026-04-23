@@ -17,11 +17,6 @@ const config = {
   },
   apiv2AnonymousTokenEndpoint: appSettings.get("api.v2_base_endpoint") + "/guest/getToken",
   apiv2MigrateEndpoint: appSettings.get("api.v2_base_endpoint") + "/guest/migrateGuest",
-  apiv2UserInfoEndpoint: appSettings.get("api.v2_base_endpoint") + "/user/info",
-  accessTokenKey: appSettings.get("cognito.access_token_key"),
-  refreshTokenKey: appSettings.get("cognito.refresh_token_key"),
-  idTokenKey: appSettings.get("cognito.id_token_key"),
-  anonymousAccessTokenKey: appSettings.get("cognito.anonymous_access_token_key"),
 };
 
 export default config;
