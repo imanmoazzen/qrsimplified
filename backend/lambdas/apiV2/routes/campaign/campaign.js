@@ -42,8 +42,11 @@ export const getCampaigns = async (userId) => {
 
       if (leadKeys?.length) {
         leads = visits
-          .map((visit) => Object.fromEntries(leadKeys.map((key) => [key, visit[key] ?? ""])))
-          .filter((lead) => Object.values(lead).some((v) => v !== ""));
+          .map((visit) => ({
+            creation_time: visit.creation_time,
+            ...Object.fromEntries(leadKeys.map((key) => [key, visit[key] ?? ""])),
+          }))
+          .filter((lead) => Object.values(lead).some((v) => v !== "" && v !== undefined));
       }
 
       return {
@@ -245,7 +248,7 @@ export const visit = async (campaign_id, event) => {
       params.set("campaign_id", campaign_id);
       params.set("visit_id", visit_id);
 
-      return redirect(`${process.env.APP_BASE_URL}${APP_PAGES.LEAD}?${params.toString()}`);
+      return redirect(`${process.env.APP_BASE_URL}/lead.html?${params.toString()}`);
     }
 
     return redirect(campaign.destination);

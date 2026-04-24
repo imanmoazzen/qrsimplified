@@ -1,3 +1,4 @@
+import { APP_PAGES } from "castofly-common/appPages.js";
 import { LOGIN_ERROR } from "castofly-common/commonConstants.js";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -5,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ILLUSTRATIONS } from "../../../../commonComponents/Illustrations/Illustrations.js";
 import styles from "./Authentication.module.scss";
 import GoogleIdentityProvider from "./GoogleIdentityProvider.js";
-import PasswordlessLogin from "./PasswordlessLogin.js";
+import PasswordlessAuth from "./PasswordlessAuth.js";
 import SignupBanner from "./SignupBanner/SignupBanner.js";
 
 const Authentication = () => {
@@ -14,15 +15,18 @@ const Authentication = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const state = location.state;
+  const { pathname, state } = location;
+
+  const isLogin = pathname.includes(APP_PAGES.LOGIN);
+  const header = isLogin ? "Log in to your account" : "Create a new account";
 
   useEffect(() => {
     if (state?.errorMessage?.includes(LOGIN_ERROR.EMAIL_ALREADY_IN_USE_PASSWORDLESS)) {
       setMessage(LOGIN_ERROR.EMAIL_ALREADY_IN_USE_PASSWORDLESS);
-      navigate(location.pathname, { replace: true, state: null });
+      navigate(pathname, { replace: true, state: null });
     } else if (state?.errorMessage?.includes(LOGIN_ERROR.EMAIL_ALREADY_IN_USE_GOOGLE)) {
       setMessage(LOGIN_ERROR.EMAIL_ALREADY_IN_USE_GOOGLE);
-      navigate(location.pathname, { replace: true, state: null });
+      navigate(pathname, { replace: true, state: null });
     }
   }, [state?.errorMessage]);
 
@@ -34,8 +38,8 @@ const Authentication = () => {
 
       <div className={styles["login-container"]}>
         <img src={ILLUSTRATIONS.CAMPAIGN} alt="marketing campaigns" />
-        <h3>Welcome to QR Simplified</h3>
-        <PasswordlessLogin
+        <h3>{header}</h3>
+        <PasswordlessAuth
           setIsPasswordLessStarted={setIsPasswordLessStarted}
           message={message}
           setMessage={setMessage}

@@ -11,7 +11,7 @@
 
   p {
     @include rfont(title);
-    @include typing(32, 32ch, 4s, 2s);
+    @include typing(32, 32ch, 4s, 1s);
     line-height: 1.6;
     color: lightgray;
     width: 0;

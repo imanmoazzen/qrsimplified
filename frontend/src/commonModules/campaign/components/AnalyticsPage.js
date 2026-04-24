@@ -37,8 +37,24 @@ const AnalyticsPage = () => {
 
     const ORDER = ["name", "email", "phone", "title", "comment"];
     const headers = ORDER.filter((key) => leads.some((l) => l[key] != null));
-    const rows = leads.map((obj) => headers.map((h) => `"${String(obj[h] ?? "").replace(/"/g, '""')}"`).join(","));
-    const csv = [headers.join(","), ...rows].join("\n");
+
+    const DISPLAY_HEADERS = [...headers, "time"];
+
+    const rows = leads.map((obj) => {
+      return DISPLAY_HEADERS.map((h) => {
+        let value;
+
+        if (h === "time") {
+          value = obj.creation_time ? new Date(obj.creation_time).toISOString().slice(0, 10) : "";
+        } else {
+          value = obj[h];
+        }
+
+        return `"${String(value ?? "").replace(/"/g, '""')}"`;
+      }).join(",");
+    });
+
+    const csv = [DISPLAY_HEADERS.join(","), ...rows].join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
 

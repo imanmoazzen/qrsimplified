@@ -10,7 +10,7 @@ export const ACTIVE_COUPON_NAME = COUPON_NAMES.SEASONAL_OFFER;
 export const COUPONS = {
   [COUPON_NAMES.SEASONAL_OFFER]: {
     metaData: {
-      message: "LIMITED HOLIDAY OFFER",
+      message: "LIMITED OFFER",
       icon: "featured_seasonal_and_gifts",
       endDate: "2025-08-31T23:59:59",
     },

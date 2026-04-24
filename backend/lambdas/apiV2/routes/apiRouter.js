@@ -2,7 +2,6 @@ import getJWTPayload from "../../../../castofly-common/getJWTPayload.js";
 import assetsRouter from "./assets/assetsRouter.js";
 import campaignRouter from "./campaign/campaignRouter.js";
 import guestRouter from "./guestRouter.js";
-import leadsRouter from "./leads/leadsRouter.js";
 import stripeRouter from "./stripe/stripeRouter.js";
 import userRouter from "./userRouter.js";
 
@@ -32,9 +31,6 @@ export default async function apiRouter(event) {
     }
     case "stripe": {
       return await stripeRouter(routeKey, requestBody, pathParameters, userId, event);
-    }
-    case "leads": {
-      return await leadsRouter(routeKey, requestBody);
     }
     case "assets": {
       return await assetsRouter(routeKey, requestBody, pathParameters, userId);

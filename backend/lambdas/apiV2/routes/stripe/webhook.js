@@ -57,6 +57,8 @@ export async function webhook(exactRequestBody, signature) {
 
     switch (eventType) {
       case HANDLED_EVENTS.CHECKOUT_SESSION_COMPLETED: {
+        const receipt_url = await getReceiptUrlFromSession(stripe, object);
+
         const payerFields = removeNullOrUndefined({
           customer,
           created: object?.created,
@@ -65,6 +67,7 @@ export async function webhook(exactRequestBody, signature) {
           product_name,
           price_id,
           coupon_id,
+          receipt_url,
         });
 
         const product = getProductByName(product_name, env);
@@ -184,3 +187,14 @@ const getCustomerEmail = async (stripe, customer) => {
 
 const removeNullOrUndefined = (obj) =>
   Object.fromEntries(Object.entries(obj).filter(([, value]) => value !== null && value !== undefined));
+
+const getReceiptUrlFromSession = async (stripe, session) => {
+  const paymentIntentId = session?.payment_intent;
+  if (!paymentIntentId) return null;
+
+  const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {
+    expand: ["latest_charge"],
+  });
+
+  return paymentIntent?.latest_charge?.receipt_url ?? null;
+};

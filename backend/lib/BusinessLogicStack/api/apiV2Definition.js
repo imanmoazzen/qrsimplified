@@ -32,17 +32,6 @@ export const API_V2_DEFINITION = {
       POST: NOAUTH,
     },
   },
-  leads: {
-    new: {
-      POST: NOAUTH,
-    },
-    verify: {
-      POST: NOAUTH,
-    },
-    update: {
-      POST: NOAUTH,
-    },
-  },
   assets: {
     sign: {
       POST: AUTH,

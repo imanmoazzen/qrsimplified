@@ -10,6 +10,9 @@ import { useFadeInImage } from "../../../hooks/useFadeInImage.js";
 import { server } from "../../../index.js";
 import styles from "./LeadPage.module.scss";
 
+// This is the old approach (App Router): loads the full React bundle → slower
+// New approach (lead.html in /public): pure HTML + minimal JS → fast
+
 const LeadPage = () => {
   const [lead, setLead] = useState({});
   const [isBusy, setIsBusy] = useState(false);
