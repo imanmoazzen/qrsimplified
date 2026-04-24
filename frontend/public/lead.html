@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Share Your Details</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #fff;
+        color: #111;
+      }
+
+      .main-container {
+        min-height: 100vh;
+        padding: 3rem 1rem;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+      }
+
+      .logo-container {
+        width: 96px;
+        height: 96px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo-container img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 28px;
+        text-align: center;
+      }
+
+      .subtitle {
+        margin: 0;
+        color: #666;
+        text-align: center;
+        margin-top: -1.25rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+      }
+
+      .form {
+        width: 400px;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .field {
+        width: 100%;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px 16px;
+        border: 1px solid gray;
+        border-radius: 8px;
+        outline: none;
+      }
+
+      input:focus,
+      textarea:focus {
+        border-color: #4b35f5; /* your primary color */
+        outline: 1px solid #4b35f5;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 128px;
+        resize: vertical;
+      }
+
+      #submitButton {
+        max-width: 100%;
+        margin-top: 1rem;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        background: #4b35f5;
+        color: #fff;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" class="main-container"></div>
+
+    <script>
+      const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+
+      const config = {
+        apiV2URL: isLocal
+          ? "https://nprjpm16wd.execute-api.us-east-1.amazonaws.com/default"
+          : "https://di0ssgj8dl.execute-api.us-east-1.amazonaws.com/default",
+      };
+
+      const params = new URLSearchParams(window.location.search);
+
+      const logo = params.get("logo");
+      const destination = params.get("destination");
+      const campaign_id = params.get("campaign_id");
+      const visit_id = params.get("visit_id");
+
+      const fields = {
+        name: params.get("name") === "true",
+        email: params.get("email") === "true",
+        phone: params.get("phone") === "true",
+        title: params.get("title") === "true",
+        comment: params.get("comment") === "true",
+      };
+
+      const isValid = campaign_id && visit_id;
+      const app = document.getElementById("app");
+
+      if (!isValid) {
+        if (destination) window.location.href = destination;
+      } else {
+        renderForm();
+      }
+
+      function renderForm() {
+        app.innerHTML = `
+        ${
+          logo
+            ? `<div class="logo-container">
+            <img id="logo" src="${logo}" alt="logo for this campaign" onerror="this.style.display='none'" />
+            </div>`
+            : ""
+        }
+
+        <h1>Share a Few Details</h1>
+        <p class="subtitle">We’d love to learn more about you</p>
+
+        <div class="form">
+          ${fields.name ? inputField("name", "Name:") : ""}
+          ${fields.email ? inputField("email", "Email:", "email") : ""}
+          ${fields.phone ? inputField("phone", "Phone:", "tel") : ""}
+          ${fields.title ? inputField("title", "Job Title:") : ""}
+          ${fields.comment ? textAreaField("comment", "Notes:") : ""}
+        </div>
+
+        <button id="submitButton">Visit Website →</button>
+      `;
+
+        const logoEl = document.getElementById("logo");
+        if (logoEl) logoEl.onload = () => logoEl.classList.add("loaded");
+
+        document.getElementById("submitButton").addEventListener("click", handleSubmit);
+      }
+
+      function inputField(name, label, type = "text") {
+        return `
+        <div class="field">
+          <label for="${name}">${label}</label>
+          <input id="${name}" name="${name}" type="${type}" />
+        </div>
+      `;
+      }
+
+      function textAreaField(name, label) {
+        return `
+        <div class="field">
+          <label for="${name}">${label}</label>
+          <textarea
+            id="${name}"
+            name="${name}"
+            placeholder="Add any additional context here (e.g., we met at the Vegas trade show)"
+          ></textarea>
+        </div>
+      `;
+      }
+
+      async function handleSubmit() {
+        const button = document.getElementById("submitButton");
+        button.disabled = true;
+        button.textContent = "Opening...";
+
+        const fieldsToSet = {};
+
+        ["name", "email", "phone", "title", "comment"].forEach((key) => {
+          const el = document.getElementById(key);
+          if (el && el.value.trim()) {
+            fieldsToSet[key] = el.value.trim();
+          }
+        });
+
+        try {
+          await fetch(`${config.apiV2URL}/campaign/lead`, {
+            method: "PUT",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              campaign_id,
+              visit_id,
+              fieldsToSet,
+            }),
+          });
+        } catch (error) {
+          console.log(error);
+        } finally {
+          if (destination) {
+            window.location.href = destination;
+          } else {
+            button.disabled = false;
+            button.textContent = "Visit Website →";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

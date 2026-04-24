@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 
 import config from "../../../server/config.js";
 
+// This is the old approach (App Router): loads the full React bundle → slower
+// New approach (redirect.html in /public): pure HTML + minimal JS → fast
+
 const Redirect = () => {
   const { campaign_id } = useParams();
 

@@ -14,11 +14,12 @@ import { PASSWORDLESS_FLOW_STATE, authenticate, startEmailPasswordlessLogin } fr
 import { verifyEmailPasswordlessLogin } from "../cognitoUtils.js";
 import { verifyEmailPasswordlessSignup } from "../cognitoUtils.js";
 import OTPInput from "../OTPInput.js";
-import styles from "./PasswordlessLogin.module.scss";
+import styles from "./PasswordlessAuth.module.scss";
 
-const PasswordlessLogin = ({ setIsPasswordLessStarted, message, setMessage }) => {
+const PasswordlessAuth = ({ setIsPasswordLessStarted, message, setMessage }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [state, setState] = useState(PASSWORDLESS_FLOW_STATE.CODE);
@@ -36,7 +37,9 @@ const PasswordlessLogin = ({ setIsPasswordLessStarted, message, setMessage }) =>
       const state = await startEmailPasswordlessLogin(email);
       setState(state);
       setIsPasswordLessStarted(true);
-      setMessage(`A code has been sent to ${email}. Paste or enter it above.`);
+      setMessage(
+        `A code has been sent to ${email}. Please check your inbox (and spam folder) and paste or enter it above.`
+      );
     } catch (error) {
       if (error?.message.includes(LOGIN_ERROR.EMAIL_ALREADY_IN_USE_GOOGLE)) {
         const navigationState = {
@@ -120,7 +123,7 @@ const PasswordlessLogin = ({ setIsPasswordLessStarted, message, setMessage }) =>
           <OTPInput setCode={setCode} length={state === PASSWORDLESS_FLOW_STATE.SIGNUP ? 6 : 8} />
           <DecoratedButton
             icon={isStartOverRequired ? "refresh" : "check"}
-            buttonText={isBusy ? "Processing..." : isStartOverRequired ? "Start Over" : "Confirm"}
+            buttonText={isBusy ? "Processing..." : isStartOverRequired ? "Start over" : "Confirm code"}
             onClick={handleCodeVerification}
             extraClasses={styles["confirm-button"]}
             theme={BUTTON_THEMES.COLORED}
@@ -132,4 +135,4 @@ const PasswordlessLogin = ({ setIsPasswordLessStarted, message, setMessage }) =>
   );
 };
 
-export default PasswordlessLogin;
+export default PasswordlessAuth;

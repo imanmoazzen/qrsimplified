@@ -245,7 +245,7 @@ export const visit = async (campaign_id, event) => {
       params.set("campaign_id", campaign_id);
       params.set("visit_id", visit_id);
 
-      return redirect(`${process.env.APP_BASE_URL}${APP_PAGES.LEAD}?${params.toString()}`);
+      return redirect(`${process.env.APP_BASE_URL}/lead.html?${params.toString()}`);
     }
 
     return redirect(campaign.destination);
