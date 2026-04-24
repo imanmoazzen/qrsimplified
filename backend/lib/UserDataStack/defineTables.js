@@ -1,7 +1,6 @@
 import { AttributeType } from "aws-cdk-lib/aws-dynamodb";
 
 import { BACKEND_CONFIG } from "../../configurationConstants.js";
-import CacheDataTable from "../standardWrappers/CacheDataTable.js";
 import UserDataTable from "../standardWrappers/UserDataTable.js";
 
 export function defineTables(parent, cdkConfig) {
@@ -10,7 +9,6 @@ export function defineTables(parent, cdkConfig) {
   // IMAN: Note for tables we cannot do this because the names are not still present
   // IMAN: Note for naming _ and - are not allowed and will be omitted during the creation
   const gsiNames = {
-    [BACKEND_CONFIG.GSI.COGNITO_ATTRIBUTES_EMAIL_GSI]: "email-index",
     [BACKEND_CONFIG.GSI.USER_DATA_EMAIL_GSI]: "email-index",
     [BACKEND_CONFIG.GSI.CAMPAIGN_ID_GSI]: "campaign_id-index",
   };
@@ -19,13 +17,6 @@ export function defineTables(parent, cdkConfig) {
     cdkConfig,
     primaryKeys: {
       anonymous_user_id: AttributeType.STRING,
-    },
-  });
-
-  tables.leads = new UserDataTable(parent, "leads", {
-    cdkConfig,
-    primaryKeys: {
-      email_address: AttributeType.STRING,
     },
   });
 
@@ -44,15 +35,6 @@ export function defineTables(parent, cdkConfig) {
     },
     gsiIndices: {
       [gsiNames[BACKEND_CONFIG.GSI.USER_DATA_EMAIL_GSI]]: {
-        email: AttributeType.STRING,
-      },
-    },
-  });
-
-  tables.cognito_attributes = new CacheDataTable(parent, "cached_cognito_attributes", {
-    cdkConfig,
-    gsiIndices: {
-      [gsiNames[BACKEND_CONFIG.GSI.COGNITO_ATTRIBUTES_EMAIL_GSI]]: {
         email: AttributeType.STRING,
       },
     },

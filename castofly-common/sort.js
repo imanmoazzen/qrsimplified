@@ -1,11 +1,11 @@
-export const sortByCreationTime = (array, isDescending = false) => {
+export const sortByCreationTime = (array, latestFirst = false) => {
   array.sort((a, b) => {
     const x = a.creation_time ? new Date(a.creation_time).getTime() : 0;
     const y = b.creation_time ? new Date(b.creation_time).getTime() : 0;
     return x < y ? -1 : x > y ? 1 : 0;
   });
 
-  if (isDescending) array.reverse();
+  if (latestFirst) array.reverse();
   return array;
 };
 

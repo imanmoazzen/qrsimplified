@@ -42,8 +42,11 @@ export const getCampaigns = async (userId) => {
 
       if (leadKeys?.length) {
         leads = visits
-          .map((visit) => Object.fromEntries(leadKeys.map((key) => [key, visit[key] ?? ""])))
-          .filter((lead) => Object.values(lead).some((v) => v !== ""));
+          .map((visit) => ({
+            creation_time: visit.creation_time,
+            ...Object.fromEntries(leadKeys.map((key) => [key, visit[key] ?? ""])),
+          }))
+          .filter((lead) => Object.values(lead).some((v) => v !== "" && v !== undefined));
       }
 
       return {
