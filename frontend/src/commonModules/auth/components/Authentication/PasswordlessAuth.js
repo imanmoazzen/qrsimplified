@@ -37,9 +37,7 @@ const PasswordlessAuth = ({ setIsPasswordLessStarted, message, setMessage }) => 
       const state = await startEmailPasswordlessLogin(email);
       setState(state);
       setIsPasswordLessStarted(true);
-      setMessage(
-        `A code has been sent to ${email}. Please check your inbox (and spam folder) and paste or enter it above.`
-      );
+      setMessage(`A code has been sent to ${email}. Check your inbox (and spam) and enter the code above.`);
     } catch (error) {
       if (error?.message.includes(LOGIN_ERROR.EMAIL_ALREADY_IN_USE_GOOGLE)) {
         const navigationState = {

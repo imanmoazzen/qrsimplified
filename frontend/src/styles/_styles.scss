@@ -179,6 +179,7 @@
 
   &:focus {
     border-color: var(--primary-color);
+    outline: 1px solid var(--primary-color);
   }
 
   &:disabled {
