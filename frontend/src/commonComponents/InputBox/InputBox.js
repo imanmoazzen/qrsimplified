@@ -13,6 +13,7 @@ const InputBox = ({
   onFocus,
   onBlur,
   onKeyDown,
+  onEnter,
   extraClasses,
   placeholder,
   isReadOnly,
@@ -45,7 +46,7 @@ const InputBox = ({
     event.stopPropagation();
     if (event.code === "Enter") {
       event.preventDefault();
-      event.target.blur();
+      onEnter?.();
     }
   };
 

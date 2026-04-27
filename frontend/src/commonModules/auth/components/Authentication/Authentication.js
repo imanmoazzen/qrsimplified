@@ -56,7 +56,7 @@ const Authentication = () => {
           <GoogleIdentityProvider isRippling={message === LOGIN_ERROR.EMAIL_ALREADY_IN_USE_GOOGLE} />
         )}
 
-        {message && <span className={styles["message"]}>{message}</span>}
+        <span className={`${styles["message"]} ${!message ? styles["hidden"] : ""}`}>{message}</span>
       </div>
     </div>
   );

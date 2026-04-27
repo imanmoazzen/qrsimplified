@@ -100,7 +100,7 @@ const PasswordlessAuth = ({ setIsPasswordLessStarted, message, setMessage }) => 
             setValue={setEmail}
             placeholder="Enter your email address"
             onFocus={() => setMessage("")}
-            onBlur={handleCodeGeneration}
+            onEnter={handleCodeGeneration}
             isRippling={
               message === LOGIN_ERROR.EMAIL_NOT_VALID || message === LOGIN_ERROR.EMAIL_ALREADY_IN_USE_PASSWORDLESS
             }

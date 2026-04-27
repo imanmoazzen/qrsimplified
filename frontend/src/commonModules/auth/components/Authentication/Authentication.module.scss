@@ -53,6 +53,7 @@
 .message {
   @include rfont(small);
   color: var(--primary-color);
+  height: 24px;
 }
 
 .divider {
