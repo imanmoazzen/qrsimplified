@@ -17,7 +17,6 @@
 .orders-table {
   @include rfont(small);
   table-layout: fixed;
-  border-radius: var(--border-radius);
 
   thead tr,
   tbody tr {
