@@ -1,10 +1,14 @@
 import { checkout } from "./checkout.js";
+import { getPastOrders } from "./orders.js";
 import { webhook } from "./webhook.js";
 
 export default async function stripeRouter(routeKey, requestBody, pathParameters, userId, event) {
   switch (routeKey) {
     case "POST /stripe/checkout": {
       return await checkout(requestBody, userId);
+    }
+    case "GET /stripe/orders": {
+      return await getPastOrders(userId);
     }
     case "POST /stripe/webhook": {
       const exactRequestBody = event.body;

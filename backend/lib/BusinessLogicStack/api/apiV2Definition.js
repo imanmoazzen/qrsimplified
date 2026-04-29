@@ -28,6 +28,9 @@ export const API_V2_DEFINITION = {
     checkout: {
       POST: AUTH,
     },
+    orders: {
+      GET: AUTH,
+    },
     webhook: {
       POST: NOAUTH,
     },

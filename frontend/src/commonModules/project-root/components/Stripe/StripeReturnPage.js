@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import Confetti from "react-confetti";
+import confetti from "canvas-confetti";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import DecoratedButton from "../../../../commonComponents/DecoratedButton/DecoratedButton.js";
@@ -9,21 +9,19 @@ import { auth } from "../../../../index.js";
 import styles from "./StripeReturnPage.module.scss";
 
 const StripeReturnPage = () => {
-  const mainContainerRef = useRef(null);
-  const [size, setSize] = useState({ width: 0, height: 0 });
-
   const user = useSelector(auth.userSelector);
   const qr_credits = user?.qr_credits;
 
   useEffect(() => {
-    if (mainContainerRef.current) {
-      const { width, height } = mainContainerRef.current.getBoundingClientRect();
-      setSize({ width, height });
-    }
+    confetti({
+      particleCount: 250,
+      spread: 70,
+      scalar: 0.6,
+    });
   }, []);
 
   return (
-    <div ref={mainContainerRef} className={styles["main-container"]}>
+    <div className={styles["main-container"]}>
       <img className={styles["illustration"]} src={ILLUSTRATIONS.CAMPAIGN} alt="thank you" />
       <Header title="Thank You!">
         <span>
@@ -38,7 +36,6 @@ const StripeReturnPage = () => {
         onClick={() => (window.location = window.location.origin)}
         isRippling={true}
       />
-      <Confetti recycle={false} numberOfPieces={1000} width={size?.width} height={size?.height} />
     </div>
   );
 };
