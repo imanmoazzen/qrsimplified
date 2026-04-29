@@ -12,4 +12,5 @@ export const APP_PAGES = {
   REFERRAL: `${UNIQUE_APP_ROUTER_KEY}/referral`,
   SUCCESS_PAYMENT: `${UNIQUE_APP_ROUTER_KEY}/success`,
   LEAD: `${UNIQUE_APP_ROUTER_KEY}/lead`,
+  PAST_ORDERS: `${UNIQUE_APP_ROUTER_KEY}/orders`,
 };

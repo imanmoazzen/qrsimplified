@@ -49,16 +49,16 @@ const UserMenu = ({ authModule }) => {
                 extraContainerClasses={styles["button-container"]}
               />
               <DecoratedButton
-                icon={"help"}
-                buttonText={"Help"}
-                onClick={() => handleClick(APP_PAGES.FAQ)}
+                icon={"receipt_long"}
+                buttonText={"Your Orders"}
+                onClick={() => handleClick(APP_PAGES.PAST_ORDERS)}
                 theme={BUTTON_THEMES.POPUP}
                 extraContainerClasses={styles["button-container"]}
               />
               <DecoratedButton
-                icon={"forum"}
-                buttonText={"Feedback"}
-                onClick={() => handleClick(APP_PAGES.FEEDBACK)}
+                icon={"help"}
+                buttonText={"Help Center"}
+                onClick={() => handleClick(APP_PAGES.FAQ)}
                 theme={BUTTON_THEMES.POPUP}
                 extraContainerClasses={styles["button-container"]}
               />
@@ -69,6 +69,14 @@ const UserMenu = ({ authModule }) => {
                 theme={BUTTON_THEMES.POPUP}
                 extraContainerClasses={styles["button-container"]}
               />
+              <DecoratedButton
+                icon={"forum"}
+                buttonText={"Feedback"}
+                onClick={() => handleClick(APP_PAGES.FEEDBACK)}
+                theme={BUTTON_THEMES.POPUP}
+                extraContainerClasses={styles["button-container"]}
+              />
+
               <DecoratedButton
                 icon={"logout"}
                 buttonText={"Log out"}

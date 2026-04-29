@@ -1,0 +1,66 @@
+@import "../../../styles/_mixin.scss";
+
+.main-container {
+  @include flexCenter(column, 4rem);
+  padding: 2rem;
+  width: 100%;
+
+  @include mobile {
+    padding: 1rem;
+  }
+}
+
+.close-container {
+  margin-left: auto;
+}
+
+.orders-table {
+  @include rfont(small);
+  table-layout: fixed;
+  border: 1px solid black;
+  border-radius: var(--border-radius);
+
+  thead tr,
+  tbody tr {
+    display: grid;
+    grid-template-columns: minmax(125px, 1fr) repeat(2, minmax(75px, 1fr)) auto;
+  }
+
+  thead tr {
+    font-weight: bold;
+    opacity: 0.75;
+  }
+
+  tr {
+    border-bottom: 1px solid black;
+  }
+
+  tbody tr:last-of-type {
+    border-bottom: none;
+  }
+
+  th,
+  td {
+    padding: 4px;
+    text-align: left;
+  }
+}
+
+.link {
+  color: var(--primary-color);
+}
+
+.purchase-button {
+  margin-bottom: -3rem;
+}
+
+.message {
+  @include rfont(small);
+  color: var(--primary-color);
+  height: 24px;
+}
+
+.contact-us {
+  @include flexCenter(row, 4px);
+  @include rfont(small);
+}

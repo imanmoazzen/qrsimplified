@@ -7,6 +7,7 @@ import Feedback from "../commonComponents/Feedback/Feedback.js";
 import Authentication from "../commonModules/auth/components/Authentication/Authentication.js";
 import Campaign from "../commonModules/campaign/components/Campaign.js";
 import LeadPage from "../commonModules/campaign/components/LeadPage.js";
+import PastOrdersPage from "../commonModules/campaign/components/PastOrdersPage.js";
 import UpgradePage from "../commonModules/campaign/components/UpgradePage.js";
 import { brandingChanged } from "../commonModules/campaign/store/uiReducer.js";
 import Cart from "../commonModules/project-root/components/Cart/Cart.js";
@@ -80,6 +81,7 @@ const AppRouter = () => {
         <Route path={APP_PAGES.SUCCESS_PAYMENT} element={<StripeReturnPage />} />
         <Route path={APP_PAGES.FEEDBACK} element={<Feedback />} />
         <Route path={APP_PAGES.REFERRAL} element={<Referral />} />
+        <Route path={APP_PAGES.PAST_ORDERS} element={<PastOrdersPage />} />
       </Route>
       <Route path="*" element={<span>Invalid URL!</span>} />
     </Routes>
