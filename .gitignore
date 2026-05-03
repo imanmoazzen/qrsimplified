@@ -29,3 +29,6 @@ yarn-error.log*
 .env
 
 /scripts/tools
+
+.claude/
+artifact-build-manifest.json
