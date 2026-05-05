@@ -1,0 +1,21 @@
+{
+  "name": "@qrsimplified/mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MCP server for QR Simplified campaign QR code operations.",
+  "type": "module",
+  "bin": {
+    "qrsimplified-mcp": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node ./src/index.js",
+    "start:http": "node ./src/index.js --http",
+    "check": "node --check ./src/index.js"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

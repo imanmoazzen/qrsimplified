@@ -8,6 +8,7 @@ import DecoratedButton, { BUTTON_THEMES } from "../../../../commonComponents/Dec
 import DecoratedButtonWithTimeout from "../../../../commonComponents/DecoratedButton/DecoratedButtonWithTimeout.js";
 import Header from "../../../../commonComponents/Header/Header.js";
 import InputBox from "../../../../commonComponents/InputBox/InputBox.js";
+import StarRating from "../../../../commonComponents/StarRating/StartRationg.js";
 import WaitIndicator from "../../../../commonComponents/WaitIndicator/WaitIndicator.js";
 import { base64ToFile, isValidHttpsUrl } from "../../../../commonUtil/stringUtils.js";
 import { COMMON_MESSAGES } from "../../../../frontEndConstants.js";
@@ -136,6 +137,8 @@ const EditPage = () => {
       <Header title="QR Code Settings" info={"Edit, download, or delete your QR code"} />
 
       {state === STATES.LOADING && <WaitIndicator text="Loading..." />}
+
+      <StarRating />
 
       {state !== STATES.LOADING && (
         <div className={styles["core-container"]}>
