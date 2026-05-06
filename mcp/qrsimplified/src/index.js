@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import QRCode from "qrcode";
 import { createServer } from "node:http";
+import QRCode from "qrcode";
 
 const JSON_RPC_VERSION = "2.0";
 const API_SUCCESS = "SUCCESS";
@@ -22,7 +22,7 @@ const tools = [
         },
         destination: {
           type: "string",
-          description: "The URL people should land on after scanning the QR code.",
+          description: "The HTTPS URL people should land on after scanning the QR code.",
         },
         include_qr_svg: {
           type: "boolean",
@@ -70,9 +70,8 @@ const tools = [
 
 function getRequiredEnv(name) {
   const value = process.env[name];
-  if (!value) {
-    throw new Error(`${name} is required`);
-  }
+  if (!value) throw new Error(`${name} is required`);
+
   return value;
 }
 
@@ -93,7 +92,7 @@ async function requestFromApi(endpoint, { method = "GET", body } = {}) {
   const response = await fetch(buildApiUrl(baseUrl, endpoint), {
     method,
     headers: {
-      Authorization: accessToken,
+      "Authorization": accessToken,
       "Content-Type": "application/json",
     },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -191,11 +190,9 @@ function requireString(args, key) {
 function validateUrl(value, key) {
   try {
     const url = new URL(value);
-    if (!["http:", "https:"].includes(url.protocol)) {
-      throw new Error("unsupported protocol");
-    }
+    if (url.protocol !== "https:") throw new Error("unsupported protocol");
   } catch {
-    throw new Error(`${key} must be a valid http(s) URL`);
+    throw new Error(`${key} must be a valid HTTPS URL`);
   }
 }
 
