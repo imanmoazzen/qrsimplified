@@ -60,8 +60,6 @@ export default class ServerModule extends AbstractModule {
 
   requestWithAuthentication = async (params, initialDelay = 500, maxTries = 1) => {
     const accessToken = await this.authModule.getAccessToken();
-
-    console.log(accessToken);
     const paramsWithAccessToken = { ...params, headers: { ...params.headers, Authorization: accessToken } };
     return await requestWithRetry(paramsWithAccessToken, initialDelay, maxTries);
   };

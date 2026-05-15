@@ -6,7 +6,7 @@ import styles from "./DataCollection.module.scss";
 
 const DataCollection = ({ lead, setLead, onUpdate, extraClasses }) => {
   const [noDataCollection, setNoDataCollection] = useState(false);
-  const { name = false, email = false, phone = false, title = false, comment = false } = lead ?? {};
+  const { name = false, email = false, phone = false, title = false, comment = false, rating = false } = lead ?? {};
 
   useEffect(() => {
     setNoDataCollection(lead ? !Object.values(lead).some(Boolean) : true);
@@ -59,16 +59,23 @@ const DataCollection = ({ lead, setLead, onUpdate, extraClasses }) => {
             />
             <InputBox
               type="checkbox"
-              label="Job Title"
+              label="Title"
               value={title}
               setValue={(value) => update({ title: value })}
               extraClasses={styles["input-checkbox"]}
             />
             <InputBox
               type="checkbox"
-              label="Notes"
+              label="Comments"
               value={comment}
               setValue={(value) => update({ comment: value })}
+              extraClasses={styles["input-checkbox"]}
+            />
+            <InputBox
+              type="checkbox"
+              label="Rating"
+              value={rating}
+              setValue={(value) => update({ rating: value })}
               extraClasses={styles["input-checkbox"]}
             />
           </div>
