@@ -7,6 +7,7 @@
   "scripts": {
     "prettier": "npx prettier --write .",
     "test": "mocha ./server/**/specs/**/*.spec.js --reporter spec ",
+    "mcp:qrsimplified": "npm --prefix ./mcp/qrsimplified start",
     "deploy-all-staging": "cd backend && npm run deploy-staging-nc && cd ../frontend && npm run deploy-all-staging-nc"
   },
   "devDependencies": {

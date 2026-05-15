@@ -17,7 +17,9 @@ export function fileToBase64(file) {
 }
 
 export async function downloadImage(url, fileName = "image.png") {
-  const res = await fetch(url);
+  const noCacheUrl = `${url}${url.includes("?") ? "&" : "?"}t=${Date.now()}`;
+  const res = await fetch(noCacheUrl);
+
   if (!res.ok) throw new Error("Failed to fetch image");
 
   const blob = await res.blob();
