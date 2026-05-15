@@ -35,8 +35,6 @@ const AnalyticsPage = () => {
     const leads = campaign?.leads;
     if (!leads?.length) return;
 
-    console.log(leads);
-
     const ORDER = ["name", "email", "phone", "title", "rating", "comment"];
     const headers = ORDER.filter((key) => leads.some((l) => l[key] != null));
 
