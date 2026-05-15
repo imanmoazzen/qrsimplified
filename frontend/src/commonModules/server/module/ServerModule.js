@@ -1,4 +1,3 @@
-import { API_RESPONSE_TYPES } from "castofly-common";
 import { v4 as uuid } from "uuid";
 
 import requestWithRetry from "../../../commonUtil/requestWithRetry.js";
@@ -61,6 +60,8 @@ export default class ServerModule extends AbstractModule {
 
   requestWithAuthentication = async (params, initialDelay = 500, maxTries = 1) => {
     const accessToken = await this.authModule.getAccessToken();
+
+    console.log(accessToken);
     const paramsWithAccessToken = { ...params, headers: { ...params.headers, Authorization: accessToken } };
     return await requestWithRetry(paramsWithAccessToken, initialDelay, maxTries);
   };
@@ -68,43 +69,6 @@ export default class ServerModule extends AbstractModule {
   requestFromApiv2 = async (endpoint, params, initialDelay = 500, maxTries = 1) => {
     const url = config.apiV2URL + endpoint;
     return await this.requestWithAuthentication({ ...params, ...{ url } }, initialDelay, maxTries);
-  };
-
-  getConvertedImageURLs = async (assetId) => {
-    const accessToken = await this.authModule.getAccessToken();
-
-    const params = {
-      url: `${config.apiV2URL}/assets/${assetId}/convertedURLs`,
-      method: "GET",
-      mode: "cors",
-      headers: {
-        Authorization: accessToken,
-      },
-    };
-
-    const response = (await requestWithRetry(params)).data;
-    if (response.message === API_RESPONSE_TYPES.SUCCESS) {
-      return response.images;
-    } else {
-      return null;
-    }
-  };
-
-  setConvertedImagesURLs = async (assetId, originalURL, images) => {
-    const accessToken = await this.authModule.getAccessToken();
-    const params = {
-      url: `${config.apiV2URL}/assets/${assetId}/convertedURLs`,
-      method: "PUT",
-      mode: "cors",
-      headers: {
-        Authorization: accessToken,
-      },
-      data: {
-        originalURL,
-        images,
-      },
-    };
-    await requestWithRetry(params).data;
   };
 
   generatePredefinedS3UploadURL = (targetDataLocation, name) => {

@@ -335,7 +335,7 @@ async function drainBuffer() {
 function readNextMessage() {
   const headerEnd = buffer.indexOf("\r\n\r\n");
   if (headerEnd !== -1) {
-    const header = buffer.slice(0, headerEnd).toString("utf8");
+    const header = buffer.subarray(0, headerEnd).toString("utf8");
     const match = header.match(/Content-Length:\s*(\d+)/i);
     if (!match) {
       throw new Error("Missing Content-Length header");
@@ -346,16 +346,16 @@ function readNextMessage() {
     const bodyEnd = bodyStart + length;
     if (buffer.length < bodyEnd) return null;
 
-    const body = buffer.slice(bodyStart, bodyEnd).toString("utf8");
-    buffer = buffer.slice(bodyEnd);
+    const body = buffer.subarray(bodyStart, bodyEnd).toString("utf8");
+    buffer = buffer.subarray(bodyEnd);
     return JSON.parse(body);
   }
 
   const newlineIndex = buffer.indexOf("\n");
   if (newlineIndex === -1) return null;
 
-  const line = buffer.slice(0, newlineIndex).toString("utf8").trim();
-  buffer = buffer.slice(newlineIndex + 1);
+  const line = buffer.subarray(0, newlineIndex).toString("utf8").trim();
+  buffer = buffer.subarray(newlineIndex + 1);
   if (!line) return null;
   return JSON.parse(line);
 }
