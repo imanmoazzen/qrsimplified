@@ -12,14 +12,9 @@ import WaitIndicator from "../../../../commonComponents/WaitIndicator/WaitIndica
 import { base64ToFile, isValidHttpsUrl } from "../../../../commonUtil/stringUtils.js";
 import { COMMON_MESSAGES } from "../../../../frontEndConstants.js";
 import { campaignModule, server } from "../../../../index.js";
+import { createQRCodeSvgURL } from "../../qrCode.js";
 import { DEFAULT_BRANDING, campaignsChanged } from "../../store/uiReducer.js";
-import {
-  downloadImage,
-  generateQRCodeAsSvgURL,
-  mergeQrAndLogo,
-  recolorSvgDataUrl,
-  transferQRCodeFileToS3,
-} from "../../utils.js";
+import { downloadImage, generateQRCodeAsSvgURL, mergeQrAndLogo, transferQRCodeFileToS3 } from "../../utils.js";
 import Adjustment from "../Branding/Adjustment.js";
 import QRCodeAndLogo from "../Branding/QRCodeAndLogo.js";
 import DataCollection from "../DataCollection.js";
@@ -61,10 +56,9 @@ const EditPage = () => {
     setDestination(campaign?.destination ?? "");
     setLead(campaign?.lead ?? null);
 
-    generateQRCodeAsSvgURL(tracking_link)
+    generateQRCodeAsSvgURL(campaign?.tracking_link, campaignBranding)
       .then((svgURL) => {
-        const svgCode = recolorSvgDataUrl(svgURL, campaignBranding?.color, campaignBranding?.background);
-        setQRCode(svgCode);
+        setQRCode(svgURL);
       })
       .catch(() => setMessage(COMMON_MESSAGES.GENERIC_ERROR))
       .finally(() => setState(STATES.INIT));
@@ -72,7 +66,7 @@ const EditPage = () => {
 
   const onBrandingChanged = (newBranding) => {
     setBranding(newBranding);
-    setQRCode(recolorSvgDataUrl(qrCode, newBranding.color, newBranding.background));
+    setQRCode(createQRCodeSvgURL(tracking_link, newBranding));
     setState(STATES.EDITING);
   };
 

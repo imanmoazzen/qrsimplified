@@ -7,7 +7,7 @@ import { isValidHttpsUrl } from "../../../commonUtil/stringUtils.js";
 import { COMMON_MESSAGES } from "../../../frontEndConstants.js";
 import { campaignModule, server } from "../../../index.js";
 import { CAMPAIGN_PAGES, campaignPageChanged } from "../store/uiReducer.js";
-import { generateQRCodeAsSvgURL, recolorSvgDataUrl } from "../utils.js";
+import { generateQRCodeAsSvgURL } from "../utils.js";
 import styles from "./NameAndLandingPage.module.scss";
 
 export const QR_STATES = {
@@ -26,7 +26,6 @@ const NameAndLandingPage = ({ onSuccess }) => {
   const [destination, setDestination] = useState("");
   const [state, setState] = useState(QR_STATES.INIT);
 
-  const { color, background } = branding;
   const isMessageVisible = [QR_STATES.URL_EMPTY, QR_STATES.URL_INVALID, QR_STATES.NAME_EMPTY, QR_STATES.ERROR].includes(
     state
   );
@@ -44,10 +43,9 @@ const NameAndLandingPage = ({ onSuccess }) => {
       });
 
       const { tracking_link, campaign_id } = res.data.item;
-      const svgURL = await generateQRCodeAsSvgURL(tracking_link);
-      const svgCode = recolorSvgDataUrl(svgURL, color, background);
+      const svgCode = await generateQRCodeAsSvgURL(tracking_link, branding);
 
-      onSuccess?.(svgCode, campaign_id);
+      onSuccess?.(svgCode, campaign_id, tracking_link);
       setState(QR_STATES.INIT);
     } catch (error) {
       setState(QR_STATES.ERROR);

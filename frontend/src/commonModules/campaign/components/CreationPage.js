@@ -20,6 +20,7 @@ import NameAndLandingPage from "./NameAndLandingPage.js";
 const CreationPage = () => {
   const dispatch = useDispatch();
   const qrCode = useSelector(campaignModule.getQRCode);
+  const [trackingLink, setTrackingLink] = useState();
   const [step, setStep] = useState(1);
   const [title, setTitle] = useState("");
   const [info, setInfo] = useState("");
@@ -47,7 +48,8 @@ const CreationPage = () => {
 
       {step === 1 && (
         <NameAndLandingPage
-          onSuccess={(item, campaign_id) => {
+          onSuccess={(item, campaign_id, tracking_link) => {
+            setTrackingLink(tracking_link);
             dispatch(qrCodeChanged(item));
             setBorningCampaignId(campaign_id);
             setStep(2);
@@ -55,7 +57,7 @@ const CreationPage = () => {
         />
       )}
 
-      {step === 2 && <Branding borningCampaignId={borningCampaignId} setStep={setStep} />}
+      {step === 2 && <Branding borningCampaignId={borningCampaignId} trackingLink={trackingLink} setStep={setStep} />}
 
       {step === 3 && <LeadCollection campaignId={borningCampaignId} setStep={setStep} />}
 

@@ -22,6 +22,8 @@ export const REGION_FILTERS = {
 export const DEFAULT_BRANDING = {
   logo: null,
   logo_scale: 4,
+  shape: "square",
+  padding: 4,
   color: "#000000",
   background: "#0000",
   isTransparent: true,

@@ -21,7 +21,14 @@ export const COLOR_PICKER_OPTIONS = [
   "#FFFFFF",
 ];
 
-const ColorPicker = ({ currentColor, setCurrentColor, customColors = COLOR_PICKER_OPTIONS, label = "Color:" }) => {
+const ColorPicker = ({
+  currentColor,
+  setCurrentColor,
+  customColors = COLOR_PICKER_OPTIONS,
+  label = "Color:",
+  labelClassName = "",
+  extraClasses = "",
+}) => {
   const [isMaterialPickerOpen, setIsMaterialPickerOpen] = useState(false);
   const [colors, setColors] = useState(customColors);
 
@@ -38,8 +45,8 @@ const ColorPicker = ({ currentColor, setCurrentColor, customColors = COLOR_PICKE
   }, [currentColor, customColors]);
 
   return (
-    <div className={styles["color-picker"]}>
-      <span className={styles["label"]}>{label}</span>
+    <div className={`${styles["color-picker"]} ${extraClasses}`}>
+      <span className={`${styles["label"]} ${labelClassName}`}>{label}</span>
 
       <div className={styles["palette"]}>
         {colors.map((color, index) => (

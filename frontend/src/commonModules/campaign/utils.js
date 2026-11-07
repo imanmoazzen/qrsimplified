@@ -1,11 +1,12 @@
-// QRCodeStyling can be used for styling down the road https://qr-code-styling.com/
-
 import { API_RESPONSE_TYPES } from "castofly-common";
-import QRCode from "qrcode";
 import { v4 as uuid } from "uuid";
 
 import { base64ToFile } from "../../commonUtil/stringUtils.js";
 import { server } from "../../index.js";
+import { generateQRCodeAsSvgURL } from "./qrCode.js";
+import { getLogoClearRects } from "./logoBoundary.js";
+
+export { generateQRCodeAsSvgURL } from "./qrCode.js";
 
 export function fileToBase64(file) {
   return new Promise((resolve, reject) => {
@@ -36,35 +37,6 @@ export async function downloadImage(url, fileName = "image.png") {
 
   URL.revokeObjectURL(blobUrl);
 }
-
-export const generateQRCodeAsSvgURL = async (text) => {
-  const svg = await QRCode.toString(text, {
-    type: "svg",
-    errorCorrectionLevel: "H",
-    margin: 2,
-  });
-
-  const svgUrl = "data:image/svg+xml;utf8," + encodeURIComponent(svg);
-
-  return svgUrl;
-};
-
-export const recolorSvgDataUrl = (dataUrl, color = "#000000", background = "#0000") => {
-  const [prefix, encoded] = dataUrl.split(",");
-  let svg = decodeURIComponent(encoded);
-
-  // Update foreground (modules)
-  svg = svg.replace(/stroke="[#A-Fa-f0-9]+"/g, `stroke="${color}"`);
-  svg = svg.replace(/fill="[#A-Fa-f0-9]+"/g, (match) => {
-    // Only replace module fills, not the background
-    return match.includes("M0 0h") ? match : `fill="${color}"`;
-  });
-
-  // Update background rectangle
-  svg = svg.replace(/<path fill="[#A-Fa-f0-9]+" d="M0 0h[\s\S]*?\/>/, `<path fill="${background}" d="M0 0h73v73H0z"/>`);
-
-  return `${prefix},${encodeURIComponent(svg)}`;
-};
 
 export const getSizeFromScale = (scale, minSize = 32, maxSize = 200, minScale = 1, maxScale = 11) => {
   const t = (scale - minScale) / (maxScale - minScale);
@@ -115,6 +87,24 @@ export async function mergeQrAndLogo(qrSvgString, logoImage, scale) {
     const logoTargetHeight = logoTargetWidth * (logoImg.height / logoImg.width);
     const logoX = (exportSize - logoTargetWidth) / 2;
     const logoY = (exportSize - logoTargetHeight) / 2;
+
+    const svg = new DOMParser().parseFromString(decodeURIComponent(qrSvgString.split(",")[1]), "image/svg+xml");
+    const moduleCount = Number(svg.documentElement.getAttribute("data-qr-modules"));
+    const margin = Number(svg.documentElement.getAttribute("data-qr-margin"));
+    if (moduleCount > 0) {
+      const mask = document.createElement("canvas");
+      mask.width = Math.max(1, Math.round(logoTargetWidth / upscaling));
+      mask.height = Math.max(1, Math.round(logoTargetHeight / upscaling));
+      const maskCtx = mask.getContext("2d");
+      maskCtx.drawImage(logoImg, 0, 0, mask.width, mask.height);
+      const pixels = maskCtx.getImageData(0, 0, mask.width, mask.height);
+      const clearRects = getLogoClearRects(pixels, moduleCount, margin, frontEndSize);
+      ctx.fillStyle = svg.querySelector("svg > path")?.getAttribute("fill") ?? "#0000";
+      for (const { x, y, size } of clearRects) {
+        ctx.clearRect(x * upscaling, y * upscaling, size * upscaling, size * upscaling);
+        ctx.fillRect(x * upscaling, y * upscaling, size * upscaling, size * upscaling);
+      }
+    }
     ctx.drawImage(logoImg, logoX, logoY, logoTargetWidth, logoTargetHeight);
   }
 
@@ -128,8 +118,7 @@ export const generateReferralQRCode = async () => {
   });
 
   const campaign = creationRes.data.item;
-  const svgURL = await generateQRCodeAsSvgURL(campaign.tracking_link);
-  const svgCode = recolorSvgDataUrl(svgURL);
+  const svgCode = await generateQRCodeAsSvgURL(campaign.tracking_link);
 
   const data = await mergeQrAndLogo(svgCode, "/logo/logo-app.png", 9);
   const file = base64ToFile(data, uuid());

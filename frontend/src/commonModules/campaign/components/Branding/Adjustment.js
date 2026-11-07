@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 
 import ColorPicker from "../../../../commonComponents/ColorPicker/ColorPicker.js";
 import DecoratedButton from "../../../../commonComponents/DecoratedButton/DecoratedButton.js";
 import SimpleSwitch from "../../../../commonComponents/SimpleSwitch/SimpleSwitch.js";
+import useLocalStorage from "../../../../hooks/useLocalStorage.js";
+import { QR_SHAPES } from "../../qrCode.js";
 import { DEFAULT_BRANDING } from "../../store/uiReducer.js";
 import styles from "./Adjustment.module.scss";
 
+const isSolidColor = (value) => typeof value === "string" && /^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(value);
+
 const Adjustment = ({ branding = DEFAULT_BRANDING, onBrandingChanged, onError }) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const shapeGroupName = useId();
 
   const { logo, logo_scale, color, background, isTransparent } = branding;
+  const [lastSolidBackground, setLastSolidBackground] = useLocalStorage("qr-last-solid-background", "#000000");
 
   const remove = async () => {
     try {
@@ -26,22 +32,106 @@ const Adjustment = ({ branding = DEFAULT_BRANDING, onBrandingChanged, onError })
 
   const updateColor = (newColor) => onBrandingChanged?.({ ...branding, color: newColor });
 
-  const updateBackground = (newColor) => onBrandingChanged?.({ ...branding, background: newColor });
+  const updateBackground = (newColor) => {
+    if (isSolidColor(newColor)) setLastSolidBackground(newColor);
+    onBrandingChanged?.({ ...branding, background: newColor });
+  };
 
   const updateOpacity = async () => {
     const newOpacity = !isTransparent;
-    const newBackground = newOpacity ? "#0000" : background !== "#0000" ? background : "#000000";
+    if (newOpacity && isSolidColor(background)) setLastSolidBackground(background);
+    const restoredBackground = isSolidColor(lastSolidBackground) ? lastSolidBackground : "#000000";
+    const newBackground = newOpacity ? "#0000" : isSolidColor(background) ? background : restoredBackground;
     onBrandingChanged?.({ ...branding, isTransparent: newOpacity, background: newBackground });
   };
 
   return (
     <div className={styles["main-container"]}>
+      <div className={styles["shape-selector"]}>
+        <span id={`${shapeGroupName}-label`} className={styles["field-label"]}>
+          Shape:
+        </span>
+        <div className={styles["shape-options"]} role="radiogroup" aria-labelledby={`${shapeGroupName}-label`}>
+          {Object.entries(QR_SHAPES).map(([value, label]) => (
+            <label
+              key={value}
+              className={`${styles["shape-option"]} ${styles[value]} ${
+                (branding.shape ?? "square") === value ? styles["selected"] : ""
+              }`}
+              style={{ "--shape-color": color ?? DEFAULT_BRANDING.color }}
+              title={label}
+            >
+              <input
+                type="radio"
+                name={shapeGroupName}
+                value={value}
+                aria-label={label}
+                checked={(branding.shape ?? "square") === value}
+                onChange={(event) => onBrandingChanged?.({ ...branding, shape: event.target.value })}
+              />
+              <span className={`${styles["shape-preview"]} ${styles[value]}`} aria-hidden="true" />
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles["background-switch"]} role="group" aria-labelledby={`${shapeGroupName}-background-type`}>
+        <span id={`${shapeGroupName}-background-type`} className={styles["field-label"]}>
+          Background Type:
+        </span>
+        <SimpleSwitch
+          leftLabel="Transparent"
+          rightLabel="Solid Color"
+          isKnobOnLeft={isTransparent}
+          onFlip={updateOpacity}
+        />
+      </div>
+
+      {!isTransparent && (
+        <ColorPicker
+          currentColor={background}
+          setCurrentColor={updateBackground}
+          label="Background Color:"
+          extraClasses={styles["color-row"]}
+          labelClassName={styles["field-label"]}
+        />
+      )}
+
+      <ColorPicker
+        currentColor={color}
+        setCurrentColor={updateColor}
+        label="QR Code Color:"
+        extraClasses={styles["color-row"]}
+        labelClassName={styles["field-label"]}
+      />
+
+      <div className={styles["resize-slider"]}>
+        <section>
+          <label className={styles["field-label"]} htmlFor={`${shapeGroupName}-padding`}>
+            Padding:
+          </label>
+          <input
+            id={`${shapeGroupName}-padding`}
+            type="range"
+            min="0"
+            max="12"
+            step={1}
+            value={branding.padding ?? DEFAULT_BRANDING.padding}
+            onChange={(event) => onBrandingChanged?.({ ...branding, padding: Number(event.target.value) })}
+            className={styles["slider"]}
+          />
+        </section>
+      </div>
+
       {logo && (
         <div className={styles["resize-container"]}>
           <div className={styles["resize-slider"]}>
             <section>
-              <label>Resize Logo:</label>
+              <label className={styles["field-label"]} htmlFor={`${shapeGroupName}-logo-scale`}>
+                Logo Size:
+              </label>
               <input
+                id={`${shapeGroupName}-logo-scale`}
                 type="range"
                 min="1"
                 max="11"
@@ -51,35 +141,23 @@ const Adjustment = ({ branding = DEFAULT_BRANDING, onBrandingChanged, onError })
                 className={styles["slider"]}
               />
             </section>
-            <DecoratedButton
-              buttonText={isDeleting ? "Removing..." : "Remove Logo"}
-              icon="delete"
-              onClick={remove}
-              isBusy={isDeleting}
-            />
           </div>
-          <div className={`${styles["scan-to-check-message"]} ${logo_scale > 4 && styles["visible"]}`}>
-            <span className="material-symbols-outlined">mobile_hand</span>
-            <span>
-              Scan the QR code with your phone to make sure it still works with the larger logo. If not, make the logo
-              smaller.
-            </span>
-          </div>
+          <DecoratedButton
+            buttonText={isDeleting ? "Removing..." : "Remove or Replace Logo"}
+            icon="delete"
+            onClick={remove}
+            isBusy={isDeleting}
+            extraContainerClasses={styles["remove-logo"]}
+            extraClasses={styles["remove-logo"]}
+          />
         </div>
       )}
-
-      <ColorPicker currentColor={color} setCurrentColor={updateColor} label="Color:" />
-
-      <div className={styles["background-color-container"]}>
-        {!isTransparent && (
-          <ColorPicker currentColor={background} setCurrentColor={updateBackground} label="Background Color:" />
-        )}
-        <SimpleSwitch
-          leftLabel="Transparent"
-          rightLabel="Solid Background"
-          isKnobOnLeft={isTransparent}
-          onFlip={updateOpacity}
-        />
+      <div className={styles["scan-to-check-message"]}>
+        <span className="material-symbols-outlined">mobile_hand</span>
+        <span>
+          <strong>NOTE:</strong> Scan the QR code with your phone to make sure it still works with the larger logo. If
+          not, make the logo smaller.
+        </span>
       </div>
     </div>
   );
