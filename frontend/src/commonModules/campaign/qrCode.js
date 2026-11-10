@@ -1,4 +1,5 @@
 import QRCode from "qrcode";
+import { renderQRCaption } from "./qrCaption.js";
 
 export const QR_SHAPES = {
   square: "Rectangle",
@@ -10,9 +11,10 @@ export const QR_SHAPES = {
 };
 
 export const createQRCodeSvgURL = (text, branding = {}) => {
-  const { shape = "square", color = "#000000", background = "#0000", padding = 4 } = branding;
+  const { shape = "square", color = "#000000", background = "#0000" } = branding;
   const { modules } = QRCode.create(text, { errorCorrectionLevel: "H" });
-  const margin = Number.isFinite(Number(padding)) ? Math.max(0, Math.min(12, Math.round(Number(padding)))) : 4;
+  // Fixed 24px padding on each side of the 256px preview, independent of caption.
+  const margin = (modules.size * 3) / 26;
   const size = modules.size + margin * 2;
   const squares = [];
   const shapedModules = [];
@@ -125,12 +127,13 @@ export const createQRCodeSvgURL = (text, branding = {}) => {
   }
 
   const gridAttributes = `data-qr-modules="${modules.size}" data-qr-margin="${margin}"`;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" ${gridAttributes} viewBox="0 0 ${size} ${size}"><path fill="${svgColor(
-    background,
-    "#0000"
-  )}" d="M0 0h${size}v${size}H0z"/><g fill="${svgColor(color, "#000000")}"><path d="${squares.join(
+  const caption = renderQRCaption(branding.caption, size, svgColor(color, "#000000"), margin);
+  const dimensions = `width="${size}" height="${caption.height}" viewBox="0 0 ${size} ${caption.height}"`;
+  const backdrop = `<path fill="${svgColor(background, "#0000")}" d="M0 0h${size}v${caption.height}H0z"/>`;
+  const pattern = `<g fill="${svgColor(color, "#000000")}"><path d="${squares.join("")}"/>${shapedModules.join(
     ""
-  )}"/>${shapedModules.join("")}</g></svg>`;
+  )}</g>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" ${gridAttributes} ${dimensions}>${backdrop}${pattern}${caption.markup}</svg>`;
 
   return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
 };

@@ -5,6 +5,7 @@ import DecoratedButton from "../../../../commonComponents/DecoratedButton/Decora
 import SimpleSwitch from "../../../../commonComponents/SimpleSwitch/SimpleSwitch.js";
 import useLocalStorage from "../../../../hooks/useLocalStorage.js";
 import { QR_SHAPES } from "../../qrCode.js";
+import { QR_CAPTION_MAX_LENGTH } from "../../qrCaption.js";
 import { DEFAULT_BRANDING } from "../../store/uiReducer.js";
 import styles from "./Adjustment.module.scss";
 
@@ -31,6 +32,8 @@ const Adjustment = ({ branding = DEFAULT_BRANDING, onBrandingChanged, onError })
   const scale = (e) => onBrandingChanged?.({ ...branding, logo_scale: e.target.value });
 
   const updateColor = (newColor) => onBrandingChanged?.({ ...branding, color: newColor });
+  const updateCaption = (event) =>
+    onBrandingChanged?.({ ...branding, caption: event.target.value.slice(0, QR_CAPTION_MAX_LENGTH) });
 
   const updateBackground = (newColor) => {
     if (isSolidColor(newColor)) setLastSolidBackground(newColor);
@@ -105,24 +108,6 @@ const Adjustment = ({ branding = DEFAULT_BRANDING, onBrandingChanged, onError })
         labelClassName={styles["field-label"]}
       />
 
-      <div className={styles["resize-slider"]}>
-        <section>
-          <label className={styles["field-label"]} htmlFor={`${shapeGroupName}-padding`}>
-            Padding:
-          </label>
-          <input
-            id={`${shapeGroupName}-padding`}
-            type="range"
-            min="0"
-            max="12"
-            step={1}
-            value={branding.padding ?? DEFAULT_BRANDING.padding}
-            onChange={(event) => onBrandingChanged?.({ ...branding, padding: Number(event.target.value) })}
-            className={styles["slider"]}
-          />
-        </section>
-      </div>
-
       {logo && (
         <div className={styles["resize-container"]}>
           <div className={styles["resize-slider"]}>
@@ -142,15 +127,36 @@ const Adjustment = ({ branding = DEFAULT_BRANDING, onBrandingChanged, onError })
               />
             </section>
           </div>
-          <DecoratedButton
-            buttonText={isDeleting ? "Removing..." : "Remove or Replace Logo"}
-            icon="delete"
-            onClick={remove}
-            isBusy={isDeleting}
-            extraContainerClasses={styles["remove-logo"]}
-            extraClasses={styles["remove-logo"]}
+        </div>
+      )}
+      <div className={styles["caption-row"]}>
+        <label className={styles["field-label"]} htmlFor={`${shapeGroupName}-caption`}>
+          Text (optional):
+        </label>
+        <div className={styles["caption-control"]}>
+          <input
+            id={`${shapeGroupName}-caption`}
+            type="text"
+            value={branding.caption ?? ""}
+            placeholder="Scan Me"
+            maxLength={QR_CAPTION_MAX_LENGTH}
+            onChange={updateCaption}
+            aria-describedby={`${shapeGroupName}-caption-count`}
           />
         </div>
+        <span id={`${shapeGroupName}-caption-count`} className={styles["caption-count"]}>
+          {(branding.caption ?? "").length}/{QR_CAPTION_MAX_LENGTH}
+        </span>
+      </div>
+      {logo && (
+        <DecoratedButton
+          buttonText={isDeleting ? "Removing..." : "Remove or Replace Logo"}
+          icon="delete"
+          onClick={remove}
+          isBusy={isDeleting}
+          extraContainerClasses={styles["remove-logo"]}
+          extraClasses={styles["remove-logo"]}
+        />
       )}
       <div className={styles["scan-to-check-message"]}>
         <span className="material-symbols-outlined">mobile_hand</span>

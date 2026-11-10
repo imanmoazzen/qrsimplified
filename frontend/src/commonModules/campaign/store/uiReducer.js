@@ -23,7 +23,7 @@ export const DEFAULT_BRANDING = {
   logo: null,
   logo_scale: 4,
   shape: "square",
-  padding: 4,
+  caption: "",
   color: "#000000",
   background: "#0000",
   isTransparent: true,

@@ -7,6 +7,7 @@
 
 .shape-selector,
 .background-switch,
+.caption-row,
 .color-row.color-row,
 .resize-slider section {
   display: grid;
@@ -15,6 +16,30 @@
   gap: 1rem;
   width: 100%;
   min-width: 0;
+}
+
+.caption-row {
+  row-gap: 0.25rem;
+}
+
+.caption-control {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  input {
+    @include inputEntry();
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+.caption-count {
+  grid-column: 2;
+  justify-self: end;
+  font-size: 0.75rem;
+  color: #6b7280;
 }
 
 .shape-options {
@@ -36,13 +61,15 @@
 .shape-option {
   @include flexCenter(row);
   position: relative;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2rem;
+  height: 2rem;
   padding: 3px;
   box-sizing: border-box;
   border: 1px solid transparent;
   background-color: #fff;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
   cursor: pointer;
 
   &.selected {

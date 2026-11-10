@@ -10,6 +10,8 @@
 
   .upload-button-container {
     position: absolute;
+    top: 128px;
+    transform: translateY(-50%);
 
     button[class*="busy"] {
       pointer-events: none;

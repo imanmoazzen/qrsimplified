@@ -13,16 +13,17 @@ const QRCodeAndLogo = ({ qrCode, branding = DEFAULT_BRANDING, onBrandingChanged,
   const errorHandler = useRef(onError);
   errorHandler.current = onError;
   const { logo, logo_scale } = branding;
-  const preview =
-    composite && composite.qrCode === qrCode && composite.logo === logo && composite.scale === logo_scale
-      ? composite.url
-      : null;
+  // Keep the last complete preview visible while its replacement is being rendered.
+  const preview = composite && composite.logo === logo ? composite.url : null;
 
   useEffect(() => {
     let cancelled = false;
     if (qrCode && logo) {
       mergeQrAndLogo(qrCode, logo, logo_scale)
-        .then((url) => {
+        .then(async (url) => {
+          const image = new Image();
+          image.src = url;
+          await image.decode();
           if (!cancelled) setComposite({ qrCode, logo, scale: logo_scale, url });
         })
         .catch(() => {
