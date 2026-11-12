@@ -2,8 +2,8 @@ import QRCode from "qrcode";
 import { renderQRCaption } from "./qrCaption.js";
 
 export const QR_SHAPES = {
-  square: "Rectangle",
   rounded: "Rounded",
+  square: "Rectangle",
   liquid: "Liquid",
   dots: "Dots",
   diamonds: "Diamonds",
@@ -61,7 +61,7 @@ export const createQRCodeSvgURL = (text, branding = {}) => {
     for (let col = 0; col < modules.size; col++) {
       if (!modules.get(row, col)) continue;
       const isFinder = finderPositions.some(([x, y]) => col >= x && col < x + 7 && row >= y && row < y + 7);
-      if (hasRoundedShapes && isFinder) {
+      if (isFinder) {
         continue;
       }
 
@@ -103,27 +103,20 @@ export const createQRCodeSvgURL = (text, branding = {}) => {
     }
   }
 
-  if (hasRoundedShapes) {
-    for (const [col, row] of finderPositions) {
-      const x = col + margin;
-      const y = row + margin;
-      if (shape === "dots") {
-        shapedModules.push(
-          `<circle cx="${x + 3.5}" cy="${y + 3.5}" r="3" fill="none" stroke="${svgColor(
-            color,
-            "#000000"
-          )}" stroke-width="1"/><circle cx="${x + 3.5}" cy="${y + 3.5}" r="1.5"/>`
-        );
-        continue;
-      }
-      // Draw a continuous rounded ring with a transparent opening and a rounded center.
-      shapedModules.push(
-        `<rect x="${x + 0.5}" y="${y + 0.5}" width="6" height="6" rx="1.5" fill="none" stroke="${svgColor(
-          color,
-          "#000000"
-        )}" stroke-width="1"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3" rx="0.75"/>`
-      );
-    }
+  for (const [col, row] of finderPositions) {
+    const x = col + margin;
+    const y = row + margin;
+    // Use the same rounded outer frame for every style; preserve the inner shape.
+    const center =
+      shape === "dots"
+        ? `<circle cx="${x + 3.5}" cy="${y + 3.5}" r="1.5"/>`
+        : `<rect x="${x + 2}" y="${y + 2}" width="3" height="3" rx="${hasRoundedShapes ? 0.75 : 0}"/>`;
+    shapedModules.push(
+      `<rect x="${x + 0.5}" y="${y + 0.5}" width="6" height="6" rx="1.5" fill="none" stroke="${svgColor(
+        color,
+        "#000000"
+      )}" stroke-width="1"/>${center}`
+    );
   }
 
   const gridAttributes = `data-qr-modules="${modules.size}" data-qr-margin="${margin}"`;

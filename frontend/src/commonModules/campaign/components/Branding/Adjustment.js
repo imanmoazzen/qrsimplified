@@ -145,6 +145,7 @@ const Adjustment = ({ branding = DEFAULT_BRANDING, onBrandingChanged, onError })
           />
         </div>
         <span id={`${shapeGroupName}-caption-count`} className={styles["caption-count"]}>
+          {(branding.caption ?? "").length >= QR_CAPTION_MAX_LENGTH && "Max characters reached — "}
           {(branding.caption ?? "").length}/{QR_CAPTION_MAX_LENGTH}
         </span>
       </div>
