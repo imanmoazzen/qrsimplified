@@ -19,7 +19,7 @@ export const renderQRCaption = (value, size, color, margin) => {
   const escapeXml = (value) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const markup = `<text x="${
     size / 2
-  }" y="${centerY}" fill="${color}" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="600" text-anchor="middle" dominant-baseline="central">${escapeXml(
+  }" y="${centerY}" fill="${color}" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="500" text-anchor="middle" dominant-baseline="central">${escapeXml(
     text
   )}</text>`;
   return { height, markup };

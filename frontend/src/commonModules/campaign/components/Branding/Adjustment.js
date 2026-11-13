@@ -1,18 +1,22 @@
 import { useId, useState } from "react";
+import { v4 as uuid } from "uuid";
 
 import ColorPicker from "../../../../commonComponents/ColorPicker/ColorPicker.js";
 import DecoratedButton from "../../../../commonComponents/DecoratedButton/DecoratedButton.js";
+import { fileSelector } from "../../../../commonComponents/FileSelector/FileSelector.js";
 import SimpleSwitch from "../../../../commonComponents/SimpleSwitch/SimpleSwitch.js";
 import useLocalStorage from "../../../../hooks/useLocalStorage.js";
-import { QR_SHAPES } from "../../qrCode.js";
 import { QR_CAPTION_MAX_LENGTH } from "../../qrCaption.js";
+import { QR_SHAPES } from "../../qrCode.js";
 import { DEFAULT_BRANDING } from "../../store/uiReducer.js";
+import { transferQRCodeFileToS3 } from "../../utils.js";
 import styles from "./Adjustment.module.scss";
 
 const isSolidColor = (value) => typeof value === "string" && /^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(value);
 
 const Adjustment = ({ branding = DEFAULT_BRANDING, onBrandingChanged, onError }) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const shapeGroupName = useId();
 
   const { logo, logo_scale, color, background, isTransparent } = branding;
@@ -27,6 +31,23 @@ const Adjustment = ({ branding = DEFAULT_BRANDING, onBrandingChanged, onError })
     } finally {
       setIsDeleting(false);
     }
+  };
+
+  const upload = () => {
+    fileSelector.choose("image/*", () => {
+      fileSelector.getImages().forEach(async (file) => {
+        try {
+          setIsUploading(true);
+          const s3URL = await transferQRCodeFileToS3(file, "logos", uuid());
+          onBrandingChanged?.({ ...branding, logo: s3URL });
+        } catch (error) {
+          console.log(error);
+          onError?.();
+        } finally {
+          setIsUploading(false);
+        }
+      });
+    });
   };
 
   const scale = (e) => onBrandingChanged?.({ ...branding, logo_scale: e.target.value });
@@ -95,7 +116,7 @@ const Adjustment = ({ branding = DEFAULT_BRANDING, onBrandingChanged, onError })
           currentColor={background}
           setCurrentColor={updateBackground}
           label="Background Color:"
-          extraClasses={styles["color-row"]}
+          extraClasses={styles["color-picker"]}
           labelClassName={styles["field-label"]}
         />
       )}
@@ -104,7 +125,7 @@ const Adjustment = ({ branding = DEFAULT_BRANDING, onBrandingChanged, onError })
         currentColor={color}
         setCurrentColor={updateColor}
         label="QR Code Color:"
-        extraClasses={styles["color-row"]}
+        extraClasses={styles["color-picker"]}
         labelClassName={styles["field-label"]}
       />
 
@@ -149,22 +170,25 @@ const Adjustment = ({ branding = DEFAULT_BRANDING, onBrandingChanged, onError })
           {(branding.caption ?? "").length}/{QR_CAPTION_MAX_LENGTH}
         </span>
       </div>
-      {logo && (
+      <div className={styles["logo-actions"]}>
         <DecoratedButton
-          buttonText={isDeleting ? "Removing..." : "Remove or Replace Logo"}
-          icon="delete"
-          onClick={remove}
-          isBusy={isDeleting}
-          extraContainerClasses={styles["remove-logo"]}
-          extraClasses={styles["remove-logo"]}
+          buttonText={isUploading ? "Uploading..." : logo ? "Replace Logo" : "Upload Logo"}
+          icon="upload"
+          onClick={upload}
+          isBusy={isUploading}
+          extraContainerClasses={styles["logo-action"]}
+          extraClasses={styles["logo-button"]}
         />
-      )}
-      <div className={styles["scan-to-check-message"]}>
-        <span className="material-symbols-outlined">mobile_hand</span>
-        <span>
-          <strong>NOTE:</strong> Scan the QR code with your phone to make sure it still works with the larger logo. If
-          not, make the logo smaller.
-        </span>
+        {logo && (
+          <DecoratedButton
+            buttonText={isDeleting ? "Removing..." : "Remove Logo"}
+            icon="delete"
+            onClick={remove}
+            isBusy={isDeleting}
+            extraContainerClasses={styles["logo-action"]}
+            extraClasses={styles["logo-button"]}
+          />
+        )}
       </div>
     </div>
   );

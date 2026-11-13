@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { server } from "../../index.js";
-import { archiveCampaigns } from "./archiveCampaigns.js";
-import { campaignsArchived } from "./store/uiReducer.js";
+import { archiveCampaigns } from "../commonModules/campaign/utils.js";
+import { campaignsArchived } from "../commonModules/campaign/store/uiReducer.js";
+import { server } from "../index.js";
 
 export default function useArchiveCampaigns() {
   const dispatch = useDispatch();

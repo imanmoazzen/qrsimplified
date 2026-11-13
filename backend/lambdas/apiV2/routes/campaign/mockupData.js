@@ -8,6 +8,7 @@ import { getCampaignAnalytics } from "./utils.js";
 export const IMAN_USER_IDS_IN_BOTH_ENV = [
   "74185438-0051-70e0-b292-15eaf51fb71d",
   "c4c814d8-7091-7095-9c9a-97fc762e42a1",
+  "6488f448-c051-7024-07de-588f77ed3ed2",
 ]; // dev and prod
 
 const COUNTRY_MODES = {

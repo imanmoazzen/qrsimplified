@@ -78,13 +78,25 @@ const Branding = ({ setStep, borningCampaignId, trackingLink }) => {
 
   return (
     <div className={styles["main-container"]}>
-      <QRCodeAndLogo
-        qrCode={qrCode}
-        branding={branding}
-        onBrandingChanged={onBrandingChanged}
-        onError={() => setState(STATES.ERROR)}
-      />
-      <Adjustment branding={branding} onBrandingChanged={onBrandingChanged} onError={() => setState(STATES.ERROR)} />
+      <div className={styles["branding-content"]}>
+        <div className={styles["settings"]}>
+          <Adjustment
+            branding={branding}
+            onBrandingChanged={onBrandingChanged}
+            onError={() => setState(STATES.ERROR)}
+          />
+        </div>
+        <div className={styles["preview"]}>
+          <QRCodeAndLogo qrCode={qrCode} branding={branding} onError={() => setState(STATES.ERROR)} />
+          <div className={styles["scan-to-check-message"]}>
+            <span className="material-symbols-outlined">mobile_hand</span>
+            <span>
+              Scan the QR code with your phone to test it.
+              {logo && <> If it doesn&apos;t scan, try reducing the logo size.</>}
+            </span>
+          </div>
+        </div>
+      </div>
 
       <div className={styles["buttons"]}>
         <DecoratedButton icon="close" buttonText={"Cancel"} onClick={cancel} />

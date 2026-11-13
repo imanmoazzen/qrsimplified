@@ -3,15 +3,6 @@
 
 .main-container {
   @include parent-container();
-  width: 700px;
-
-  &.more-space {
-    width: fit-content;
-
-    @include mobile {
-      width: 100%;
-    }
-  }
 }
 
 .stage-navigation {
@@ -48,30 +39,27 @@
 }
 
 .stage-top {
-  display: flex;
-  align-items: center;
-  min-height: 2rem;
+  @include flexCenter();
+  justify-content: flex-start;
+  min-height: 1.75rem;
+  height: 100%;
 }
 
 .stage-number {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flexCenter();
   flex-shrink: 0;
   width: 1.75rem;
-  height: 2rem;
+  height: 100%;
   border-radius: 4px 4px 0 0;
   background-color: var(--stage-color);
   font-size: small;
-  font-weight: 600;
-
+  font-weight: 500;
   color: white;
 }
 
 .stage-label {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+  @include flexCenter(row, 0.25rem);
+  justify-content: flex-start;
   padding-inline: 0.375rem;
   font-size: 0.9rem;
   font-weight: 400;
@@ -84,7 +72,7 @@
 
 .stage-line {
   display: block;
-  height: 6px;
+  height: 2px;
   border-radius: 0 4px 4px 4px;
   background-color: currentColor;
 }

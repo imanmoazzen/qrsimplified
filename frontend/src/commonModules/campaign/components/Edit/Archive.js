@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import DecoratedButton, { BUTTON_THEMES } from "../../../../commonComponents/DecoratedButton/DecoratedButton.js";
+import useArchiveCampaigns from "../../../../hooks/useArchiveCampaigns.js";
 import { campaignModule } from "../../../../index.js";
 import { CAMPAIGN_PAGES, campaignPageChanged } from "../../store/uiReducer.js";
-import useArchiveCampaigns from "../../useArchiveCampaigns.js";
 import styles from "./Archive.module.scss";
 
 const Archive = ({ onError }) => {

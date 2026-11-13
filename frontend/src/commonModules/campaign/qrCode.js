@@ -1,4 +1,5 @@
 import QRCode from "qrcode";
+
 import { renderQRCaption } from "./qrCaption.js";
 
 export const QR_SHAPES = {
@@ -106,13 +107,13 @@ export const createQRCodeSvgURL = (text, branding = {}) => {
   for (const [col, row] of finderPositions) {
     const x = col + margin;
     const y = row + margin;
-    // Use the same rounded outer frame for every style; preserve the inner shape.
+    const finderRadius = shape === "square" ? 0 : 1.5;
     const center =
       shape === "dots"
         ? `<circle cx="${x + 3.5}" cy="${y + 3.5}" r="1.5"/>`
         : `<rect x="${x + 2}" y="${y + 2}" width="3" height="3" rx="${hasRoundedShapes ? 0.75 : 0}"/>`;
     shapedModules.push(
-      `<rect x="${x + 0.5}" y="${y + 0.5}" width="6" height="6" rx="1.5" fill="none" stroke="${svgColor(
+      `<rect x="${x + 0.5}" y="${y + 0.5}" width="6" height="6" rx="${finderRadius}" fill="none" stroke="${svgColor(
         color,
         "#000000"
       )}" stroke-width="1"/>${center}`
@@ -122,7 +123,14 @@ export const createQRCodeSvgURL = (text, branding = {}) => {
   const gridAttributes = `data-qr-modules="${modules.size}" data-qr-margin="${margin}"`;
   const caption = renderQRCaption(branding.caption, size, svgColor(color, "#000000"), margin);
   const dimensions = `width="${size}" height="${caption.height}" viewBox="0 0 ${size} ${caption.height}"`;
-  const backdrop = `<path fill="${svgColor(background, "#0000")}" d="M0 0h${size}v${caption.height}H0z"/>`;
+  const backdropFill = svgColor(background, "#0000");
+  const radius = Math.min(margin, size / 2, caption.height / 2);
+  const backdropPath = `M${radius} 0H${size - radius}Q${size} 0 ${size} ${radius}V${caption.height - radius}Q${size} ${
+    caption.height
+  } ${size - radius} ${caption.height}H${radius}Q0 ${caption.height} 0 ${
+    caption.height - radius
+  }V${radius}Q0 0 ${radius} 0Z`;
+  const backdrop = `<path fill="${backdropFill}" d="${backdropPath}"/>`;
   const pattern = `<g fill="${svgColor(color, "#000000")}"><path d="${squares.join("")}"/>${shapedModules.join(
     ""
   )}</g>`;

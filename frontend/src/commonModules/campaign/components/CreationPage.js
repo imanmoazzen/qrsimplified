@@ -50,8 +50,8 @@ const CreationPage = () => {
   }, [step]);
 
   return (
-    <div className={`${styles["main-container"]} ${step === 3 && styles["more-space"]}`}>
-      <nav className={styles["stage-navigation"]} aria-label="QR code creation progress">
+    <div className={styles["main-container"]}>
+      <nav className={styles["stage-navigation"]}>
         <ol className={styles["stage-list"]}>
           {CREATION_STEPS.map(({ label, icon }, index) => (
             <li
@@ -59,19 +59,15 @@ const CreationPage = () => {
               className={`${styles["stage"]} ${index + 1 === step ? styles["active"] : ""} ${
                 index + 1 < step ? styles["completed"] : ""
               }`}
-              aria-current={index + 1 === step ? "step" : undefined}
-              aria-label={`Step ${index + 1} of ${CREATION_STEPS.length}: ${label}${
-                index + 1 < step ? ", completed" : ""
-              }`}
             >
-              <span className={styles["stage-top"]} aria-hidden="true">
+              <span className={styles["stage-top"]}>
                 <span className={styles["stage-number"]}>{index + 1}</span>
                 <span className={styles["stage-label"]}>
                   <span className={`material-symbols-outlined ${styles["stage-icon"]}`}>{icon}</span>
                   <span>{label}</span>
                 </span>
               </span>
-              <span className={styles["stage-line"]} aria-hidden="true" />
+              <span className={styles["stage-line"]} />
             </li>
           ))}
         </ol>

@@ -3,12 +3,20 @@
 .main-container {
   @include flexCenter(column, 2rem);
   width: 100%;
+  background-color: var(--light-gray-color);
+  border-radius: var(--border-radius-big);
+  padding: 1.5rem;
+
+  @include mobile {
+    background-color: transparent;
+    padding: 0;
+  }
 }
 
 .shape-selector,
 .background-switch,
 .caption-row,
-.color-row.color-row,
+.color-picker,
 .resize-slider section {
   display: grid;
   grid-template-columns: 8.5rem minmax(0, 1fr);
@@ -16,6 +24,13 @@
   gap: 1rem;
   width: 100%;
   min-width: 0;
+}
+
+.color-picker {
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
 }
 
 .caption-row {
@@ -165,12 +180,18 @@
   width: 100%;
 }
 
-.remove-logo {
+.logo-actions {
+  @include flexCenter(row, 0.75rem);
   width: 100%;
+}
 
-  &:not(button) {
-    margin-top: 1rem;
-  }
+.logo-action {
+  flex: 1;
+  min-width: 0;
+}
+
+.logo-button {
+  width: 100%;
 }
 
 .resize-slider {
@@ -186,23 +207,5 @@
     color: var(--primary-color);
     accent-color: var(--primary-color);
     cursor: pointer;
-  }
-}
-
-.scan-to-check-message {
-  @include flexCenter(row, 0.5rem);
-  margin-top: 1rem;
-  padding: 1rem;
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: var(--border-radius, 0.75rem);
-  background-color: var(--light-background, #f3f4f6);
-
-  span:first-child {
-    font-size: 36px;
-  }
-
-  span:last-child {
-    @include rfont(small);
   }
 }

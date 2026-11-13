@@ -1,17 +1,17 @@
 import { APP_PAGES } from "castofly-common/appPages.js";
 import { CAMPAIGN_STATUS } from "castofly-common/campaigns.js";
 import { convertToHumanReadableDate } from "castofly-common/convertToHumanReadableDate.js";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 import DecoratedButton, { BUTTON_THEMES } from "../../../commonComponents/DecoratedButton/DecoratedButton.js";
 import Header from "../../../commonComponents/Header/Header.js";
 import { ILLUSTRATIONS } from "../../../commonComponents/Illustrations/Illustrations.js";
 import Label from "../../../commonComponents/Label/Label.js";
+import useArchiveCampaigns from "../../../hooks/useArchiveCampaigns.js";
 import { campaignModule } from "../../../index.js";
 import { CAMPAIGN_PAGES, campaignPageChanged } from "../store/uiReducer.js";
-import useArchiveCampaigns from "../useArchiveCampaigns.js";
 import Demo from "./Demo/Demo.js";
 import styles from "./MainPage.module.scss";
 
@@ -58,13 +58,7 @@ const MainPage = () => {
   return (
     <>
       <div className={styles["main-container"]}>
-        {isAnyCampaignActive && (
-          <Header
-            title="Your QR Codes"
-            info="View analytics or manage your active QR codes"
-            extraClasses={selectedCampaigns.length > 0 ? styles["selection-header"] : undefined}
-          />
-        )}
+        {isAnyCampaignActive && <Header title="Your QR Codes" info="View analytics or manage your active QR codes" />}
 
         {!isAnyCampaignActive && (
           <div className={styles["empty-container"]}>
@@ -141,7 +135,6 @@ const MainPage = () => {
                     disabled={Boolean(pendingArchiveIds) || isArchiving}
                     checked={selectedIds.includes(campaign.campaign_id)}
                     onChange={() => toggleSelection(campaign.campaign_id)}
-                    aria-label={`Select QR code ${campaign.name}`}
                   />
                   <span className={styles["name"]}>{campaign.name}</span>
                 </label>

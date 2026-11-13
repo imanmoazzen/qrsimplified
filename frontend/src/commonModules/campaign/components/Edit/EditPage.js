@@ -207,6 +207,13 @@ const EditPage = () => {
               onBrandingChanged={onBrandingChanged}
               onError={() => setMessage(COMMON_MESSAGES.GENERIC_ERROR)}
             />
+            <div className={styles["scan-to-check-message"]}>
+              <span className="material-symbols-outlined">mobile_hand</span>
+              <span>
+                Scan the QR code with your phone to test it.
+                {branding?.logo && <> If it doesn&apos;t scan, try reducing the logo size.</>}
+              </span>
+            </div>
 
             {(state === STATES.EDITING || state === STATES.UPDATING) && (
               <div className={styles["buttons"]}>

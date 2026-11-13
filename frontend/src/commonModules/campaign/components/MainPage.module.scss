@@ -3,10 +3,6 @@
 
 .main-container {
   @include parent-container();
-
-  > .selection-header {
-    margin-bottom: 0;
-  }
 }
 
 .campaigns {
@@ -41,9 +37,8 @@
   font-size: small;
 }
 .name-selection {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  @include flexCenter(row, 0.5rem);
+  justify-content: flex-start;
   min-width: 0;
   cursor: pointer;
 
