@@ -22,7 +22,7 @@ export const REGION_FILTERS = {
 
 export const DEFAULT_BRANDING = {
   logo: null,
-  logo_scale: 4,
+  logo_scale: 3,
   shape: "rounded",
   caption: "",
   color: "#000000",

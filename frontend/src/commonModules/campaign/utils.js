@@ -4,8 +4,8 @@ import { v4 as uuid } from "uuid";
 
 import { base64ToFile } from "../../commonUtil/stringUtils.js";
 import { server } from "../../index.js";
-import { generateQRCodeAsSvgURL } from "./qrCode.js";
 import { getLogoClearRects } from "./logoBoundary.js";
+import { generateQRCodeAsSvgURL } from "./qrCode.js";
 
 export { generateQRCodeAsSvgURL } from "./qrCode.js";
 
@@ -57,7 +57,7 @@ export async function downloadImage(url, fileName = "image.png") {
   URL.revokeObjectURL(blobUrl);
 }
 
-export const getSizeFromScale = (scale, minSize = 32, maxSize = 200, minScale = 1, maxScale = 11) => {
+export const getSizeFromScale = (scale, minSize = 16, maxSize = 128, minScale = 1, maxScale = 11) => {
   const t = (scale - minScale) / (maxScale - minScale);
   return minSize + t * (maxSize - minSize);
 };
