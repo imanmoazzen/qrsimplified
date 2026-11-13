@@ -72,7 +72,6 @@ const loadSvgToImage = (svgString) => {
 };
 
 const logoImageCache = new Map();
-const logoBoundaryCache = new WeakMap();
 
 const loadFileToImage = (image) => {
   if (logoImageCache.has(image)) return logoImageCache.get(image);
@@ -133,31 +132,23 @@ export async function mergeQrAndLogo(qrSvgString, logoImage, scale) {
     const moduleCount = Number(svg.documentElement.getAttribute("data-qr-modules"));
     const margin = Number(svg.documentElement.getAttribute("data-qr-margin"));
     if (moduleCount > 0) {
-      const maskWidth = Math.max(1, Math.round(logoTargetWidth / upscaling));
-      const maskHeight = Math.max(1, Math.round(logoTargetHeight / upscaling));
-      const boundaryKey = `${maskWidth}:${maskHeight}:${moduleCount}:${margin}`;
-      let boundaries = logoBoundaryCache.get(logoImg);
-      if (!boundaries) {
-        boundaries = new Map();
-        logoBoundaryCache.set(logoImg, boundaries);
-      }
-      let clearRects = boundaries.get(boundaryKey);
-      if (!clearRects) {
-        const mask = document.createElement("canvas");
-        mask.width = maskWidth;
-        mask.height = maskHeight;
-        const maskCtx = mask.getContext("2d");
-        maskCtx.drawImage(logoImg, 0, 0, mask.width, mask.height);
-        const pixels = maskCtx.getImageData(0, 0, mask.width, mask.height);
-        clearRects = getLogoClearRects(pixels, moduleCount, margin, frontEndSize);
-        boundaries.set(boundaryKey, clearRects);
-        if (boundaries.size > 16) boundaries.delete(boundaries.keys().next().value);
-      }
-      ctx.fillStyle = svg.querySelector("svg > path")?.getAttribute("fill") ?? "#0000";
+      const clearRects = getLogoClearRects(
+        { width: logoTargetWidth / upscaling, height: logoTargetHeight / upscaling },
+        moduleCount,
+        margin,
+        frontEndSize
+      );
+      ctx.save();
+      ctx.beginPath();
       for (const { x, y, size } of clearRects) {
-        ctx.clearRect(x * upscaling, y * upscaling, size * upscaling, size * upscaling);
-        ctx.fillRect(x * upscaling, y * upscaling, size * upscaling, size * upscaling);
+        ctx.rect(x * upscaling, y * upscaling, size * upscaling, size * upscaling);
       }
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.fill();
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillStyle = svg.querySelector("svg > path")?.getAttribute("fill") ?? "#0000";
+      ctx.fill();
+      ctx.restore();
     }
     ctx.drawImage(logoImg, logoX, logoY, logoTargetWidth, logoTargetHeight);
     ctx.restore();
