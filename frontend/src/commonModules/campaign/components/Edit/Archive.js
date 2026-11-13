@@ -1,40 +1,27 @@
-import { CAMPAIGN_STATUS } from "castofly-common/campaigns.js";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import DecoratedButton, { BUTTON_THEMES } from "../../../../commonComponents/DecoratedButton/DecoratedButton.js";
-import { campaignModule, server } from "../../../../index.js";
-import { CAMPAIGN_PAGES, campaignPageChanged, campaignsChanged } from "../../store/uiReducer.js";
+import useArchiveCampaigns from "../../../../hooks/useArchiveCampaigns.js";
+import { campaignModule } from "../../../../index.js";
+import { CAMPAIGN_PAGES, campaignPageChanged } from "../../store/uiReducer.js";
 import styles from "./Archive.module.scss";
 
 const Archive = ({ onError }) => {
   const dispatch = useDispatch();
-  const campaigns = useSelector(campaignModule.getActiveCampaigns);
   const campaign = useSelector(campaignModule.getActiveCampaign);
   const [requestToArchive, setRequestToArchive] = useState(false);
-  const [isArchiving, setIsArchiving] = useState(false);
+  const { archive: archiveSelected, isArchiving } = useArchiveCampaigns();
 
-  const archive = () => {
-    setIsArchiving(true);
-
-    const status = CAMPAIGN_STATUS.ARCHIVED;
-
-    server
-      .requestFromApiv2(`/campaign`, {
-        method: "PUT",
-        mode: "cors",
-        data: { campaign_id: campaign.campaign_id, fieldsToSet: { status } },
-      })
-      .then(() => {
-        dispatch(
-          campaignsChanged(
-            campaigns.map((item) => (item.campaign_id === campaign.campaign_id ? { ...item, status } : item))
-          )
-        );
-        dispatch(campaignPageChanged(CAMPAIGN_PAGES.MAIN));
-      })
-      .catch(() => onError?.())
-      .finally(() => setIsArchiving(false));
+  const archive = async () => {
+    try {
+      const result = await archiveSelected([campaign.campaign_id]);
+      if (!result) return;
+      if (result.failedIds.length) onError?.();
+      else dispatch(campaignPageChanged(CAMPAIGN_PAGES.MAIN));
+    } catch {
+      onError?.();
+    }
   };
 
   return (

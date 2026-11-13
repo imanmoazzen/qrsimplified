@@ -2,12 +2,8 @@
 
 .main-container {
   @include flexCenter(column, 4rem);
-  padding: 2rem;
+  padding: 1rem;
   width: 100%;
-
-  @include mobile {
-    padding: 1rem;
-  }
 }
 
 .new-campaign-container {

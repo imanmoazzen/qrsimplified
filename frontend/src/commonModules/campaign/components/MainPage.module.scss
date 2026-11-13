@@ -9,6 +9,51 @@
   @include flexCenter(column);
   width: 100%;
 }
+.selection-actions {
+  @include flexCenter(row, 0.75rem);
+  justify-content: flex-end;
+  width: 100%;
+  margin-block: 0 2rem;
+  font-size: small;
+  flex-wrap: wrap;
+}
+.archive-confirmation {
+  @include flexCenter(column, 1rem);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1.25rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
+  text-align: center;
+}
+.confirmation-buttons {
+  @include flexCenter(row, 0.75rem);
+  flex-wrap: wrap;
+}
+.archive-error {
+  width: 100%;
+  margin: 0 0 0.75rem;
+  color: var(--reddish-color, #b42318);
+  font-size: small;
+}
+.name-selection {
+  @include flexCenter(row, 0.5rem);
+  justify-content: flex-start;
+  min-width: 0;
+  cursor: pointer;
+
+  input {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--primary-color);
+  }
+
+  .name {
+    min-width: 0;
+  }
+}
 
 .empty-container {
   @include flexCenter(column);
@@ -34,7 +79,7 @@
 
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr 0.75fr 50px 75px 75px 50px;
+  grid-template-columns: 1fr 0.75fr 75px 50px 75px 50px;
   gap: 0.5rem;
 
   @include mobile {

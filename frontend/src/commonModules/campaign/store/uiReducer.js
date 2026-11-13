@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { CAMPAIGN_STATUS } from "castofly-common/campaigns.js";
 
 export const CAMPAIGN_PAGES = {
   MAIN: "main page",
@@ -22,6 +23,8 @@ export const REGION_FILTERS = {
 export const DEFAULT_BRANDING = {
   logo: null,
   logo_scale: 4,
+  shape: "rounded",
+  caption: "",
   color: "#000000",
   background: "#0000",
   isTransparent: true,
@@ -52,6 +55,12 @@ const slice = createSlice({
     campaignsChanged: (state, action) => {
       state.campaigns = action.payload;
     },
+    campaignsArchived: (state, action) => {
+      const archivedIds = new Set(action.payload);
+      state.campaigns.forEach((campaign) => {
+        if (archivedIds.has(campaign.campaign_id)) campaign.status = CAMPAIGN_STATUS.ARCHIVED;
+      });
+    },
     brandingChanged: (state, action) => {
       state.branding = action.payload;
     },
@@ -73,6 +82,7 @@ export const {
   dashboardingLoadingStatusChanged,
   campaignPageChanged,
   campaignsChanged,
+  campaignsArchived,
   brandingChanged,
   timeFilterChanged,
   regionFilterChanged,

@@ -17,9 +17,17 @@ import styles from "./CreationPage.module.scss";
 import LeadCollection from "./LeadCollection.js";
 import NameAndLandingPage from "./NameAndLandingPage.js";
 
+const CREATION_STEPS = [
+  { label: "Details", icon: "link" },
+  { label: "Branding", icon: "palette" },
+  { label: "Leads", icon: "contact_mail" },
+  { label: "Download", icon: "download" },
+];
+
 const CreationPage = () => {
   const dispatch = useDispatch();
   const qrCode = useSelector(campaignModule.getQRCode);
+  const [trackingLink, setTrackingLink] = useState();
   const [step, setStep] = useState(1);
   const [title, setTitle] = useState("");
   const [info, setInfo] = useState("");
@@ -42,12 +50,35 @@ const CreationPage = () => {
   }, [step]);
 
   return (
-    <div className={`${styles["main-container"]} ${step === 3 && styles["more-space"]}`}>
-      <Header title={title} info={info} />
+    <div className={styles["main-container"]}>
+      <nav className={styles["stage-navigation"]}>
+        <ol className={styles["stage-list"]}>
+          {CREATION_STEPS.map(({ label, icon }, index) => (
+            <li
+              key={label}
+              className={`${styles["stage"]} ${index + 1 === step ? styles["active"] : ""} ${
+                index + 1 < step ? styles["completed"] : ""
+              }`}
+            >
+              <span className={styles["stage-top"]}>
+                <span className={styles["stage-number"]}>{index + 1}</span>
+                <span className={styles["stage-label"]}>
+                  <span className={`material-symbols-outlined ${styles["stage-icon"]}`}>{icon}</span>
+                  <span>{label}</span>
+                </span>
+              </span>
+              <span className={styles["stage-line"]} />
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      <Header title={title} info={info} extraClasses={styles["page-header"]} />
 
       {step === 1 && (
         <NameAndLandingPage
-          onSuccess={(item, campaign_id) => {
+          onSuccess={(item, campaign_id, tracking_link) => {
+            setTrackingLink(tracking_link);
             dispatch(qrCodeChanged(item));
             setBorningCampaignId(campaign_id);
             setStep(2);
@@ -55,7 +86,7 @@ const CreationPage = () => {
         />
       )}
 
-      {step === 2 && <Branding borningCampaignId={borningCampaignId} setStep={setStep} />}
+      {step === 2 && <Branding borningCampaignId={borningCampaignId} trackingLink={trackingLink} setStep={setStep} />}
 
       {step === 3 && <LeadCollection campaignId={borningCampaignId} setStep={setStep} />}
 

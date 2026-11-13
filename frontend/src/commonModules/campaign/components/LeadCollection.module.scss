@@ -27,7 +27,7 @@
     width: 200px;
     aspect-ratio: 1;
     box-shadow: 0 0 4px gray;
-    border-radius: var(--border-radius);
+    border-radius: 20px;
 
     @include mobile {
       width: 128px;

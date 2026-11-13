@@ -156,7 +156,7 @@ export const updateCampaign = async (requestBody, userId) => {
 
     const items = await query(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, { user_id: userId });
 
-    const selected = items.filter((item) => item.campaign_id === campaign_id);
+    const selected = items.find((item) => item.campaign_id === campaign_id);
     if (!selected) throw new Error("campaign doesn't belong to this user");
 
     await updateItemSet(dynamo, TABLE_NAMES.CAMPAIGN_SOURCES, { user_id: userId, campaign_id }, fieldsToSet);

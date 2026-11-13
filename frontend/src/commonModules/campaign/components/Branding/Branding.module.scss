@@ -5,9 +5,53 @@
   width: 100%;
 }
 
+.branding-content {
+  display: grid;
+  grid-template-areas:
+    "settings"
+    "preview";
+  gap: 4rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.settings {
+  grid-area: settings;
+  min-width: 0;
+  max-width: var(--max-subcontainer-width);
+}
+
+.preview {
+  @include flexCenter(column, 1.5rem);
+  grid-area: preview;
+  min-width: 0;
+}
+
+@include aboveMobile {
+  .branding-content {
+    grid-template-areas: "settings preview";
+    grid-template-columns: minmax(0, var(--max-subcontainer-width)) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
 .info {
   @include labelStyle(1);
   color: var(--primary-color);
+}
+
+.scan-to-check-message {
+  @include flexCenter(row, 0.5rem);
+  width: 100%;
+  box-sizing: border-box;
+
+  span:first-child {
+    font-size: 36px;
+  }
+
+  span:last-child {
+    @include rfont(small);
+  }
 }
 
 .buttons {

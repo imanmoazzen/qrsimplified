@@ -5,8 +5,9 @@ import DecoratedButton, { BUTTON_THEMES } from "../../../../commonComponents/Dec
 import { base64ToFile } from "../../../../commonUtil/stringUtils.js";
 import { COMMON_MESSAGES } from "../../../../frontEndConstants.js";
 import { campaignModule, server } from "../../../../index.js";
+import { createQRCodeSvgURL } from "../../qrCode.js";
 import { CAMPAIGN_PAGES, brandingChanged, campaignPageChanged, qrCodeChanged } from "../../store/uiReducer.js";
-import { mergeQrAndLogo, recolorSvgDataUrl, transferQRCodeFileToS3 } from "../../utils.js";
+import { mergeQrAndLogo, transferQRCodeFileToS3 } from "../../utils.js";
 import Adjustment from "./Adjustment.js";
 import styles from "./Branding.module.scss";
 import QRCodeAndLogo from "./QRCodeAndLogo.js";
@@ -17,7 +18,7 @@ const STATES = {
   ERROR: COMMON_MESSAGES.GENERIC_ERROR,
 };
 
-const Branding = ({ setStep, borningCampaignId }) => {
+const Branding = ({ setStep, borningCampaignId, trackingLink }) => {
   const dispatch = useDispatch();
   const branding = useSelector(campaignModule.getBranding);
   const qrCode = useSelector(campaignModule.getQRCode);
@@ -27,11 +28,7 @@ const Branding = ({ setStep, borningCampaignId }) => {
 
   const onBrandingChanged = async (newBranding) => {
     try {
-      const { color, background, isTransparent } = newBranding;
-      const isQRCodeUpdateRequired =
-        branding.color !== color || branding.background !== background || branding.isTransparent !== isTransparent;
-
-      if (isQRCodeUpdateRequired) dispatch(qrCodeChanged(recolorSvgDataUrl(qrCode, color, background)));
+      dispatch(qrCodeChanged(createQRCodeSvgURL(trackingLink, newBranding)));
       dispatch(brandingChanged(newBranding));
 
       server.requestFromApiv2("/user/updateInfo", {
@@ -81,13 +78,25 @@ const Branding = ({ setStep, borningCampaignId }) => {
 
   return (
     <div className={styles["main-container"]}>
-      <QRCodeAndLogo
-        qrCode={qrCode}
-        branding={branding}
-        onBrandingChanged={onBrandingChanged}
-        onError={() => setState(STATES.ERROR)}
-      />
-      <Adjustment branding={branding} onBrandingChanged={onBrandingChanged} onError={() => setState(STATES.ERROR)} />
+      <div className={styles["branding-content"]}>
+        <div className={styles["settings"]}>
+          <Adjustment
+            branding={branding}
+            onBrandingChanged={onBrandingChanged}
+            onError={() => setState(STATES.ERROR)}
+          />
+        </div>
+        <div className={styles["preview"]}>
+          <QRCodeAndLogo qrCode={qrCode} branding={branding} onError={() => setState(STATES.ERROR)} />
+          <div className={styles["scan-to-check-message"]}>
+            <span className="material-symbols-outlined">mobile_hand</span>
+            <span>
+              Scan the QR code with your phone to test it.
+              {logo && <> If it doesn&apos;t scan, try reducing the logo size.</>}
+            </span>
+          </div>
+        </div>
+      </div>
 
       <div className={styles["buttons"]}>
         <DecoratedButton icon="close" buttonText={"Cancel"} onClick={cancel} />
